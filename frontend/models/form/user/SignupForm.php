@@ -62,17 +62,18 @@ class SignupForm extends Model
         ];
     }
 
-
     /**
      * @return User
      */
     public function toUser(): User
     {
+        $date = \DateTime::createFromFormat('d-m-Y', $this->birth_date);
+
         $user = new User();
         $user->first_name = $this->first_name;
         $user->last_name = $this->last_name;
         $user->middle_name = $this->middle_name;
-        $user->birth_date = $this->birth_date;
+        $user->birth_date = $date->format('Y-m-d');
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();

@@ -1,11 +1,14 @@
 <?php
 
 
+namespace frontend\controllers;
+
+use Yii;
 use yii\filters\AccessControl;
-use yii\web\Controller as BaseController;
+use yii\web\Controller;
 use yii\web\ErrorAction;
 
-class Controller extends BaseController
+class BaseController extends Controller
 {
     /**
      * @return array[]
@@ -15,10 +18,10 @@ class Controller extends BaseController
         return [
             'access' => [
                 'class' => AccessControl::class,
-                'denyCallback' => function ($rule, $action) {
-                    return Yii::$app->response->redirect(['site/login']);
+                'denyCallback' => function () {
+                    return Yii::$app->response->redirect(['auth/login']);
                 },
-                'except' => ['login', 'signup'],
+                'except' => ['login'],
                 'rules' => [
                     [
                         'allow' => true,

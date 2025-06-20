@@ -4,12 +4,12 @@ namespace frontend\controllers;
 
 use common\models\LoginForm;
 use frontend\models\form\user\SignupForm;
-use UserService;
+use frontend\services\UserService;
 use Yii;
 use yii\db\Exception;
 use yii\web\Response;
 
-class AuthBaseController extends BaseController
+class AuthController extends BaseController
 {
     /**
      * @return Response|string
@@ -24,7 +24,6 @@ class AuthBaseController extends BaseController
             $user = $form->toUser();
 
             if ($userService->register($user)) {
-                Yii::$app->session->setFlash('success', 'Регистрация прошла успешно.');
                 return $this->goHome();
             }
         }
@@ -45,7 +44,7 @@ class AuthBaseController extends BaseController
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            return $this->redirect(['site/index']);
         }
 
         $model->password = '';

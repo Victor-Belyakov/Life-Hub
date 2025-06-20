@@ -1,4 +1,5 @@
 <?php
+namespace frontend\services;
 
 use common\models\User;
 

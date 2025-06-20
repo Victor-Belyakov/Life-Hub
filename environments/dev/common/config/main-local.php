@@ -4,7 +4,7 @@ return [
     'components' => [
         'db' => [
             'class' => \yii\db\Connection::class,
-            'dsn' => 'pgsql:host=localhost;dbname=yii2advanced',
+            'dsn' => 'pgsql:host=localhost;dbname=life-hub',
             'username' => 'root',
             'password' => '',
             'charset' => 'utf8',
