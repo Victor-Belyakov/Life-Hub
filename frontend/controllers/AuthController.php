@@ -9,7 +9,7 @@ use Yii;
 use yii\db\Exception;
 use yii\web\Response;
 
-class AuthController extends Controller
+class AuthBaseController extends BaseController
 {
     /**
      * @return Response|string
