@@ -12,5 +12,19 @@ return [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
+        'i18n' => [
+            'translations' => [
+                'yii*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@yii/messages',
+                    'sourceLanguage' => 'en-US',
+                    'fileMap' => [
+                        'yii' => 'yii.php',
+                        'yii/grid' => 'grid.php',
+                    ],
+                ],
+            ],
+        ],
     ],
+    'language' => 'ru-RU',
 ];

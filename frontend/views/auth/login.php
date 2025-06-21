@@ -18,6 +18,14 @@ $this->title = 'Авторизация';
             <?= $form->field($model, 'email')->textInput(['placeholder' => 'Введите Email'])->label(false) ?>
             <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Введите Пароль'])->label(false) ?>
 
+<!--            <script async src="https://telegram.org/js/telegram-widget.js?15"-->
+<!--                    data-telegram-login="life_hub_official_bot"-->
+<!--                    data-size="large"-->
+<!--                    data-userpic="false"-->
+<!--                    data-auth-url="/site/telegram-auth"-->
+<!--                    data-request-access="write">-->
+<!--            </script>-->
+
             <div class="form-group text-center">
                 <?= Html::submitButton('Вход', ['class' => 'btn btn-info text-light', 'name' => 'login-button']) ?>
             </div>

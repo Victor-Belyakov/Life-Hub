@@ -3,6 +3,19 @@ main > .container, main > .container-fluid
     padding: 70px 15px 20px;
 }
 
+a.text-decoration-none,
+a.text-decoration-none:hover,
+a.text-decoration-none:focus,
+a.text-decoration-none:active {
+    color: inherit !important;
+    text-decoration: none !important;
+    background: none !important;
+    box-shadow: none !important;
+    outline: none !important;
+    cursor: pointer;
+}
+
+
 .flatpickr-calendar {
     box-shadow: 8px 8px rgba(0, 0, 0, 0.2);
 }
