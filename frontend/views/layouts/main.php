@@ -47,6 +47,16 @@ AppAsset::register($this);
             justify-content: center;
             background-color: transparent;
         }
+        .no-role-content {
+            margin: 0 auto;
+            padding: 40px 20px;
+            max-width: 800px; /* или ширина формы авторизации */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: transparent;
+        }
         #profile {
             color: #6c757d;
         }
@@ -152,7 +162,7 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
-<?php if (!Yii::$app->user->isGuest): ?>
+<?php if (!Yii::$app->user->isGuest && !empty(Yii::$app->user->identity->role)): ?>
     <nav id="sidebar">
         <div class="logo">
             <a href="<?= Yii::$app->homeUrl ?>" style="color: inherit; text-decoration: none;">Life Hub</a>
@@ -204,7 +214,12 @@ AppAsset::register($this);
 <?php endif; ?>
 
 
-<main id="content" class="<?= Yii::$app->user->isGuest ? 'guest-content' : 'auth-content' ?>">
+<main id="content" class=" <?= Yii::$app->user->isGuest
+        ? 'guest-content'
+        : (empty(Yii::$app->user->identity->role)
+            ? 'no-role-content'
+            : 'auth-content')
+    ?>">
     <div class="container-fluid">
         <?= Breadcrumbs::widget([
             'links' => $this->params['breadcrumbs'] ?? [],

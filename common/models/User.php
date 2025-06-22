@@ -2,13 +2,16 @@
 
 namespace common\models;
 
+use console\rbac\roles\UserRole;
 use DateTime;
 use frontend\enum\UserEnum;
+use frontend\services\UserService;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\db\Exception;
+use yii\db\Expression;
 use yii\web\IdentityInterface;
 
 /**
@@ -35,6 +38,8 @@ class User extends ActiveRecord implements IdentityInterface
     const int STATUS_INACTIVE = 9;
     const int STATUS_ACTIVE = 10;
 
+    private $_role;
+
 
     /**
      * {@inheritdoc}
@@ -50,8 +55,43 @@ class User extends ActiveRecord implements IdentityInterface
     public function behaviors()
     {
         return [
-            TimestampBehavior::class,
+            [
+                'class' => TimestampBehavior::class,
+                'value' => new Expression('NOW()'),
+            ],
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if (is_string($this->birth_date)) {
+                // пытаемся распарсить дату в формате d-m-Y
+                $date = \DateTime::createFromFormat('d-m-Y', $this->birth_date);
+                if ($date) {
+                    $this->birth_date = $date->format('Y-m-d');
+                } else {
+                    $this->birth_date = null;
+                }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        UserService::assignRole($this->id, $this->role);
+
+        if ($insert) {
+            $auth = Yii::$app->authManager;
+            $role = $auth->getRole(UserRole::ROLE_USER);
+
+            if ($role) {
+                $auth->assign($role, $this->id);
+            }
+        }
     }
 
     /**
@@ -60,7 +100,10 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
+            [['first_name', 'last_name', 'middle_name', 'email', 'birth_date', 'status', 'role'], 'safe'],
+            [['first_name', 'last_name', 'email'], 'string', 'max' => 255],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
+            ['email', 'unique', 'message' => 'Этот email уже используется.'],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
         ];
     }
@@ -241,5 +284,37 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->status = UserEnum::STATUS_DELETED->value;
         return $this->save(false);
+    }
+
+    /**
+     * @return string
+     */
+    public function getRoleName(): string
+    {
+        $auth = Yii::$app->authManager;
+
+        $roles = $auth->getRolesByUser($this->id);
+
+        if (!empty($roles)) {
+            $firstRole = reset($roles);
+            return $firstRole->description;
+        }
+
+        return 'Роль не назначена';
+    }
+
+    public function getRole(): int|string|null
+    {
+        if ($this->_role === null && !$this->isNewRecord) {
+            $auth = Yii::$app->authManager;
+            $roles = $auth->getRolesByUser($this->id);
+            $this->_role = !empty($roles) ? key($roles) : null;
+        }
+        return $this->_role;
+    }
+
+    public function setRole($value): void
+    {
+        $this->_role = $value;
     }
 }

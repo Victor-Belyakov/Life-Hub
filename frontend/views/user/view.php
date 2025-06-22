@@ -19,7 +19,7 @@ $this->title = $model->email;
         }
 
     </style>
-    <h1 class="text-info"><?= Html::encode('Пользователь: ' . $this->title) ?></h1>
+    <h3 class="text-info"><?= Html::encode('Пользователь: ' . $this->title) ?></h3>
 
     <?= DetailView::widget([
         'model' => $model,
@@ -37,10 +37,14 @@ $this->title = $model->email;
                 'value' => trim($model->first_name . ' ' . $model->middle_name . ' ' . $model->last_name),
             ],
             [
+                'label' => 'Роль',
+                'value' => $model->getRoleName(),
+            ],
+            [
                 'label' => 'Дата рождения',
                 'value' => function($model) {
-                    $date = \DateTime::createFromFormat('Y-m-d', $model->birth_date);
-                    return $date ? $date->format('d.m.Y') : $model->birth_date;
+                    $date = new \DateTime($model->birth_date);
+                    return $date->format('d-m-Y');
                 },
             ],
             [

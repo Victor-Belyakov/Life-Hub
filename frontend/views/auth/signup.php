@@ -12,7 +12,7 @@ $this->title = 'Регистрация пользователя';
 
 <div class="user-create">
 
-    <div class="row justify-content-center">
+    <div class="row justify-content-left">
         <div class="col-md-4">
             <h1 class="mb-4"><?= Html::encode($this->title) ?></h1>
 
@@ -20,7 +20,6 @@ $this->title = 'Регистрация пользователя';
                 'id' => 'user-create-form',
                 'enableClientValidation' => true,
             ]); ?>
-
 
             <?= Html::hiddenInput('returnUrl', $returnUrl ?? Yii::$app->homeUrl) ?>
 

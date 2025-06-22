@@ -4,10 +4,12 @@ namespace frontend\controllers;
 
 use backend\services\TelegramService;
 use common\models\LoginForm;
+use console\rbac\permissions\user\CreateUserPermission;
 use frontend\models\form\user\SignupForm;
 use frontend\services\UserService;
 use Yii;
 use yii\db\Exception;
+use yii\web\ForbiddenHttpException;
 use yii\web\Response;
 
 class AuthController extends BaseController
@@ -18,6 +20,10 @@ class AuthController extends BaseController
      */
     public function actionSignup(): Response|string
     {
+        if (!Yii::$app->user->can(CreateUserPermission::getName())) {
+            throw new ForbiddenHttpException('У вас нет прав для создания пользователей.');
+        }
+
         $form = new SignupForm();
         $returnUrl = Yii::$app->request->post('returnUrl', Yii::$app->homeUrl);
 
@@ -47,8 +53,7 @@ class AuthController extends BaseController
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            $telegramService = new TelegramService();
-            $telegramService->sendMessage('Пользователь: ' . Yii::$app->user->identity->email . ' авторизовался');
+            TelegramService::sendMessage('Пользователь: ' . Yii::$app->user->identity->email . ' авторизовался');
             return $this->redirect(['site/index']);
         }
 
@@ -69,5 +74,10 @@ class AuthController extends BaseController
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    public function actionNoRole(): string
+    {
+        return $this->render('no-role');
     }
 }

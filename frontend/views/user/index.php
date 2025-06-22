@@ -1,5 +1,7 @@
 <?php
 
+use console\rbac\permissions\user\CreateUserPermission;
+use console\rbac\permissions\user\UpdateUserPermission;
 use frontend\enum\UserEnum;
 use yii\grid\GridView;
 use yii\helpers\Html;
@@ -12,7 +14,11 @@ use yii\helpers\Url;
 ?>
 
 <p>
-    <?= Html::a('Зарегистрировать', ['/auth/signup', 'returnUrl' => Yii::$app->request->referrer], ['class' => 'btn btn-success']) ?>
+    <?php
+        if (Yii::$app->user->can(CreateUserPermission::getName())) {
+            echo Html::a('Зарегистрировать', ['/auth/signup', 'returnUrl' => Yii::$app->request->referrer], ['class' => 'btn btn-info text-light']) ;
+        }
+    ?>
 </p>
 
 <?= GridView::widget([
@@ -28,6 +34,12 @@ use yii\helpers\Url;
     },
     'columns' => [
         [
+            'label' => '<span class="text-info">Id</span>',
+            'value' => function($model) { return $model->id; },
+            'encodeLabel' => false,
+            'contentOptions' => ['style' => 'color: #6c757d;'],
+        ],
+        [
             'label' => '<span class="text-info">Email</span>',
             'value' => function($model) { return $model->email; },
             'encodeLabel' => false,
@@ -42,10 +54,16 @@ use yii\helpers\Url;
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
+            'label' => '<span class="text-info">Роль</span>',
+            'value' => function($model) { return $model->getRoleName(); },
+            'encodeLabel' => false,
+            'contentOptions' => ['style' => 'color: #6c757d;'],
+        ],
+        [
             'label' => '<span class="text-info">День рождения</span>',
             'value' => function($model) {
-                $date = \DateTime::createFromFormat('Y-m-d', $model->birth_date);
-                return $date ? $date->format('d.m.Y') : $model->birth_date;
+                $date = new \DateTime($model->birth_date);
+                return $date->format('d-m-Y');
             },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
@@ -74,20 +92,22 @@ use yii\helpers\Url;
             'contentOptions' => ['class' => 'action-buttons'],
             'buttons' => [
                 'update' => function ($url, $model, $key) {
-                    return Html::a('<i class="bi bi-pencil text-info"></i>', $url, [
-                        'title' => 'Редактировать',
-                        'class' => 'btn btn-sm me-1',
-                        'data-pjax' => '0',
-                    ]);
+                    return Yii::$app->user->can(UpdateUserPermission::getName())
+                        ? Html::a('<i class="bi bi-pencil text-info"></i>', $url, [
+                            'title' => 'Редактировать',
+                            'class' => 'btn btn-sm me-1',
+                            'data-pjax' => '0',
+                        ]) : '';
                 },
                 'delete' => function ($url, $model, $key) {
-                    return Html::a('<i class="bi bi-trash text-info"></i>', $url, [
-                        'title' => 'Удалить',
-                        'class' => 'btn btn-sm',
-                        'data-confirm' => 'Вы уверены, что хотите удалить этот элемент?',
-                        'data-method' => 'post',
-                        'data-pjax' => '0',
-                    ]);
+                    return Yii::$app->user->can(UpdateUserPermission::getName())
+                        ? Html::a('<i class="bi bi-trash text-info"></i>', $url, [
+                            'title' => 'Удалить',
+                            'class' => 'btn btn-sm',
+                            'data-confirm' => 'Вы уверены, что хотите удалить этот элемент?',
+                            'data-method' => 'post',
+                            'data-pjax' => '0',
+                        ]) : '';
                 },
             ],
         ],

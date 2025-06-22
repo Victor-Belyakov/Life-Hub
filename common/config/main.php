@@ -11,6 +11,7 @@ return [
         ],
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
+            'assignmentTable' => 'auth_assignment',
         ],
         'i18n' => [
             'translations' => [
@@ -24,6 +25,13 @@ return [
                     ],
                 ],
             ],
+        ],
+        's3' => [
+            'class' => 'common\components\S3Component',
+            'key' => 'YANDEX_KEY',
+            'secret' => 'YANDEX_SECRET',
+            'region' => 'us-east-1',
+            'bucket' => 'your-bucket-name',
         ],
     ],
     'language' => 'ru-RU',

@@ -6,6 +6,7 @@ namespace frontend\controllers;
 use backend\services\TelegramService;
 use common\models\User;
 use frontend\models\search\UserSearch;
+use frontend\services\UserService;
 use Yii;
 use yii\db\Exception;
 use yii\web\Response;
@@ -43,11 +44,14 @@ class UserController extends BaseController
      * @param int $id
      * @return Response|string
      * @throws Exception
+     * @throws \Exception
      */
     public function actionUpdate(int $id): Response|string
     {
         $model = User::findOne($id);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            UserService::assignRole($model->id, $model->role);
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -61,8 +65,8 @@ class UserController extends BaseController
     {
         $model = User::findOne($id);
         $model?->softDelete();
-        $telegramService = new TelegramService();
-        $telegramService->sendMessage('Пользователь: ' . $model->email . ' удалён');
+        TelegramService::sendMessage('Пользователь: ' . $model->email . ' удалён');
+
         return $this->redirect(['index']);
     }
 }

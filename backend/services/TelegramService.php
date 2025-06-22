@@ -7,29 +7,24 @@ use yii\httpclient\Exception;
 
 class TelegramService
 {
-    private string $botToken;
-    private string $chatId;
-
-    public function __construct()
-    {
-        $this->botToken = $_ENV['TELEGRAM_TOKEN'];
-        $this->chatId = $_ENV['TELEGRAM_CHAT_ID'];
-    }
-
     /**
      * Отправить текстовое сообщение в Telegram
+     *
      * @param string $text
      * @return bool
      * @throws Exception
      */
-    public function sendMessage(string $text): bool
+    public static function sendMessage(string $text): bool
     {
-        $url = "https://api.telegram.org/bot{$this->botToken}/sendMessage";
+//        $token = $_ENV['TELEGRAM_TOKEN'];
+        $token = '7790844686:AAHGN464hjXLFYXIT_rqvo6riu7EdSAS-cY';
+        $url = "https://api.telegram.org/bot{$token}/sendMessage";
 
         $client = new Client();
 
         $response = $client->post($url, [
-            'chat_id' => $this->chatId,
+//            'chat_id' => $_ENV['TELEGRAM_CHAT_ID'],
+            'chat_id' => '-1002608930190',
             'text' => $text,
             'parse_mode' => 'HTML',
         ])->send();
