@@ -3,6 +3,7 @@
 use frontend\enum\UserEnum;
 use yii\grid\GridView;
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 /**
  * @var $dataProvider
@@ -10,16 +11,27 @@ use yii\helpers\Html;
  */
 ?>
 
+<p>
+    <?= Html::a('Зарегистрировать', ['/auth/signup', 'returnUrl' => Yii::$app->request->referrer], ['class' => 'btn btn-success']) ?>
+</p>
+
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
     'filterModel' => $searchModel,
     'layout' => "{items}\n{summary}\n{pager}",
+    'rowOptions' => function($model) {
+        $url = Url::to(['user/view', 'id' => $model->id]);
+        return [
+            'style' => 'cursor: pointer;',
+            'onclick' => "if(!event.target.closest('.action-buttons')) { window.location.href='$url'; }",
+        ];
+    },
     'columns' => [
         [
             'label' => '<span class="text-info">Email</span>',
             'value' => function($model) { return $model->email; },
             'encodeLabel' => false,
-            'contentOptions' => ['style' => 'color: #2b2f32;'],
+            'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
             'label' => '<span class="text-info">ФИО</span>',
@@ -27,16 +39,16 @@ use yii\helpers\Html;
                 return trim($searchModel->first_name . ' ' . $searchModel->middle_name . ' ' . $searchModel->last_name);
             },
             'encodeLabel' => false,
-            'contentOptions' => ['style' => 'color: #2b2f32;'],
+            'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
-            'label' => '<span class="text-info">День рождение</span>',
+            'label' => '<span class="text-info">День рождения</span>',
             'value' => function($model) {
                 $date = \DateTime::createFromFormat('Y-m-d', $model->birth_date);
                 return $date ? $date->format('d.m.Y') : $model->birth_date;
             },
             'encodeLabel' => false,
-            'contentOptions' => ['style' => 'color: #2b2f32;'],
+            'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
             'label' => '<span class="text-info">Статус</span>',
@@ -45,20 +57,22 @@ use yii\helpers\Html;
                 return $status ? $status->label() : 'Неизвестно';
             },
             'encodeLabel' => false,
-            'contentOptions' => ['style' => 'color: #2b2f32;'],
+            'contentOptions' => function($model) {
+                $status = (int)$model->status;
+                return match ($status) {
+                    UserEnum::STATUS_ACTIVE->value => ['class' => 'text-success'],
+                    UserEnum::STATUS_DELETED->value => ['class' => 'text-danger'],
+                    UserEnum::STATUS_INACTIVE->value => ['class' => 'text-warning'],
+                    default => ['class' => 'text-secondary'],
+                };
+            },
         ],
         [
             'class' => 'yii\grid\ActionColumn',
             'header' => '<span class="text-info">Действия</span>',
-            'template' => '{view} {update} {delete}',
+            'template' => '{update} {delete}',
+            'contentOptions' => ['class' => 'action-buttons'],
             'buttons' => [
-                'view' => function ($url, $model, $key) {
-                    return Html::a('<i class="bi bi-eye text-info"></i>', $url, [
-                        'title' => 'Просмотр',
-                        'class' => 'btn btn-sm me-1',
-                        'data-pjax' => '0',
-                    ]);
-                },
                 'update' => function ($url, $model, $key) {
                     return Html::a('<i class="bi bi-pencil text-info"></i>', $url, [
                         'title' => 'Редактировать',

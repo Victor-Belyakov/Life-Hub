@@ -30,7 +30,6 @@ class UserSearch extends User
             return $dataProvider;
         }
 
-        // фильтрация по целочисленному id
         $query->andFilterWhere(['id' => $this->id]);
 
 

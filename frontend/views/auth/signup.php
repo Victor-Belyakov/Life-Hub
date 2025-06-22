@@ -1,39 +1,78 @@
 <?php
 
 use frontend\models\form\user\SignupForm;
+use yii\helpers\Html;
 use yii\bootstrap5\ActiveForm;
-use yii\bootstrap5\Html;
-use yii\jui\DatePicker;
 
-/** @var yii\web\View $this */
-/** @var yii\bootstrap5\ActiveForm $form */
-/** @var SignupForm $model */
+/* @var $this yii\web\View */
+/* @var $model SignupForm */
 
-$this->title = 'Регистрация';
+$this->title = 'Регистрация пользователя';
 ?>
-<div class="site-signup d-flex justify-content-center align-items-start" style="min-height: 100vh; padding-top: 200px;">
-    <div class="form-container" style="width: 350px;">
-        <h1 class="text-center text-info" style="font-weight: 700; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Life Hub</h1>
 
-        <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
+<div class="user-create">
 
-        <?= $form->field($model, 'first_name')->textInput(['placeholder' => 'Введите Имя'])->label(false) ?>
-        <?= $form->field($model, 'last_name')->textInput(['placeholder' => 'Введите Фамилию'])->label(false) ?>
-        <?= $form->field($model, 'middle_name')->textInput(['placeholder' => 'Введите Отчество'])->label(false) ?>
+    <div class="row justify-content-center">
+        <div class="col-md-4">
+            <h1 class="mb-4"><?= Html::encode($this->title) ?></h1>
 
-        <?= $form->field($model, 'birth_date')->textInput([
-            'placeholder' => 'Введите Дату рождения',
-            'class' => 'form-control datepicker',
-        ])->label(false) ?>
+            <?php $form = ActiveForm::begin([
+                'id' => 'user-create-form',
+                'enableClientValidation' => true,
+            ]); ?>
 
-        <?= $form->field($model, 'email')->textInput(['placeholder' => 'Введите Email'])->label(false) ?>
-        <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Введите Пароль'])->label(false) ?>
 
-        <div class="form-group text-center">
-            <?= Html::submitButton('Регистрация', ['class' => 'btn btn-info text-light', 'name' => 'signup-button']) ?>
+            <?= Html::hiddenInput('returnUrl', $returnUrl ?? Yii::$app->homeUrl) ?>
+
+            <?= $form->field($model, 'first_name')->textInput([
+                'placeholder' => 'Введите Имя',
+                'autofocus' => true,
+            ])->label(false) ?>
+
+            <?= $form->field($model, 'last_name')->textInput([
+                'placeholder' => 'Введите Фамилию',
+            ])->label(false) ?>
+
+            <?= $form->field($model, 'middle_name')->textInput([
+                'placeholder' => 'Введите Отчество',
+            ])->label(false) ?>
+
+            <?= $form->field($model, 'birth_date')->textInput([
+                'placeholder' => 'Введите Дату рождения',
+                'class' => 'form-control datepicker',
+                'autocomplete' => 'off',
+            ])->label(false) ?>
+
+            <?= $form->field($model, 'email')->textInput([
+                'placeholder' => 'Введите Email',
+            ])->label(false) ?>
+
+            <?= $form->field($model, 'password')->passwordInput([
+                'placeholder' => 'Введите Пароль',
+            ])->label(false) ?>
+
+            <div class="form-group mt-3 text-center">
+                <?= Html::submitButton('Зарегистрировать', ['class' => 'btn btn-info text-light', 'style' => 'width: 40%;']) ?>
+            </div>
+
+            <?php ActiveForm::end(); ?>
+
         </div>
-
-        <?php ActiveForm::end(); ?>
     </div>
 </div>
 
+<?php
+// Подключаем flatpickr для datepicker
+$this->registerCssFile('https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css');
+$this->registerJsFile('https://cdn.jsdelivr.net/npm/flatpickr', ['depends' => \yii\web\JqueryAsset::class]);
+
+$js = <<<JS
+flatpickr(".datepicker", {
+    dateFormat: "d-m-Y",
+    maxDate: "today",
+    locale: "ru"
+});
+JS;
+
+$this->registerJs($js);
+?>

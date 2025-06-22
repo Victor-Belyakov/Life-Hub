@@ -12,24 +12,25 @@ $this->title = $model->email;
 
 <div class="user-view">
     <style>
-        .table > tbody > tr > th {
-            color: #2b2f32;
+        .table > tbody > tr > th,
+        .table > tbody > tr > td {
+            color: #6c757d;
             font-weight: 500;
         }
+
     </style>
-    <h1 class="text-info"><?= Html::encode($this->title) ?></h1>
+    <h1 class="text-info"><?= Html::encode('Пользователь: ' . $this->title) ?></h1>
 
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
             [
                 'label' => 'Идентификатор',
-                'value' => $model->id,
-                'labelColOptions' => ['style' => 'color: #;'],
+                'value' => $model->id
             ],
             [
                 'label' => 'Email',
-                'value' => $model->email,
+                'value' => $model->email
             ],
             [
                 'label' => 'ФИО',

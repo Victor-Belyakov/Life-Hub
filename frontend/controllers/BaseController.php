@@ -21,7 +21,7 @@ class BaseController extends Controller
                 'denyCallback' => function () {
                     return Yii::$app->response->redirect(['auth/login']);
                 },
-                'except' => ['login', 'signup'],
+                'except' => ['login'],
                 'rules' => [
                     [
                         'allow' => true,

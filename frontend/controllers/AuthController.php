@@ -2,6 +2,7 @@
 
 namespace frontend\controllers;
 
+use backend\services\TelegramService;
 use common\models\LoginForm;
 use frontend\models\form\user\SignupForm;
 use frontend\services\UserService;
@@ -18,13 +19,14 @@ class AuthController extends BaseController
     public function actionSignup(): Response|string
     {
         $form = new SignupForm();
+        $returnUrl = Yii::$app->request->post('returnUrl', Yii::$app->homeUrl);
 
         if ($form->load(Yii::$app->request->post()) && $form->validate()) {
             $userService = new UserService();
             $user = $form->toUser();
 
             if ($userService->register($user)) {
-                return $this->goHome();
+                return $this->redirect($returnUrl);
             }
         }
 
@@ -35,6 +37,7 @@ class AuthController extends BaseController
      * Logs in a user.
      *
      * @return mixed
+     * @throws \yii\httpclient\Exception
      */
     public function actionLogin(): mixed
     {
@@ -44,6 +47,8 @@ class AuthController extends BaseController
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
+            $telegramService = new TelegramService();
+            $telegramService->sendMessage('Пользователь: ' . Yii::$app->user->identity->email . ' авторизовался');
             return $this->redirect(['site/index']);
         }
 

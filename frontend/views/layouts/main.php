@@ -6,7 +6,6 @@ use common\widgets\Alert;
 use frontend\assets\AppAsset;
 use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
-use yii\bootstrap5\NavBar;
 
 AppAsset::register($this);
 ?>
@@ -21,132 +20,179 @@ AppAsset::register($this);
     <?php $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
-
     <style>
-        body {
-            background-color: #f5f5f5;
-            color: #212529;
+        html, body {
+            height: 100%;
+            margin: 0;
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #6c757d;
+        }
+        .auth-content {
+            margin-left: 220px;
+            padding: 20px;
+            background-color: #fff;
+            min-height: calc(100vh - 56px);
+            transition: margin-left 0.25s ease;
         }
 
-        .navbar {
-            background-color: #fff !important;
-            box-shadow: inset 0 -2px 5px -2px rgba(0, 0, 0, 0.1);
-            border-bottom: 1px solid #dee2e6;
+        /* Для гостей — центрирование содержимого */
+        .guest-content {
+            margin: 0 auto;
+            padding: 40px 20px;
+            max-width: 400px; /* или ширина формы авторизации */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: transparent;
         }
-
+        #profile {
+            color: #6c757d;
+        }
         #sidebar {
             position: fixed;
-            top: 56px; /* высота navbar */
+            top: 0;
             left: 0;
             width: 220px;
-            height: calc(100vh - 56px);
+            height: 100vh;
             background-color: #fff;
             border-right: 1px solid #dee2e6;
             box-shadow: inset -3px 0 6px -3px rgba(0,0,0,0.08);
-            transition: width 0.25s ease;
-            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
         }
-
-        #sidebar.collapsed {
-            width: 65px;
-            box-shadow: inset -2px 0 5px -3px rgba(0,0,0,0.06);
+        #sidebar .logo {
+            height: 60px;
+            padding: 10px;
+            font-weight: 700;
+            font-size: 1.75rem;
+            color: #0dcaf0;
+            text-align: center;
+            user-select: none;
         }
-
         #sidebar ul {
             list-style: none;
-            padding: 0;
             margin: 0;
+            padding: 0;
+            flex-grow: 1;
+            overflow-y: auto;
         }
-
         #sidebar ul li {
             padding: 12px 20px;
             display: flex;
             align-items: center;
-            color: #2b2f32;
+            gap: 10px;
+            color: #6c757d;
             cursor: pointer;
             transition: background-color 0.15s ease, color 0.15s ease;
+            border-left: 4px solid transparent;
         }
-
         #sidebar ul li:hover {
-            color: #0a0a0a;
+            color: #0dcaf0;
+        }
+        #sidebar ul li:hover i,
+        #sidebar ul li:hover a {
+            color: #0dcaf0;
+        }
+        #sidebar ul li.active {
+            color: #0dcaf0;
+            border-left-color: #0dcaf0;
+        }
+        #sidebar ul li.active i,
+        #sidebar ul li.active a {
+            color: #0dcaf0;
+        }
+        #sidebar ul li i,
+        #sidebar ul li a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.15s ease;
         }
 
-        #sidebar ul li i {
-            margin-right: 15px;
-            font-size: 20px;
-            min-width: 20px;
-            text-align: center;
+        /* Навбар сверху, сдвинут вправо на ширину меню */
+        #navbar {
+            position: fixed;
+            top: 0;
+            left: 220px;
+            right: 0;
+            height: 60px;
+            background-color: #ffffff;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: #000;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.20);
+            z-index: 1000;
         }
 
-        #sidebar.collapsed ul li span {
-            display: none;
+        #navbar .logout-button {
+            margin-left: auto;
         }
 
-        #content {
+        /* Контент ниже навбара, с отступом слева под меню */
+        #main-content {
+            margin-top: 60px;
             margin-left: 220px;
             padding: 20px;
-            transition: margin-left 0.25s ease;
+            min-height: calc(100vh - 60px);
             background-color: #fff;
             box-shadow: inset 0 0 10px -6px rgba(0,0,0,0.1);
-            min-height: calc(100vh - 56px);
-        }
-
-        #content.expanded {
-            margin-left: 65px;
-        }
-
-        #sidebarToggleBtn {
-            width: 100%;
-            padding: 10px 20px;
-            border: none;
-            background-color: transparent;
-            color: #495057;
-            cursor: pointer;
-            font-weight: 600;
-            text-align: left;
-            user-select: none;
-        }
-
-        #sidebarToggleBtn:hover {
-            background-color: #e9ecef;
+            overflow-y: auto;
         }
 
         .btn-link.logout {
-            color: #0d6efd !important;
+            color: #0dcaf0 !important;
             font-size: 1.3rem;
         }
-
         .btn-link.logout:hover {
             color: #0a58ca !important;
         }
-
-
     </style>
 </head>
-<body class="d-flex flex-column h-100">
+<body>
 <?php $this->beginBody() ?>
+<?php if (!Yii::$app->user->isGuest): ?>
+    <nav id="sidebar">
+        <div class="logo">
+            <a href="<?= Yii::$app->homeUrl ?>" style="color: inherit; text-decoration: none;">Life Hub</a>
+        </div>
 
-<header>
-    <?php
-    NavBar::begin([
-        'brandLabel' => ' <div class="d-flex align-items-center" style="padding-left: 30px;">
-            <button class="btn btn-link text-info p-0" style="font-weight: 700; font-size: 2rem; 
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3); text-decoration: none; cursor: pointer;"> Life Hub </button>
-        </div>',
-        'brandUrl' => Yii::$app->homeUrl,
-        'renderInnerContainer' => false,
-        'options' => [
-            'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top d-flex justify-content-between',
-            'style' => 'height:56px;',
-        ],
-    ]);
-    ?>
+        <ul>
+            <li class="<?= Yii::$app->controller->id == 'journal' ? 'active' : '' ?>">
+                <i class="bi bi-book-fill"></i>
+                <a href="/journal/index">Журнал</a>
+            </li>
+            <li class="<?= Yii::$app->controller->id == 'task' ? 'active' : '' ?>">
+                <i class="bi bi-calendar-check-fill"></i>
+                <a href="/task/index">Задачи</a>
+            </li>
+            <li class="<?= Yii::$app->controller->id == 'article' ? 'active' : '' ?>">
+                <i class="bi bi-list-task"></i>
+                <a href="/article/index">Статьи</a>
+            </li>
+            <li class="<?= Yii::$app->controller->id == 'finance' ? 'active' : '' ?>">
+                <i class="bi bi-piggy-bank-fill"></i>
+                <a href="/finance/index">Финансы</a>
+            </li>
+            <li class="<?= Yii::$app->controller->id == 'user' ? 'active' : '' ?>">
+                <i class="bi bi-people-fill"></i>
+                <a href="/user/index">Пользователи</a>
+            </li>
+            <li class="<?= Yii::$app->controller->id == 'reference' ? 'active' : '' ?>">
+                <i class="bi bi-folder-fill"></i>
+                <a href="/reference/index">Справочники</a>
+            </li>
+        </ul>
+    </nav>
 
-    <div class="d-flex align-items-center" style="margin-left: auto;">
-        <?= Html::beginForm(['/auth/logout'], 'post', ['class' => 'd-flex align-items-center']) ?>
+    <header id="navbar">
+        <?= Html::beginForm(['/auth/logout'], 'post', ['class' => 'd-flex align-items-center logout-button']) ?>
+
+        <div id="profile" class="me-3"><?= Yii::$app->user->identity->fullName ?? '' ?></div>
+
         <?= Html::submitButton(
-            '<i class="bi bi-box-arrow-right" style="color: #0dcaf0; font-size: 24px;"></i>',
+            '<i class="bi bi-box-arrow-right ml-2" style="color: #0dcaf0; font-size: 24px;"></i>',
             [
                 'class' => 'btn btn-link logout text-decoration-none p-0',
                 'title' => 'Выйти',
@@ -154,25 +200,11 @@ AppAsset::register($this);
             ]
         ) ?>
         <?= Html::endForm() ?>
-    </div>
+    </header>
+<?php endif; ?>
 
 
-    <?php NavBar::end(); ?>
-</header>
-
-<div id="sidebar">
-
-    <ul>
-        <li><i class="bi bi-book-fill text-info" ></i> <a href="" style="color: inherit; text-decoration: none; cursor: pointer;">Журнал</a></li>
-        <li><i class="bi bi-calendar-check-fill text-info"></i> <a href="" style="color: inherit; text-decoration: none; cursor: pointer;">Задачи</a></li>
-        <li><i class="bi bi-list-task text-info"></i> <a href="" style="color: inherit; text-decoration: none; cursor: pointer;">Статьи</a></li>
-        <li><i class="bi bi-piggy-bank-fill text-info"></i> <a href="" style="color: inherit; text-decoration: none; cursor: pointer;">Финансы</a></li>
-        <li><i class="bi bi-people-fill text-info"></i> <a href="/user/index" style="color: inherit; text-decoration: none; cursor: pointer;">Пользователи</a></li>
-        <li><i class="bi bi-folder-fill text-info"></i> <a href="" style="color: inherit; text-decoration: none; cursor: pointer;">Справочники</a></li>
-    </ul>
-</div>
-
-<main id="content">
+<main id="content" class="<?= Yii::$app->user->isGuest ? 'guest-content' : 'auth-content' ?>">
     <div class="container-fluid">
         <?= Breadcrumbs::widget([
             'links' => $this->params['breadcrumbs'] ?? [],
@@ -196,15 +228,6 @@ AppAsset::register($this);
     let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
     let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
         return new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-
-    const sidebar = document.getElementById('sidebar');
-    const content = document.getElementById('content');
-    const toggleBtn = document.getElementById('sidebarToggleBtn');
-
-    toggleBtn.addEventListener('click', () => {
-        sidebar.classList.toggle('collapsed');
-        content.classList.toggle('expanded');
     });
 </script>
 
