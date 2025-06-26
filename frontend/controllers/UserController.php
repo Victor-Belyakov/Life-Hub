@@ -69,4 +69,22 @@ class UserController extends BaseController
 
         return $this->redirect(['index']);
     }
+
+    public function actionExecutorList($q = null)
+    {
+        \Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $out = ['items' => []];
+        if (!is_null($q)) {
+            $data = User::find()
+                ->select(['id', 'username AS text'])
+                ->where(['like', 'username', $q])
+                ->limit(20)
+                ->asArray()
+                ->all();
+            $out['items'] = $data;
+        }
+        return $out;
+    }
+
 }

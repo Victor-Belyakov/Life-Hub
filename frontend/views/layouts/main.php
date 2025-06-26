@@ -28,6 +28,7 @@ AppAsset::register($this);
             background-color: #f5f5f5;
             color: #6c757d;
         }
+
         .auth-content {
             margin-left: 220px;
             padding: 20px;
@@ -169,22 +170,22 @@ AppAsset::register($this);
         </div>
 
         <ul>
-            <li class="<?= Yii::$app->controller->id == 'journal' ? 'active' : '' ?>">
-                <i class="bi bi-book-fill"></i>
-                <a href="/journal/index">Журнал</a>
-            </li>
+<!--            <li class="--><?php //= Yii::$app->controller->id == 'journal' ? 'active' : '' ?><!--">-->
+<!--                <i class="bi bi-book-fill"></i>-->
+<!--                <a href="/journal/index">Журнал</a>-->
+<!--            </li>-->
             <li class="<?= Yii::$app->controller->id == 'task' ? 'active' : '' ?>">
                 <i class="bi bi-calendar-check-fill"></i>
                 <a href="/task/index">Задачи</a>
             </li>
-            <li class="<?= Yii::$app->controller->id == 'article' ? 'active' : '' ?>">
-                <i class="bi bi-list-task"></i>
-                <a href="/article/index">Статьи</a>
-            </li>
-            <li class="<?= Yii::$app->controller->id == 'finance' ? 'active' : '' ?>">
-                <i class="bi bi-piggy-bank-fill"></i>
-                <a href="/finance/index">Финансы</a>
-            </li>
+<!--            <li class="--><?php //= Yii::$app->controller->id == 'article' ? 'active' : '' ?><!--">-->
+<!--                <i class="bi bi-list-task"></i>-->
+<!--                <a href="/article/index">Статьи</a>-->
+<!--            </li>-->
+<!--            <li class="--><?php //= Yii::$app->controller->id == 'finance' ? 'active' : '' ?><!--">-->
+<!--                <i class="bi bi-piggy-bank-fill"></i>-->
+<!--                <a href="/finance/index">Финансы</a>-->
+<!--            </li>-->
             <li class="<?= Yii::$app->controller->id == 'user' ? 'active' : '' ?>">
                 <i class="bi bi-people-fill"></i>
                 <a href="/user/index">Пользователи</a>
