@@ -16,4 +16,9 @@ interface PermissionInterface
      * @return string
      */
     public static function getName(): string;
+
+    /**
+     * @return string
+     */
+    public static function getDescription(): string;
 }

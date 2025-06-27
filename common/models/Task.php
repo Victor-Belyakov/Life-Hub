@@ -2,6 +2,9 @@
 
 namespace common\models;
 
+use common\behaviors\DateFormatBehavior;
+use frontend\enum\TaskPriorityEnum;
+use frontend\enum\TaskStatusEnum;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
@@ -17,6 +20,8 @@ use yii\db\Expression;
  * @property string $status
  * @property string $priority
  * @property int|null $executor_id
+ * @property int $creator_id
+ * @property User $creator
  * @property string|null $deadline
  * @property string $created_at
  * @property string|null $updated_at
@@ -25,15 +30,6 @@ use yii\db\Expression;
  */
 class Task extends ActiveRecord
 {
-    const STATUS_NEW = 'new';
-    const STATUS_IN_PROGRESS = 'in_progress';
-    const STATUS_DONE = 'done';
-    const STATUS_CANCELED = 'canceled';
-
-    const PRIORITY_LOW = 'low';
-    const PRIORITY_MEDIUM = 'medium';
-    const PRIORITY_HIGH = 'high';
-
     /**
      * {@inheritdoc}
      */
@@ -52,24 +48,11 @@ class Task extends ActiveRecord
                 'class' => TimestampBehavior::class,
                 'value' => new Expression('NOW()'),
             ],
+            [
+                'class' => DateFormatBehavior::class,
+                'attributes' => ['deadline'],
+            ],
         ];
-    }
-
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            if (is_string($this->deadline)) {
-                // пытаемся распарсить дату в формате d-m-Y
-                $date = \DateTime::createFromFormat('d-m-Y', $this->deadline);
-                if ($date) {
-                    $this->deadline = $date->format('Y-m-d');
-                } else {
-                    $this->deadline = null;
-                }
-            }
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -78,13 +61,13 @@ class Task extends ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'status', 'priority'], 'required'],
+            [['title', 'status', 'priority', 'creator_id'], 'required'],
             [['description'], 'string'],
-            [['executor_id'], 'integer'],
+            [['executor_id', 'creator_id'], 'integer'],
             [['deadline', 'created_at', 'updated_at'], 'safe'],
             [['title'], 'string', 'max' => 255],
-            [['status'], 'in', 'range' => [self::STATUS_NEW, self::STATUS_IN_PROGRESS, self::STATUS_DONE, self::STATUS_CANCELED]],
-            [['priority'], 'in', 'range' => [self::PRIORITY_LOW, self::PRIORITY_MEDIUM, self::PRIORITY_HIGH]],
+            [['status'], 'in', 'range' => array_map(static fn($enum) => $enum->value, TaskStatusEnum::cases())],
+            [['priority'], 'in', 'range' => array_map(static fn($enum) => $enum->value, TaskPriorityEnum::cases())],
         ];
     }
 
@@ -100,6 +83,7 @@ class Task extends ActiveRecord
             'status' => 'Статус',
             'priority' => 'Приоритет',
             'executor_id' => 'Исполнитель',
+            'creator_id' => 'Постановщик задачи',
             'deadline' => 'Срок выполнения',
             'created_at' => 'Дата создания',
             'updated_at' => 'Дата обновления',
@@ -110,8 +94,17 @@ class Task extends ActiveRecord
      * Получить исполнителя задачи
      * @return ActiveQuery
      */
-    public function getExecutor()
+    public function getExecutor(): ActiveQuery
     {
         return $this->hasOne(User::class, ['id' => 'executor_id']);
+    }
+
+    /**
+     * Получить постановщика задачи
+     * @return ActiveQuery
+     */
+    public function getCreator(): ActiveQuery
+    {
+        return $this->hasOne(User::class, ['id' => 'creator_id']);
     }
 }

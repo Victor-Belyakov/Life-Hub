@@ -1,6 +1,7 @@
 <?php
 
 use common\models\User;
+use frontend\enum\TaskPriorityEnum;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
@@ -14,6 +15,7 @@ use common\models\Task;
 /** @var yii\web\View $this */
 /** @var common\models\Task $model */
 
+$dropdownParent = $model->isNewRecord ? '#createTaskModal' : '#updateTaskModal';
 ?>
 
     <div class="task-form">
@@ -33,16 +35,13 @@ use common\models\Task;
 
         <div class="mb-3" style="color: #6c757d">
             <?= $form->field($model, 'priority')->dropDownList([
-                Task::PRIORITY_LOW => 'Низкий',
-                Task::PRIORITY_MEDIUM => 'Средний',
-                Task::PRIORITY_HIGH => 'Высокий',
+                TaskPriorityEnum::LOW->value => TaskPriorityEnum::LOW->label(),
+                TaskPriorityEnum::MEDIUM->value => TaskPriorityEnum::MEDIUM->label(),
+                TaskPriorityEnum::HIGH->value => TaskPriorityEnum::HIGH->label(),
             ]) ?>
         </div>
 
         <div class="mb-3" style="color: #6c757d">
-            <?php
-            $dropdownParent = $model->isNewRecord ? '#createTaskModal' : '#updateTaskModal';
-            ?>
             <?= $form->field($model, 'executor_id')->widget(Select2::class, [
                 'options' => ['placeholder' => 'Выберите исполнителя...'],
                 'pluginOptions' => [

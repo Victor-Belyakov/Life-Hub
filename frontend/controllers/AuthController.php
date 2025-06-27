@@ -2,11 +2,11 @@
 
 namespace frontend\controllers;
 
-use backend\services\TelegramService;
 use common\models\LoginForm;
-use console\rbac\permissions\user\CreateUserPermission;
+use console\rbac\permissions\user\UserCreatePermission;
 use frontend\models\form\user\SignupForm;
-use frontend\services\UserService;
+use TelegramService;
+use UserService;
 use Yii;
 use yii\db\Exception;
 use yii\web\ForbiddenHttpException;
@@ -17,10 +17,11 @@ class AuthController extends BaseController
     /**
      * @return Response|string
      * @throws Exception
+     * @throws ForbiddenHttpException
      */
     public function actionSignup(): Response|string
     {
-        if (!Yii::$app->user->can(CreateUserPermission::getName())) {
+        if (!Yii::$app->user->can(UserCreatePermission::getName())) {
             throw new ForbiddenHttpException('У вас нет прав для создания пользователей.');
         }
 

@@ -2,13 +2,15 @@
 
 namespace common\models;
 
+use common\behaviors\DateFormatBehavior;
 use console\rbac\roles\UserRole;
 use DateTime;
 use frontend\enum\UserEnum;
-use frontend\services\UserService;
+use UserService;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Exception;
 use yii\db\Expression;
@@ -27,6 +29,7 @@ use yii\web\IdentityInterface;
  * @property string $verification_token
  * @property string $email
  * @property string $auth_key
+ * @property string $chat_id
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
@@ -59,27 +62,17 @@ class User extends ActiveRecord implements IdentityInterface
                 'class' => TimestampBehavior::class,
                 'value' => new Expression('NOW()'),
             ],
+            [
+                'class' => DateFormatBehavior::class,
+                'attributes' => ['birth_date'],
+            ],
         ];
     }
 
-    public function beforeSave($insert)
-    {
-        if (parent::beforeSave($insert)) {
-            if (is_string($this->birth_date)) {
-                // пытаемся распарсить дату в формате d-m-Y
-                $date = \DateTime::createFromFormat('d-m-Y', $this->birth_date);
-                if ($date) {
-                    $this->birth_date = $date->format('Y-m-d');
-                } else {
-                    $this->birth_date = null;
-                }
-            }
-            return true;
-        }
-        return false;
-    }
-
-    public function afterSave($insert, $changedAttributes)
+    /**
+     * @throws \Exception
+     */
+    public function afterSave($insert, $changedAttributes): void
     {
         parent::afterSave($insert, $changedAttributes);
         UserService::assignRole($this->id, $this->role);
@@ -101,7 +94,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             [['first_name', 'last_name', 'middle_name', 'email', 'birth_date', 'status', 'role'], 'safe'],
-            [['first_name', 'last_name', 'email'], 'string', 'max' => 255],
+            [['first_name', 'last_name', 'email', 'chat_id'], 'string', 'max' => 255],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['email', 'unique', 'message' => 'Этот email уже используется.'],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
@@ -316,5 +309,14 @@ class User extends ActiveRecord implements IdentityInterface
     public function setRole($value): void
     {
         $this->_role = $value;
+    }
+
+    /**
+     * Телеграм
+     * @return ActiveQuery
+     */
+    public function getTelegram(): ActiveQuery
+    {
+        return $this->hasOne(Telegram::class, ['id' => 'user_id']);
     }
 }

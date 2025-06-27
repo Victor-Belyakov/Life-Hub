@@ -55,7 +55,6 @@ $this->title = 'Регистрация пользователя';
             </div>
 
             <?php ActiveForm::end(); ?>
-
         </div>
     </div>
 </div>

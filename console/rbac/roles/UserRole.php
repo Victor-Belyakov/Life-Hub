@@ -2,7 +2,7 @@
 
 namespace console\rbac\roles;
 
-use console\rbac\permissions\user\ViewUserPermission;
+use console\rbac\permissions\user\UserViewPermission;
 use console\rbac\RoleInterface;
 use Exception;
 use yii\rbac\ManagerInterface;
@@ -52,7 +52,7 @@ class UserRole implements RoleInterface
     public function getPermissions(): array
     {
         return [
-            ViewUserPermission::getName()
+            UserViewPermission::class
         ];
     }
 }

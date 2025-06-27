@@ -2,16 +2,18 @@
 
 namespace console\rbac\roles;
 
-use console\rbac\permissions\user\CreateUserPermission;
-use console\rbac\permissions\user\UpdateUserPermission;
-use console\rbac\permissions\user\ViewUserPermission;
+use console\rbac\permissions\task\TaskIndexPermission;
+use console\rbac\permissions\user\UserCreatePermission;
+use console\rbac\permissions\user\UserIndexPermission;
+use console\rbac\permissions\user\UserUpdatePermission;
+use console\rbac\permissions\user\UserViewPermission;
 use console\rbac\RoleInterface;
 use Exception;
 use yii\rbac\ManagerInterface;
 
 class AdminRole implements RoleInterface
 {
-    public const string ROLE_USER = 'admin';
+    public const string ROLE_ADMIN = 'admin';
 
     /**
      * @param ManagerInterface $auth
@@ -54,9 +56,11 @@ class AdminRole implements RoleInterface
     public function getPermissions(): array
     {
         return [
-            CreateUserPermission::getName(),
-            UpdateUserPermission::getName(),
-            ViewUserPermission::getName()
+            UserCreatePermission::class,
+            UserUpdatePermission::class,
+            UserIndexPermission::class,
+            UserViewPermission::class,
+            TaskIndexPermission::class,
         ];
     }
 }

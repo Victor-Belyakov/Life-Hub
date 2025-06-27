@@ -1,13 +1,16 @@
 <?php
 /** @var \yii\web\View $this */
+
 /** @var string $content */
 
+use app\widgets\SidebarWidget;
 use common\widgets\Alert;
 use frontend\assets\AppAsset;
 use yii\bootstrap5\Breadcrumbs;
 use yii\bootstrap5\Html;
 
 AppAsset::register($this);
+$hasAccess = !Yii::$app->user->isGuest && !empty(Yii::$app->user->identity->role);
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
@@ -48,6 +51,7 @@ AppAsset::register($this);
             justify-content: center;
             background-color: transparent;
         }
+
         .no-role-content {
             margin: 0 auto;
             padding: 40px 20px;
@@ -58,9 +62,11 @@ AppAsset::register($this);
             justify-content: center;
             background-color: transparent;
         }
+
         #profile {
             color: #6c757d;
         }
+
         #sidebar {
             position: fixed;
             top: 0;
@@ -69,10 +75,11 @@ AppAsset::register($this);
             height: 100vh;
             background-color: #fff;
             border-right: 1px solid #dee2e6;
-            box-shadow: inset -3px 0 6px -3px rgba(0,0,0,0.08);
+            box-shadow: inset -3px 0 6px -3px rgba(0, 0, 0, 0.08);
             display: flex;
             flex-direction: column;
         }
+
         #sidebar .logo {
             height: 60px;
             padding: 10px;
@@ -82,6 +89,7 @@ AppAsset::register($this);
             text-align: center;
             user-select: none;
         }
+
         #sidebar ul {
             list-style: none;
             margin: 0;
@@ -89,6 +97,7 @@ AppAsset::register($this);
             flex-grow: 1;
             overflow-y: auto;
         }
+
         #sidebar ul li {
             padding: 12px 20px;
             display: flex;
@@ -99,21 +108,26 @@ AppAsset::register($this);
             transition: background-color 0.15s ease, color 0.15s ease;
             border-left: 4px solid transparent;
         }
+
         #sidebar ul li:hover {
             color: #0dcaf0;
         }
+
         #sidebar ul li:hover i,
         #sidebar ul li:hover a {
             color: #0dcaf0;
         }
+
         #sidebar ul li.active {
             color: #0dcaf0;
             border-left-color: #0dcaf0;
         }
+
         #sidebar ul li.active i,
         #sidebar ul li.active a {
             color: #0dcaf0;
         }
+
         #sidebar ul li i,
         #sidebar ul li a {
             color: inherit;
@@ -148,7 +162,7 @@ AppAsset::register($this);
             padding: 20px;
             min-height: calc(100vh - 60px);
             background-color: #fff;
-            box-shadow: inset 0 0 10px -6px rgba(0,0,0,0.1);
+            box-shadow: inset 0 0 10px -6px rgba(0, 0, 0, 0.1);
             overflow-y: auto;
         }
 
@@ -156,6 +170,7 @@ AppAsset::register($this);
             color: #0dcaf0 !important;
             font-size: 1.3rem;
         }
+
         .btn-link.logout:hover {
             color: #0a58ca !important;
         }
@@ -163,39 +178,8 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
-<?php if (!Yii::$app->user->isGuest && !empty(Yii::$app->user->identity->role)): ?>
-    <nav id="sidebar">
-        <div class="logo">
-            <a href="<?= Yii::$app->homeUrl ?>" style="color: inherit; text-decoration: none;">Life Hub</a>
-        </div>
-
-        <ul>
-<!--            <li class="--><?php //= Yii::$app->controller->id == 'journal' ? 'active' : '' ?><!--">-->
-<!--                <i class="bi bi-book-fill"></i>-->
-<!--                <a href="/journal/index">Журнал</a>-->
-<!--            </li>-->
-            <li class="<?= Yii::$app->controller->id == 'task' ? 'active' : '' ?>">
-                <i class="bi bi-calendar-check-fill"></i>
-                <a href="/task/index">Задачи</a>
-            </li>
-<!--            <li class="--><?php //= Yii::$app->controller->id == 'article' ? 'active' : '' ?><!--">-->
-<!--                <i class="bi bi-list-task"></i>-->
-<!--                <a href="/article/index">Статьи</a>-->
-<!--            </li>-->
-<!--            <li class="--><?php //= Yii::$app->controller->id == 'finance' ? 'active' : '' ?><!--">-->
-<!--                <i class="bi bi-piggy-bank-fill"></i>-->
-<!--                <a href="/finance/index">Финансы</a>-->
-<!--            </li>-->
-            <li class="<?= Yii::$app->controller->id == 'user' ? 'active' : '' ?>">
-                <i class="bi bi-people-fill"></i>
-                <a href="/user/index">Пользователи</a>
-            </li>
-            <li class="<?= Yii::$app->controller->id == 'reference' ? 'active' : '' ?>">
-                <i class="bi bi-folder-fill"></i>
-                <a href="/reference/index">Справочники</a>
-            </li>
-        </ul>
-    </nav>
+<?php if ($hasAccess): ?>
+    <?= SidebarWidget::widget() ?>
 
     <header id="navbar">
         <?= Html::beginForm(['/auth/logout'], 'post', ['class' => 'd-flex align-items-center logout-button']) ?>
@@ -215,12 +199,19 @@ AppAsset::register($this);
 <?php endif; ?>
 
 
-<main id="content" class=" <?= Yii::$app->user->isGuest
-        ? 'guest-content'
-        : (empty(Yii::$app->user->identity->role)
-            ? 'no-role-content'
-            : 'auth-content')
-    ?>">
+<?php
+$mainClass = '';
+
+if (Yii::$app->user->isGuest) {
+    $mainClass = 'guest-content';
+} elseif (empty(Yii::$app->user->identity->role)) {
+    $mainClass = 'no-role-content';
+} else {
+    $mainClass = 'auth-content';
+}
+?>
+
+<main id="content" class=" <?= $mainClass ?>">
     <div class="container-fluid">
         <?= Breadcrumbs::widget([
             'links' => $this->params['breadcrumbs'] ?? [],

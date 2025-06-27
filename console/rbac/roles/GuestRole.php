@@ -8,7 +8,7 @@ use yii\rbac\ManagerInterface;
 
 class GuestRole implements RoleInterface
 {
-    public const string ROLE_USER = 'guest';
+    public const string ROLE_GUEST = 'guest';
 
     /**
      * @param ManagerInterface $auth

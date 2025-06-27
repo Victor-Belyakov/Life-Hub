@@ -26,15 +26,10 @@ foreach ($tasks as $task) {
 }
 ?>
 
-<div class="task-index">
-    <p>
-        <?= Html::button('Создать задачу', [
-            'class' => 'btn btn-success text-light',
-            'data-bs-toggle' => 'modal',
-            'data-bs-target' => '#createTaskModal'
-        ]) ?>
-    </p>
 
+<?= $this->render('_header') ?>
+
+<div class="task-index">
     <div class="row">
         <?php foreach ($statuses as $statusCode => $statusLabel): ?>
             <div class="col-md-3">

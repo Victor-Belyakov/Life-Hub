@@ -1,6 +1,6 @@
 <?php
 
-use console\rbac\permissions\user\UpdateUserPermission;
+use console\rbac\permissions\user\UserUpdatePermission;
 use frontend\enum\UserEnum;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;

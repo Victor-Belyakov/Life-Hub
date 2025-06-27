@@ -2,11 +2,10 @@
 
 namespace frontend\controllers;
 
-
-use backend\services\TelegramService;
 use common\models\User;
 use frontend\models\search\UserSearch;
-use frontend\services\UserService;
+use TelegramService;
+use UserService;
 use Yii;
 use yii\db\Exception;
 use yii\web\Response;
@@ -76,19 +75,11 @@ class UserController extends BaseController
      */
     public function actionExecutorList($q = null): array
     {
-        \Yii::$app->response->format = Response::FORMAT_JSON;
-
         $out = ['items' => []];
         if (!is_null($q)) {
-            $data = User::find()
-                ->select(['id', 'fullName AS text'])
-                ->where(['like', 'fullName', $q])
-                ->limit(20)
-                ->asArray()
-                ->all();
-            $out['items'] = $data;
+            $searchModel = new UserSearch();
+            $out['items'] = $searchModel->getUserForSelect2($q);
         }
         return $out;
     }
-
 }

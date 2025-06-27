@@ -1,7 +1,8 @@
 <?php
 
-use console\rbac\permissions\user\CreateUserPermission;
-use console\rbac\permissions\user\UpdateUserPermission;
+use yii\grid\ActionColumn;
+use console\rbac\permissions\user\UserCreatePermission;
+use console\rbac\permissions\user\UserUpdatePermission;
 use frontend\enum\UserEnum;
 use yii\grid\GridView;
 use yii\helpers\Html;
@@ -15,7 +16,7 @@ use yii\helpers\Url;
 
 <p>
     <?php
-        if (Yii::$app->user->can(CreateUserPermission::getName())) {
+        if (Yii::$app->user->can(UserCreatePermission::getName())) {
             echo Html::a('Зарегистрировать', ['/auth/signup', 'returnUrl' => Yii::$app->request->referrer], ['class' => 'btn btn-success text-light']) ;
         }
     ?>
@@ -35,19 +36,19 @@ use yii\helpers\Url;
     'columns' => [
         [
             'label' => '<span class="text-info">Id</span>',
-            'value' => function($model) { return $model->id; },
+            'value' => static function($model) { return $model->id; },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
             'label' => '<span class="text-info">Email</span>',
-            'value' => function($model) { return $model->email; },
+            'value' => static function($model) { return $model->email; },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
             'label' => '<span class="text-info">ФИО</span>',
-            'value' => function($searchModel) {
+            'value' => static function($searchModel) {
                 return trim($searchModel->first_name . ' ' . $searchModel->middle_name . ' ' . $searchModel->last_name);
             },
             'encodeLabel' => false,
@@ -55,13 +56,13 @@ use yii\helpers\Url;
         ],
         [
             'label' => '<span class="text-info">Роль</span>',
-            'value' => function($model) { return $model->getRoleName(); },
+            'value' => static function($model) { return $model->getRoleName(); },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
             'label' => '<span class="text-info">День рождения</span>',
-            'value' => function($model) {
+            'value' => static function($model) {
                 $date = new \DateTime($model->birth_date);
                 return $date->format('d-m-Y');
             },
@@ -70,12 +71,12 @@ use yii\helpers\Url;
         ],
         [
             'label' => '<span class="text-info">Статус</span>',
-            'value' => function($model) {
+            'value' => static function($model) {
                 $status = UserEnum::fromValue((int)$model->status);
                 return $status ? $status->label() : 'Неизвестно';
             },
             'encodeLabel' => false,
-            'contentOptions' => function($model) {
+            'contentOptions' => static function($model) {
                 $status = (int)$model->status;
                 return match ($status) {
                     UserEnum::STATUS_ACTIVE->value => ['class' => 'text-success'],
@@ -86,21 +87,21 @@ use yii\helpers\Url;
             },
         ],
         [
-            'class' => 'yii\grid\ActionColumn',
+            'class' => ActionColumn::class,
             'header' => '<span class="text-info">Действия</span>',
             'template' => '{update} {delete}',
             'contentOptions' => ['class' => 'action-buttons'],
             'buttons' => [
-                'update' => function ($url, $model, $key) {
-                    return Yii::$app->user->can(UpdateUserPermission::getName())
+                'update' => static function ($url, $model, $key) {
+                    return Yii::$app->user->can(UserUpdatePermission::getName())
                         ? Html::a('<i class="bi bi-pencil text-info"></i>', $url, [
                             'title' => 'Редактировать',
                             'class' => 'btn btn-sm me-1',
                             'data-pjax' => '0',
                         ]) : '';
                 },
-                'delete' => function ($url, $model, $key) {
-                    return Yii::$app->user->can(UpdateUserPermission::getName())
+                'delete' => static function ($url, $model, $key) {
+                    return Yii::$app->user->can(UserUpdatePermission::getName())
                         ? Html::a('<i class="bi bi-trash text-info"></i>', $url, [
                             'title' => 'Удалить',
                             'class' => 'btn btn-sm',

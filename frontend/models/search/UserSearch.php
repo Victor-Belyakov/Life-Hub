@@ -7,6 +7,8 @@ use yii\data\ActiveDataProvider;
 
 class UserSearch extends User
 {
+    private const int USER_SELECT2_LIMIT = 5;
+
     public function search($params)
     {
         $query = User::find();
@@ -34,5 +36,19 @@ class UserSearch extends User
 
 
         return $dataProvider;
+    }
+
+    /**
+     * @param string $q
+     * @return array
+     */
+    public function getUserForSelect2(string $q): array
+    {
+        return User::find()
+            ->select(['id', 'fullName AS text'])
+            ->where(['ilike', 'fullName', $q])
+            ->limit(self::USER_SELECT2_LIMIT)
+            ->asArray()
+            ->all();
     }
 }

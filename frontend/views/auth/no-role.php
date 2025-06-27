@@ -4,7 +4,6 @@ use yii\helpers\Html;
 $this->title = 'Нет роли';
 ?>
 
-
 <div class="container text-center">
     <div class="alert alert-danger" role="alert" style="font-size: 1.25rem;">
         <strong>Ошибка:</strong> За Вами не закреплена роль, обратитесь к администратору.

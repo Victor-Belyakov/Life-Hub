@@ -2,9 +2,12 @@
 
 namespace frontend\controllers;
 
+use frontend\enum\TaskPriorityEnum;
 use frontend\models\search\TaskSearch;
+use TelegramService;
 use Yii;
 use common\models\Task;
+use yii\httpclient\Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -16,7 +19,7 @@ use yii\web\Response;
 class TaskController extends Controller
 {
     /**
-     * Список задач
+     * Список задач для доски
      */
     public function actionIndex()
     {
@@ -30,7 +33,22 @@ class TaskController extends Controller
     }
 
     /**
+     * Список задач для листинга
+     */
+    public function actionList(): string
+    {
+        $searchModel = new TaskSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('list', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
      * Просмотр одной задачи
+     * @throws NotFoundHttpException
      */
     public function actionView($id): string
     {
@@ -41,13 +59,25 @@ class TaskController extends Controller
 
     /**
      * Создание новой задачи
+     * @throws Exception|\yii\db\Exception
      */
     public function actionCreate(): Response|string
     {
         $model = new Task();
         if ($model->load(Yii::$app->request->post())) {
-
+            $model->creator_id = Yii::$app->user->id;
             $model->save();
+
+            if ($model->executor_id !== $model->creator_id) {
+                TelegramService::sendMessage(sprintf(
+                    "Пользователю %s назначена задача %s от %s. Время выполнения до %s",
+                    $model->executor->getFullName(),
+                    $model->creator->getFullName(),
+                    $model->title,
+                    $model->deadline
+                ));
+            }
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -76,19 +106,19 @@ class TaskController extends Controller
                             'priority' => $model->priority,
                             'executor_id' => $model->executor_id,
                             'deadline' => $model->deadline,
-                            'priorityLabel' => \frontend\enum\TaskPriorityEnum::fromValue($model->priority)?->label(),
-                            'priorityClass' => \frontend\enum\TaskPriorityEnum::fromValue($model->priority)?->badgeClass(),
+                            'priorityLabel' => TaskPriorityEnum::fromValue($model->priority)?->label(),
+                            'priorityClass' => TaskPriorityEnum::fromValue($model->priority)?->badgeClass(),
                         ],
                     ]);
                 }
                 return $this->redirect(['index']);
-            } else {
-                if (Yii::$app->request->isAjax) {
-                    return $this->asJson([
-                        'success' => false,
-                        'errors' => $model->errors,
-                    ]);
-                }
+            }
+
+            if (Yii::$app->request->isAjax) {
+                return $this->asJson([
+                    'success' => false,
+                    'errors' => $model->errors,
+                ]);
             }
         }
 
@@ -98,8 +128,6 @@ class TaskController extends Controller
 
         return $this->render('update', ['model' => $model]);
     }
-
-
 
     /**
      * Удаление задачи
@@ -122,10 +150,12 @@ class TaskController extends Controller
         throw new NotFoundHttpException('Запрашиваемая задача не найдена.');
     }
 
-    public function actionChangeStatus()
+    /**
+     * @return false[]|true[]
+     * @throws \yii\db\Exception
+     */
+    public function actionChangeStatus(): array
     {
-        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
-
         $taskId = Yii::$app->request->post('id');
         $newStatus = Yii::$app->request->post('status');
 
