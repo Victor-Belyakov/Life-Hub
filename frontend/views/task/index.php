@@ -3,6 +3,13 @@ use frontend\enum\TaskPriorityEnum;
 use yii\bootstrap5\Modal;
 use yii\helpers\Html;
 use yii\helpers\Url;
+use yii\web\JqueryAsset;
+
+/**
+ * @var $newTaskModel
+ * @var $tasks
+ */
+
 
 $this->title = 'Задачи';
 
@@ -22,7 +29,7 @@ foreach ($tasks as $task) {
 <div class="task-index">
     <p>
         <?= Html::button('Создать задачу', [
-            'class' => 'btn btn-info text-light',
+            'class' => 'btn btn-success text-light',
             'data-bs-toggle' => 'modal',
             'data-bs-target' => '#createTaskModal'
         ]) ?>
@@ -103,31 +110,7 @@ $formUrl = Url::to(['task/update']);
 $updateUrl = Url::to(['task/change-status']);
 $updateFormUrl = Url::to(['task/update']);
 $indexUrl = Url::to(['task/index']);
-$this->registerCss(<<<CSS
-.custom-modal .modal-header {
-    background-color: #0dcaf0;
-    color: #fff;
-}
-.card.task-item {
-    border: 1px solid transparent; /* базовая прозрачная рамка */
-    background-color: #fff; /* фон белый */
-    transition: border-color 0.3s ease;
-}
 
-.card.task-item.border-low {
-    border-color: #198754; /* синий цвет рамки */
-}
-
-.card.task-item.border-medium {
-    border-color: #ffc107; /* желтый цвет рамки */
-}
-
-.card.task-item.border-high {
-    border-color: #dc3545; /* красный цвет рамки */
-}
-
-CSS
-);
 $js = <<<JS
 function updateEmptyPlaceholders() {
     $(".task-column").each(function() {
@@ -170,17 +153,20 @@ $(".task-column").sortable({
 
 updateEmptyPlaceholders();
 
-// Открываем форму редактирования в модалке
 $(".task-index").on("click", ".update-task-btn", function() {
     var id = $(this).data("id");
     $("#updateTaskModalContent").html("Загрузка...");
     $("#updateTaskModal").modal("show");
     $.get("$updateFormUrl", {id: id}, function(data) {
         $("#updateTaskModalContent").html(data);
+        
+         // После вставки контента — принудительная инициализация Select2
+        $('#updateTaskModalContent').find('select').select2({
+            dropdownParent: $('#updateTaskModal')
+        });
     });
 });
 
-// AJAX-сабмит формы редактирования
 $("#updateTaskModal").on("submit", "#task-form", function(e) {
     e.preventDefault();
     var form = $(this);
@@ -231,8 +217,9 @@ $("#updateTaskModal").on("submit", "#task-form", function(e) {
 });
 JS;
 
-$this->registerJs($js);
+$this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position' => \yii\web\View::POS_HEAD]);
 $this->registerCssFile('https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css');
-$this->registerJsFile('https://code.jquery.com/ui/1.13.2/jquery-ui.min.js', ['depends' => \yii\web\JqueryAsset::class]);
+$this->registerJsFile('https://code.jquery.com/ui/1.13.2/jquery-ui.min.js', ['depends' => JqueryAsset::class]);
+$this->registerCssFile('@web/css/task/index.css');
 
 ?>

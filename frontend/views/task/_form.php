@@ -40,14 +40,17 @@ use common\models\Task;
         </div>
 
         <div class="mb-3" style="color: #6c757d">
+            <?php
+            $dropdownParent = $model->isNewRecord ? '#createTaskModal' : '#updateTaskModal';
+            ?>
             <?= $form->field($model, 'executor_id')->widget(Select2::class, [
                 'options' => ['placeholder' => 'Выберите исполнителя...'],
                 'pluginOptions' => [
                     'allowClear' => true,
-                    'minimumInputLength' => 2, // минимум символов для запроса
-                    'dropdownParent' => new JsExpression('$("#createTaskModal")'),
+                    'minimumInputLength' => 2,
+                    'dropdownParent' => new JsExpression('jQuery("' . $dropdownParent . '")'),
                     'ajax' => [
-                        'url' => Url::to(['user/executor-list']), // твой экшен с поиском
+                        'url' => Url::to(['user/executor-list']),
                         'dataType' => 'json',
                         'delay' => 250,
                         'data' => new JsExpression('function(params) { return {q:params.term}; }'),
@@ -58,8 +61,7 @@ use common\models\Task;
                     'templateResult' => new JsExpression('function(data) { return data.text; }'),
                     'templateSelection' => new JsExpression('function(data) { return data.text; }'),
                 ],
-            ]); ?>
-
+            ]) ?>
         </div>
 
         <div class="mb-3" style="color: #6c757d">
@@ -85,7 +87,4 @@ $this->registerJsFile('https://cdn.jsdelivr.net/npm/flatpickr', ['depends' => Jq
         maxDate: "today",
         locale: "ru"
     });
-
-
-
 </script>

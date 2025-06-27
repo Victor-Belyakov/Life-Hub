@@ -16,7 +16,7 @@ use yii\helpers\Url;
 <p>
     <?php
         if (Yii::$app->user->can(CreateUserPermission::getName())) {
-            echo Html::a('Зарегистрировать', ['/auth/signup', 'returnUrl' => Yii::$app->request->referrer], ['class' => 'btn btn-info text-light']) ;
+            echo Html::a('Зарегистрировать', ['/auth/signup', 'returnUrl' => Yii::$app->request->referrer], ['class' => 'btn btn-success text-light']) ;
         }
     ?>
 </p>

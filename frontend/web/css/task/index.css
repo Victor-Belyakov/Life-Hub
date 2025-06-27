@@ -1,0 +1,21 @@
+.custom-modal .modal-header {
+    background-color: #0dcaf0;
+    color: #fff;
+}
+.card.task-item {
+    border: 1px solid transparent;
+    background-color: #fff;
+    transition: border-color 0.3s ease;
+}
+
+.card.task-item.border-low {
+    border-color: #198754;
+}
+
+.card.task-item.border-medium {
+    border-color: #ffc107;
+}
+
+.card.task-item.border-high {
+    border-color: #dc3545;
+}

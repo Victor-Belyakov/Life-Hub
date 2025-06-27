@@ -55,4 +55,21 @@ class RbacController extends Controller
 
         echo "RBAC обновлено.\n";
     }
+
+    /**
+     * Назначает пользователю роль администратора
+     * @param int $userId
+     */
+    public function actionAssignAdmin(int $userId): void
+    {
+        $auth = Yii::$app->authManager;
+        $role = $auth->getRole('admin');
+        if (!$role) {
+            echo "Роль admin не найдена.\n";
+            return;
+        }
+
+        $auth->assign($role, $userId);
+        echo "Роль admin назначена пользователю с ID $userId.\n";
+    }
 }
