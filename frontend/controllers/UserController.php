@@ -5,9 +5,10 @@ namespace frontend\controllers;
 use common\models\User;
 use frontend\models\search\UserSearch;
 use TelegramService;
-use UserService;
+use common\services\UserService;
 use Yii;
 use yii\db\Exception;
+use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
 class UserController extends BaseController
@@ -29,10 +30,11 @@ class UserController extends BaseController
     /**
      * @param int $id
      * @return string
+     * @throws NotFoundHttpException
      */
     public function actionView(int $id): string
     {
-        $model = User::findOne($id);
+        $model = User::findModel($id);
 
         return $this->render('view', [
             'model' => $model,
@@ -47,7 +49,8 @@ class UserController extends BaseController
      */
     public function actionUpdate(int $id): Response|string
     {
-        $model = User::findOne($id);
+        $model = User::findModel($id);
+
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             UserService::assignRole($model->id, $model->role);
 
@@ -59,10 +62,12 @@ class UserController extends BaseController
 
     /**
      * @throws Exception|\yii\httpclient\Exception
+     * @throws NotFoundHttpException
      */
     public function actionDelete(int $id): Response|string
     {
-        $model = User::findOne($id);
+        $model = User::findModel($id);
+
         $model?->softDelete();
         TelegramService::sendMessage('Пользователь: ' . $model->email . ' удалён');
 

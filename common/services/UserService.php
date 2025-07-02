@@ -1,6 +1,9 @@
 <?php
+namespace common\services;
 
 use common\models\User;
+use Exception;
+use Yii;
 
 class UserService
 {
@@ -16,6 +19,7 @@ class UserService
      * @param int $userId
      * @param string|null $roleName
      * @return void
+     * @throws Exception
      * @throws Exception
      */
     public static function assignRole(int $userId, ?string $roleName): void

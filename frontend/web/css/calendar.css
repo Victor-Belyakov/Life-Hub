@@ -1,0 +1,28 @@
+
+/* Ограничиваем ширину и высоту календаря */
+#calendar {
+    max-width: 1400px;
+    height: 800px;
+    margin: 0 auto;
+}
+
+.fc .fc-col-header-cell-cushion,
+.fc .fc-daygrid-day-number {
+    color: #0dcaf0 !important;
+    text-decoration: none !important;
+}
+
+.fc .fc-toolbar-title {
+    color: #0dcaf0 !important;
+    text-decoration: none !important;
+}
+
+.fc .fc-day-today {
+    color: #6c757d !important;
+    font-weight: bold;
+}
+
+.fc a {
+    text-decoration: none !important;
+    color: inherit !important;
+}

@@ -2,26 +2,25 @@
 
 namespace frontend\controllers;
 
-use frontend\enum\TaskPriorityEnum;
+use common\models\Task;
+use frontend\enum\task\TaskPriorityEnum;
 use frontend\models\search\TaskSearch;
 use TelegramService;
+use Throwable;
 use Yii;
-use common\models\Task;
+use yii\db\StaleObjectException;
+use yii\helpers\Url;
 use yii\httpclient\Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
 use yii\web\Response;
 
-/**
- * TaskController implements the CRUD actions for Task model.
- */
 class TaskController extends Controller
 {
     /**
-     * Список задач для доски
+     * @return string
      */
-    public function actionIndex()
+    public function actionIndex(): string
     {
         $tasks = Task::find()->orderBy(['created_at' => SORT_DESC])->all();
         $newTaskModel = new Task();
@@ -33,7 +32,7 @@ class TaskController extends Controller
     }
 
     /**
-     * Список задач для листинга
+     * @return string
      */
     public function actionList(): string
     {
@@ -47,19 +46,21 @@ class TaskController extends Controller
     }
 
     /**
-     * Просмотр одной задачи
+     * @param $id
+     * @return string
      * @throws NotFoundHttpException
      */
     public function actionView($id): string
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => Task::findModel($id),
         ]);
     }
 
     /**
-     * Создание новой задачи
-     * @throws Exception|\yii\db\Exception
+     * @return Response|string
+     * @throws Exception
+     * @throws \yii\db\Exception
      */
     public function actionCreate(): Response|string
     {
@@ -87,31 +88,35 @@ class TaskController extends Controller
     }
 
     /**
-     * Редактирование задачи
+     * @param $id
+     * @return string|Response
+     * @throws NotFoundHttpException
+     * @throws \yii\db\Exception
      */
-    public function actionUpdate($id)
+    public function actionUpdate($id): Response|string
     {
-        $model = $this->findModel($id);
+        $model = Task::findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
-                if (Yii::$app->request->isAjax) {
-                    return $this->asJson([
-                        'success' => true,
-                        'task' => [
-                            'id' => $model->id,
-                            'title' => $model->title,
-                            'description' => $model->description,
-                            'status' => $model->status,
-                            'priority' => $model->priority,
-                            'executor_id' => $model->executor_id,
-                            'deadline' => $model->deadline,
-                            'priorityLabel' => TaskPriorityEnum::fromValue($model->priority)?->label(),
-                            'priorityClass' => TaskPriorityEnum::fromValue($model->priority)?->badgeClass(),
-                        ],
-                    ]);
+                if (!Yii::$app->request->isAjax) {
+                    return $this->redirect(['index']);
                 }
-                return $this->redirect(['index']);
+
+                return $this->asJson([
+                    'success' => true,
+                    'task' => [
+                        'id' => $model->id,
+                        'title' => $model->title,
+                        'description' => $model->description,
+                        'status' => $model->status,
+                        'priority' => $model->priority,
+                        'executor_id' => $model->executor_id,
+                        'deadline' => $model->deadline,
+                        'priorityLabel' => TaskPriorityEnum::fromValue($model->priority)?->label(),
+                        'priorityClass' => TaskPriorityEnum::fromValue($model->priority)?->badgeClass(),
+                    ],
+                ]);
             }
 
             if (Yii::$app->request->isAjax) {
@@ -122,32 +127,22 @@ class TaskController extends Controller
             }
         }
 
-        if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('_form', ['model' => $model]);
-        }
-
-        return $this->render('update', ['model' => $model]);
+        return Yii::$app->request->isAjax
+            ? $this->renderAjax('_form', ['model' => $model])
+            : $this->render('update', ['model' => $model]);
     }
 
     /**
-     * Удаление задачи
+     * @param $id
+     * @return Response
+     * @throws NotFoundHttpException
+     * @throws Throwable
+     * @throws StaleObjectException
      */
-    public function actionDelete($id)
+    public function actionDelete($id): Response
     {
-        $this->findModel($id)->delete();
+        Task::findModel($id)?->delete();
         return $this->redirect(['index']);
-    }
-
-    /**
-     * Поиск модели задачи по ID
-     */
-    protected function findModel($id)
-    {
-        if (($model = Task::findOne($id)) !== null) {
-            return $model;
-        }
-
-        throw new NotFoundHttpException('Запрашиваемая задача не найдена.');
     }
 
     /**
@@ -171,4 +166,25 @@ class TaskController extends Controller
         return ['success' => false];
     }
 
+    /**
+     * @return array
+     */
+    public function actionGetEvents(): array
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $tasks = Task::find()->all();
+        $events = [];
+
+        /** @var Task $task */
+        foreach ($tasks as $task) {
+            $events[] = [
+                'title' => $task->title,
+                'start' => $task->created_at,
+                'end' => $task->deadline,
+                'url' => Url::to(['task/view', 'id' => $task->id]),
+            ];
+        }
+
+        return $events;
+    }
 }

@@ -1,7 +1,6 @@
 <?php
 
-use console\rbac\permissions\user\UserUpdatePermission;
-use frontend\enum\UserEnum;
+use frontend\enum\user\UserEnum;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -83,7 +82,7 @@ $this->title = 'Редактирование: ' . $model->email;
         </div>
 
         <div class="form-group mt-4 text-center">
-            <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success']) ?>
+            <?= Html::submitButton('Сохранить', ['class' => 'btn btn-cus-success']) ?>
             <?= Html::a('Отмена', ['view', 'id' => $model->id], ['class' => 'btn btn-secondary ms-2']) ?>
         </div>
 

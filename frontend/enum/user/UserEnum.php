@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\enum;
+namespace frontend\enum\user;
 
 enum UserEnum: int
 {

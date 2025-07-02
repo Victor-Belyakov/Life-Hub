@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\enum;
+namespace frontend\enum\task;
 
 enum TaskPriorityEnum: string
 {

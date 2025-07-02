@@ -1,9 +1,8 @@
 <?php
 
-use yii\grid\ActionColumn;
-use console\rbac\permissions\user\UserCreatePermission;
 use console\rbac\permissions\user\UserUpdatePermission;
-use frontend\enum\UserEnum;
+use frontend\enum\user\UserEnum;
+use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -14,19 +13,14 @@ use yii\helpers\Url;
  */
 ?>
 
-<p>
-    <?php
-        if (Yii::$app->user->can(UserCreatePermission::getName())) {
-            echo Html::a('Зарегистрировать', ['/auth/signup', 'returnUrl' => Yii::$app->request->referrer], ['class' => 'btn btn-success text-light']) ;
-        }
-    ?>
-</p>
+<?= $this->render('_header') ?>
 
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
+    'emptyText' => '<span style="color: #6c757d">Ничего не найдено</span>',
     'filterModel' => $searchModel,
     'layout' => "{items}\n{summary}\n{pager}",
-    'rowOptions' => function($model) {
+    'rowOptions' => static function($model) {
         $url = Url::to(['user/view', 'id' => $model->id]);
         return [
             'style' => 'cursor: pointer;',
@@ -63,8 +57,7 @@ use yii\helpers\Url;
         [
             'label' => '<span class="text-info">День рождения</span>',
             'value' => static function($model) {
-                $date = new \DateTime($model->birth_date);
-                return $date->format('d-m-Y');
+                return (new DateTime($model->birth_date))->format('d-m-Y');
             },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
@@ -105,7 +98,7 @@ use yii\helpers\Url;
                         ? Html::a('<i class="bi bi-trash text-info"></i>', $url, [
                             'title' => 'Удалить',
                             'class' => 'btn btn-sm',
-                            'data-confirm' => 'Вы уверены, что хотите удалить этот элемент?',
+                            'data-confirm' => 'Вы уверены, что хотите удалить этого пользователя?',
                             'data-method' => 'post',
                             'data-pjax' => '0',
                         ]) : '';
@@ -113,6 +106,5 @@ use yii\helpers\Url;
             ],
         ],
     ],
-]);
-
+])
 ?>

@@ -1,8 +1,8 @@
 <?php
 
-use yii\widgets\DetailView;
+use frontend\enum\user\UserEnum;
 use yii\helpers\Html;
-use frontend\enum\UserEnum;
+use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
 /** @var common\models\User $model */
@@ -19,7 +19,9 @@ $this->title = $model->email;
         }
 
     </style>
-    <h3 class="text-info"><?= Html::encode('Пользователь: ' . $this->title) ?></h3>
+    <h3 class="text-info">
+        <?= Html::encode('Пользователь: ' . $this->title) ?>
+    </h3>
 
     <?= DetailView::widget([
         'model' => $model,
@@ -42,28 +44,27 @@ $this->title = $model->email;
             ],
             [
                 'label' => 'Дата рождения',
-                'value' => function($model) {
-                    $date = new \DateTime($model->birth_date);
-                    return $date->format('d-m-Y');
+                'value' => static function($model) {
+                    return (new DateTime($model->birth_date))->format('d-m-Y');
                 },
             ],
             [
                 'label' => 'Статус',
-                'value' => function($model) {
+                'value' => static function($model) {
                     return UserEnum::fromValue((int)$model->status)?->label() ?? 'Неизвестно';
                 },
             ],
             [
                 'label' => 'Дата создания',
-                'value' => function($model) {
-                    $date = \DateTime::createFromFormat('Y-m-d', $model->created_at);
+                'value' => static function($model) {
+                    $date = DateTime::createFromFormat('Y-m-d', $model->created_at);
                     return $date ? $date->format('d.m.Y') : $model->created_at;
                 },
             ],
             [
                 'label' => 'Дата обновления',
-                'value' => function($model) {
-                    $date = \DateTime::createFromFormat('Y-m-d', $model->updated_at);
+                'value' => static function($model) {
+                    $date = DateTime::createFromFormat('Y-m-d', $model->updated_at);
                     return $date ? $date->format('d.m.Y') : $model->updated_at;
                 },
             ]
@@ -71,7 +72,7 @@ $this->title = $model->email;
     ]) ?>
 
     <p>
-        <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-info text-light']) ?>
+        <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-cus-success text-light']) ?>
         <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [

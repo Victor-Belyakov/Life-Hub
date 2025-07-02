@@ -2,11 +2,10 @@
 
 namespace common\models;
 
-use common\behaviors\DateFormatBehavior;
+use common\services\UserService;
 use console\rbac\roles\UserRole;
 use DateTime;
-use frontend\enum\UserEnum;
-use UserService;
+use frontend\enum\user\UserEnum;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -29,13 +28,12 @@ use yii\web\IdentityInterface;
  * @property string $verification_token
  * @property string $email
  * @property string $auth_key
- * @property string $chat_id
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
  */
-class User extends ActiveRecord implements IdentityInterface
+class User extends AbstractModel implements IdentityInterface
 {
     const int STATUS_DELETED = 0;
     const int STATUS_INACTIVE = 9;
@@ -61,11 +59,7 @@ class User extends ActiveRecord implements IdentityInterface
             [
                 'class' => TimestampBehavior::class,
                 'value' => new Expression('NOW()'),
-            ],
-            [
-                'class' => DateFormatBehavior::class,
-                'attributes' => ['birth_date'],
-            ],
+            ]
         ];
     }
 
@@ -94,7 +88,7 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             [['first_name', 'last_name', 'middle_name', 'email', 'birth_date', 'status', 'role'], 'safe'],
-            [['first_name', 'last_name', 'email', 'chat_id'], 'string', 'max' => 255],
+            [['first_name', 'last_name', 'email'], 'string', 'max' => 255],
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['email', 'unique', 'message' => 'Этот email уже используется.'],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],

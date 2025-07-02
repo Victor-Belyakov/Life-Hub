@@ -58,19 +58,3 @@ $this->title = 'Регистрация пользователя';
         </div>
     </div>
 </div>
-
-<?php
-// Подключаем flatpickr для datepicker
-$this->registerCssFile('https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css');
-$this->registerJsFile('https://cdn.jsdelivr.net/npm/flatpickr', ['depends' => \yii\web\JqueryAsset::class]);
-
-$js = <<<JS
-flatpickr(".datepicker", {
-    dateFormat: "d-m-Y",
-    maxDate: "today",
-    locale: "ru"
-});
-JS;
-
-$this->registerJs($js);
-?>

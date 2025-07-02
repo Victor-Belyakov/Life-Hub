@@ -3,10 +3,10 @@
 namespace frontend\controllers;
 
 use common\models\LoginForm;
+use common\services\UserService;
 use console\rbac\permissions\user\UserCreatePermission;
 use frontend\models\form\user\SignupForm;
 use TelegramService;
-use UserService;
 use Yii;
 use yii\db\Exception;
 use yii\web\ForbiddenHttpException;
@@ -77,6 +77,9 @@ class AuthController extends BaseController
         return $this->goHome();
     }
 
+    /**
+     * @return string
+     */
     public function actionNoRole(): string
     {
         return $this->render('no-role');

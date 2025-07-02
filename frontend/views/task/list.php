@@ -16,6 +16,7 @@ use yii\helpers\Url;
 
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
+    'emptyText' => '<span style="color: #6c757d">Ничего не найдено</span>',
     'filterModel' => $searchModel,
     'layout' => "{items}\n{summary}\n{pager}",
     'rowOptions' => static function($model) {
@@ -87,7 +88,7 @@ use yii\helpers\Url;
                         ? Html::a('<i class="bi bi-trash text-info"></i>', $url, [
                             'title' => 'Удалить',
                             'class' => 'btn btn-sm',
-                            'data-confirm' => 'Вы уверены, что хотите удалить этот элемент?',
+                            'data-confirm' => 'Вы уверены, что хотите удалить эту задачу?',
                             'data-method' => 'post',
                             'data-pjax' => '0',
                         ]) : '';

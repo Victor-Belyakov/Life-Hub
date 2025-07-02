@@ -7,7 +7,7 @@ use yii\helpers\Html;
 <div style="display: flex; justify-content: left; margin-bottom: 15px;">
     <div class="me-3">
         <?= Html::button('Создать задачу', [
-            'class' => 'btn btn-success text-light',
+            'class' => 'btn btn-cus-success text-light',
             'data-bs-toggle' => 'modal',
             'data-bs-target' => '#createTaskModal'
         ]) ?>
@@ -21,12 +21,6 @@ use yii\helpers\Html;
 
     <div class="me-3">
         <?= Html::a('Список', ['task/list'], [
-            'class' => 'btn btn-info text-light'
-        ]) ?>
-    </div>
-
-    <div class="me-3">
-        <?= Html::a('Календарь', ['task/calendar'], [
             'class' => 'btn btn-info text-light'
         ]) ?>
     </div>

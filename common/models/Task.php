@@ -2,18 +2,14 @@
 
 namespace common\models;
 
-use common\behaviors\DateFormatBehavior;
-use frontend\enum\TaskPriorityEnum;
-use frontend\enum\TaskStatusEnum;
-use Yii;
+use frontend\enum\task\TaskPriorityEnum;
+use frontend\enum\task\TaskStatusEnum;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 
 /**
- * This is the model class for table "task".
- *
  * @property int $id
  * @property string $title
  * @property string|null $description
@@ -21,14 +17,14 @@ use yii\db\Expression;
  * @property string $priority
  * @property int|null $executor_id
  * @property int $creator_id
- * @property User $creator
  * @property string|null $deadline
  * @property string $created_at
  * @property string|null $updated_at
  *
- * @property User|null $executor
+ * @property User $creator
+ * @property User $executor
  */
-class Task extends ActiveRecord
+class Task extends AbstractModel
 {
     /**
      * {@inheritdoc}
@@ -47,11 +43,7 @@ class Task extends ActiveRecord
             [
                 'class' => TimestampBehavior::class,
                 'value' => new Expression('NOW()'),
-            ],
-            [
-                'class' => DateFormatBehavior::class,
-                'attributes' => ['deadline'],
-            ],
+            ]
         ];
     }
 
@@ -91,7 +83,6 @@ class Task extends ActiveRecord
     }
 
     /**
-     * Получить исполнителя задачи
      * @return ActiveQuery
      */
     public function getExecutor(): ActiveQuery
@@ -100,7 +91,6 @@ class Task extends ActiveRecord
     }
 
     /**
-     * Получить постановщика задачи
      * @return ActiveQuery
      */
     public function getCreator(): ActiveQuery
