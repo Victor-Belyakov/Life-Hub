@@ -3,9 +3,9 @@
 namespace frontend\controllers;
 
 use common\models\Task;
+use common\services\TelegramService;
 use frontend\enum\task\TaskPriorityEnum;
 use frontend\models\search\TaskSearch;
-use TelegramService;
 use Throwable;
 use Yii;
 use yii\db\StaleObjectException;
@@ -65,27 +65,48 @@ class TaskController extends Controller
     public function actionCreate(): Response|string
     {
         $model = new Task();
+
         if ($model->load(Yii::$app->request->post())) {
             $model->creator_id = Yii::$app->user->id;
-            $model->save();
 
-            if ($model->executor_id !== $model->creator_id) {
-                TelegramService::sendMessage(sprintf(
-                    "Пользователю %s назначена задача %s от %s. Время выполнения до %s",
-                    $model->executor->getFullName(),
-                    $model->creator->getFullName(),
-                    $model->title,
-                    $model->deadline
-                ));
+            if ($model->save()) {
+
+                if ($model->executor_id !== $model->creator_id) {
+                    TelegramService::sendMessage(sprintf(
+                        "Пользователю %s назначена задача %s от %s. Время выполнения до %s",
+                        $model->executor->getFullName(),
+                        $model->title,
+                        $model->creator->getFullName(),
+                        $model->deadline
+                    ));
+                }
+
+                if (Yii::$app->request->isAjax) {
+                    return $this->asJson(['success' => true]);
+                }
+
+                return $this->redirect(['view', 'id' => $model->id]);
             }
 
-            return $this->redirect(['view', 'id' => $model->id]);
+            if (Yii::$app->request->isAjax) {
+                return $this->asJson([
+                    'success' => false,
+                    'errors' => $model->getErrors(),
+                ]);
+            }
+        }
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_form', [
+                'model' => $model,
+            ]);
         }
 
         return $this->render('create', [
             'model' => $model,
         ]);
     }
+
 
     /**
      * @param $id
@@ -172,7 +193,7 @@ class TaskController extends Controller
     public function actionGetEvents(): array
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $tasks = Task::find()->all();
+        $tasks = Task::find()->where(['executor_id' => Yii::$app->user->id])->all();
         $events = [];
 
         /** @var Task $task */

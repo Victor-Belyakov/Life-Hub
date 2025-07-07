@@ -19,7 +19,7 @@ $(".task-column").sortable({
         var taskId = ui.item.data("id");
         var newStatus = $(this).data("status");
         $.ajax({
-            url: "$updateUrl",
+            url: updateUrl,
             type: "POST",
             data: {
                 id: taskId,
@@ -43,7 +43,7 @@ $(".task-index").on("click", ".update-task-btn", function() {
     var id = $(this).data("id");
     $("#updateTaskModalContent").html("Загрузка...");
     $("#updateTaskModal").modal("show");
-    $.get("$updateFormUrl", {id: id}, function(data) {
+    $.get(updateFormUrl, {id: id}, function(data) {
         $("#updateTaskModalContent").html(data);
 
         // После вставки контента — принудительная инициализация Select2
@@ -53,11 +53,34 @@ $(".task-index").on("click", ".update-task-btn", function() {
     });
 });
 
+$("#createTaskModal").on("submit", "#task-form", function(e) {
+    e.preventDefault();
+    var form = $(this);
+
+    $.ajax({
+        url: createFormUrl,
+        type: form.attr("method"),
+        data: form.serialize(),
+        dataType: "json",
+        success: function(response) {
+            if (response.success) {
+                location.reload();
+                $("#createTaskModal").modal("hide");
+            } else {
+                form.yiiActiveForm("updateMessages", response.errors, true);
+            }
+        },
+        error: function() {
+            alert("Ошибка при создании задачи");
+        }
+    });
+});
+
 $("#updateTaskModal").on("submit", "#task-form", function(e) {
     e.preventDefault();
     var form = $(this);
     $.ajax({
-        url: form.attr("action"),
+        url: updateFormUrl,
         type: form.attr("method"),
         data: form.serialize(),
         dataType: "json",

@@ -16,7 +16,6 @@ class AppAsset extends AssetBundle
 
     public $css = [
         'css/site.css',
-        'css/color.css',
         'css/calendar.css',
     ];
 

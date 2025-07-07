@@ -18,6 +18,12 @@ class SidebarWidget extends Widget
                 'permission' => TaskIndexPermission::getName(),
             ],
             [
+                'label' => 'Записи',
+                'url' => ['/record/index'],
+                'icon' => 'bi-people-fill',
+                'permission' => UserIndexPermission::getName(),
+            ],
+            [
                 'label' => 'Пользователи',
                 'url' => ['/user/index'],
                 'icon' => 'bi-people-fill',

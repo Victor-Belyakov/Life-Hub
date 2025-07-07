@@ -96,20 +96,21 @@ Modal::begin([
 echo '<div id="updateTaskModalContent">Загрузка...</div>';
 Modal::end();
 ?>
-<?php
-$updateUrl = Url::to(['task/change-status']);
-$formUrl = Url::to(['task/update']);
-?>
 
 <?php
-$updateUrl = Url::to(['task/change-status']);
-$updateFormUrl = Url::to(['task/update']);
 $indexUrl = Url::to(['task/index']);
 
-$this->registerJsFile('https://code.jquery.com/jquery-3.6.0.min.js', ['position' => \yii\web\View::POS_HEAD]);
 $this->registerCssFile('https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css');
 $this->registerJsFile('https://code.jquery.com/ui/1.13.2/jquery-ui.min.js', ['depends' => JqueryAsset::class]);
-$this->registerJsFile('@web/js/task/index.css');
+
+$this->registerJsFile('@web/js/task/index.js', ['depends' => JqueryAsset::class]);
 $this->registerCssFile('@web/css/task/index.css');
 
+
 ?>
+
+<script>
+    const updateUrl = "<?= Url::to(['task/change-status']) ?>";
+    const updateFormUrl = "<?= Url::to(['task/update']) ?>";
+    const createFormUrl = "<?= Url::to(['task/create']) ?>";
+</script>

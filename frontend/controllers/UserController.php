@@ -80,6 +80,8 @@ class UserController extends BaseController
      */
     public function actionExecutorList($q = null): array
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
         $out = ['items' => []];
         if (!is_null($q)) {
             $searchModel = new UserSearch();

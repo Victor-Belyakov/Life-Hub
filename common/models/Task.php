@@ -53,12 +53,13 @@ class Task extends AbstractModel
     public function rules()
     {
         return [
-            [['title', 'status', 'priority', 'creator_id'], 'required'],
+            [['title', 'priority', 'creator_id'], 'required'],
             [['description'], 'string'],
             [['executor_id', 'creator_id'], 'integer'],
             [['deadline', 'created_at', 'updated_at'], 'safe'],
             [['title'], 'string', 'max' => 255],
-            [['status'], 'in', 'range' => array_map(static fn($enum) => $enum->value, TaskStatusEnum::cases())],
+            [['status'], 'default', 'value' => TaskStatusEnum::NEW],
+//            [['status'], 'in', 'range' => array_map(static fn($enum) => $enum->value, TaskStatusEnum::cases())],
             [['priority'], 'in', 'range' => array_map(static fn($enum) => $enum->value, TaskPriorityEnum::cases())],
         ];
     }

@@ -45,8 +45,11 @@ class UserSearch extends User
     public function getUserForSelect2(string $q): array
     {
         return User::find()
-            ->select(['id', 'fullName AS text'])
-            ->where(['ilike', 'fullName', $q])
+            ->select([
+                'id',
+                "CONCAT(first_name, ' ', last_name) AS text"
+            ])
+            ->where("CONCAT(first_name, ' ', last_name) ILIKE :q", [':q' => "%{$q}%"])
             ->limit(self::USER_SELECT2_LIMIT)
             ->asArray()
             ->all();

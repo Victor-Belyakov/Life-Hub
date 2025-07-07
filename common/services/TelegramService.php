@@ -1,4 +1,5 @@
 <?php
+namespace common\services;
 
 use yii\httpclient\Client;
 use yii\httpclient\Exception;
