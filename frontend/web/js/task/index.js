@@ -15,9 +15,11 @@ function updateEmptyPlaceholders() {
 $(".task-column").sortable({
     connectWith: ".task-column",
     placeholder: "ui-state-highlight",
+
     receive: function(event, ui) {
-        var taskId = ui.item.data("id");
-        var newStatus = $(this).data("status");
+        let taskId = ui.item.data("id");
+        let newStatus = $(this).data("status");
+
         $.ajax({
             url: updateUrl,
             type: "POST",
@@ -40,9 +42,10 @@ $(".task-column").sortable({
 updateEmptyPlaceholders();
 
 $(".task-index").on("click", ".update-task-btn", function() {
-    var id = $(this).data("id");
+    let id = $(this).data("id");
     $("#updateTaskModalContent").html("Загрузка...");
     $("#updateTaskModal").modal("show");
+
     $.get(updateFormUrl, {id: id}, function(data) {
         $("#updateTaskModalContent").html(data);
 
@@ -55,7 +58,7 @@ $(".task-index").on("click", ".update-task-btn", function() {
 
 $("#createTaskModal").on("submit", "#task-form", function(e) {
     e.preventDefault();
-    var form = $(this);
+    let form = $(this);
 
     $.ajax({
         url: createFormUrl,
@@ -78,7 +81,8 @@ $("#createTaskModal").on("submit", "#task-form", function(e) {
 
 $("#updateTaskModal").on("submit", "#task-form", function(e) {
     e.preventDefault();
-    var form = $(this);
+    let form = $(this);
+
     $.ajax({
         url: updateFormUrl,
         type: form.attr("method"),
@@ -86,9 +90,9 @@ $("#updateTaskModal").on("submit", "#task-form", function(e) {
         dataType: "json",
         success: function(response) {
             if (response.success) {
-                var task = response.task;
-                var card = $('.task-item[data-id="' + task.id + '"]');
-                var newColumn = $('.task-column[data-status="' + task.status + '"]');
+                let task = response.task;
+                let card = $('.task-item[data-id="' + task.id + '"]');
+                let newColumn = $('.task-column[data-status="' + task.status + '"]');
 
                 // Перемещаем карточку в новую колонку, если статус изменился
                 if (card.parent().data('status') !== task.status) {
@@ -110,12 +114,10 @@ $("#updateTaskModal").on("submit", "#task-form", function(e) {
                     .removeClass("border-low border-medium border-high")
                     .addClass("border-" + task.priorityClass.replace('badge-', ''));
 
-                // Закрываем модалку
                 $("#updateTaskModal").modal("hide");
                 updateEmptyPlaceholders();
             } else {
-                // Показать ошибки
-                var errors = response.errors;
+                let errors = response.errors;
                 form.yiiActiveForm("updateMessages", errors, true);
             }
         },

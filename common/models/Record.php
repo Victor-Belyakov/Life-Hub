@@ -17,11 +17,11 @@ use yii\db\ActiveRecord;
  * @property Section $section
  * @property Tag[] $tags
  */
-class Entry extends ActiveRecord
+class Record extends AbstractModel
 {
     public static function tableName()
     {
-        return 'entry';
+        return 'record';
     }
 
     public function rules()
@@ -42,13 +42,13 @@ class Entry extends ActiveRecord
         return $this->hasOne(Section::class, ['id' => 'section_id']);
     }
 
-    public function getEntryTags()
+    public function getRecordTags()
     {
-        return $this->hasMany(EntryTag::class, ['entry_id' => 'id']);
+        return $this->hasMany(RecordTag::class, ['record_id' => 'id']);
     }
 
     public function getTags()
     {
-        return $this->hasMany(Tag::class, ['id' => 'tag_id'])->via('entryTags');
+        return $this->hasMany(Tag::class, ['id' => 'record_id'])->via('recordTags');
     }
 }

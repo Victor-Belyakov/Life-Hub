@@ -35,6 +35,18 @@ class SidebarWidget extends Widget
                 'icon' => 'bi-folder-fill',
                 'permission' => 'reference.view',
             ],
+            [
+                'label' => 'Настройки',
+                'icon' => 'bi-gear-fill',
+                'permission' => UserIndexPermission::getName(),
+                'items' => [
+                    [
+                        'label' => 'Разделы для записей',
+                        'url' => ['/section/index'],
+                        'permission' => UserIndexPermission::getName(),
+                    ]
+                ],
+            ],
         ];
 
         return $this->render('sidebar', [

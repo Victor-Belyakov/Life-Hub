@@ -3,23 +3,28 @@
 namespace common\models;
 
 use yii\db\ActiveQuery;
-use yii\db\ActiveRecord;
 
 /**
  * @property int $id
  * @property string $name
  * @property string $created_at
  *
- * @property Entry[] $entries
+ * @property Record[] $entries
  */
-class Section extends ActiveRecord
+class Section extends AbstractModel
 {
-    public static function tableName()
+    /**
+     * @return string
+     */
+    public static function tableName(): string
     {
         return 'section';
     }
 
-    public function rules()
+    /**
+     * @return array
+     */
+    public function rules(): array
     {
         return [
             [['name'], 'required'],
@@ -27,8 +32,21 @@ class Section extends ActiveRecord
         ];
     }
 
+    /**
+     * @return string[]
+     */
+    public function attributeLabels(): array
+    {
+        return [
+            'name' => 'Наименование раздела'
+        ];
+    }
+
+    /**
+     * @return ActiveQuery
+     */
     public function getEntries(): ActiveQuery
     {
-        return $this->hasMany(Entry::class, ['section_id' => 'id']);
+        return $this->hasMany(Record::class, ['section_id' => 'id']);
     }
 }

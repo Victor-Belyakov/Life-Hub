@@ -51,4 +51,12 @@ class TaskSearch extends Task
 
         return $dataProvider;
     }
+
+    /**
+     * @return array
+     */
+    public function getTasksForCalendar(): array
+    {
+        return Task::find()->where(['executor_id' => Yii::$app->user->id])->all();
+    }
 }

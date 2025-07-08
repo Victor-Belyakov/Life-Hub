@@ -9,7 +9,7 @@ use yii\db\ActiveRecord;
  * @property int $id
  * @property string $name
  *
- * @property Entry[] $entries
+ * @property Record[] $entries
  */
 class Tag extends ActiveRecord
 {
@@ -26,13 +26,13 @@ class Tag extends ActiveRecord
         ];
     }
 
-    public function getEntryTags(): ActiveQuery
+    public function getRecordTags(): ActiveQuery
     {
-        return $this->hasMany(EntryTag::class, ['tag_id' => 'id']);
+        return $this->hasMany(RecordTag::class, ['tag_id' => 'id']);
     }
 
-    public function getEntries(): ActiveQuery
+    public function getRecords(): ActiveQuery
     {
-        return $this->hasMany(Entry::class, ['id' => 'entry_id'])->via('entryTags');
+        return $this->hasMany(Record::class, ['id' => 'record_id'])->via('recordTags');
     }
 }

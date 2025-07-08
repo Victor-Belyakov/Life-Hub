@@ -46,11 +46,11 @@ class TaskController extends Controller
     }
 
     /**
-     * @param $id
+     * @param int $id
      * @return string
      * @throws NotFoundHttpException
      */
-    public function actionView($id): string
+    public function actionView(int $id): string
     {
         return $this->render('view', [
             'model' => Task::findModel($id),
@@ -81,49 +81,32 @@ class TaskController extends Controller
                     ));
                 }
 
-                if (Yii::$app->request->isAjax) {
-                    return $this->asJson(['success' => true]);
-                }
-
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->asJson(['success' => true]);
             }
 
-            if (Yii::$app->request->isAjax) {
-                return $this->asJson([
-                    'success' => false,
-                    'errors' => $model->getErrors(),
-                ]);
-            }
-        }
-
-        if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('_form', [
-                'model' => $model,
+            return $this->asJson([
+                'success' => false,
+                'errors' => $model->getErrors(),
             ]);
         }
 
-        return $this->render('create', [
+        return $this->renderAjax('_form', [
             'model' => $model,
         ]);
     }
 
-
     /**
-     * @param $id
+     * @param int $id
      * @return string|Response
      * @throws NotFoundHttpException
      * @throws \yii\db\Exception
      */
-    public function actionUpdate($id): Response|string
+    public function actionUpdate(int $id): Response|string
     {
         $model = Task::findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
-                if (!Yii::$app->request->isAjax) {
-                    return $this->redirect(['index']);
-                }
-
                 return $this->asJson([
                     'success' => true,
                     'task' => [
@@ -140,17 +123,13 @@ class TaskController extends Controller
                 ]);
             }
 
-            if (Yii::$app->request->isAjax) {
-                return $this->asJson([
-                    'success' => false,
-                    'errors' => $model->errors,
-                ]);
-            }
+            return $this->asJson([
+                'success' => false,
+                'errors' => $model->errors,
+            ]);
         }
 
-        return Yii::$app->request->isAjax
-            ? $this->renderAjax('_form', ['model' => $model])
-            : $this->render('update', ['model' => $model]);
+        return $this->renderAjax('_form', ['model' => $model]);
     }
 
     /**
@@ -163,25 +142,25 @@ class TaskController extends Controller
     public function actionDelete($id): Response
     {
         Task::findModel($id)?->delete();
+
         return $this->redirect(['index']);
     }
 
     /**
      * @return false[]|true[]
      * @throws \yii\db\Exception
+     * @throws NotFoundHttpException
      */
     public function actionChangeStatus(): array
     {
         $taskId = Yii::$app->request->post('id');
         $newStatus = Yii::$app->request->post('status');
 
-        $task = Task::findOne($taskId);
+        $task = Task::findModel($taskId);
 
-        if ($task) {
-            $task->status = $newStatus;
-            if ($task->save(false)) {
-                return ['success' => true];
-            }
+        $task->status = $newStatus;
+        if ($task->save(false)) {
+            return ['success' => true];
         }
 
         return ['success' => false];
@@ -193,7 +172,8 @@ class TaskController extends Controller
     public function actionGetEvents(): array
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
-        $tasks = Task::find()->where(['executor_id' => Yii::$app->user->id])->all();
+        $searchModel = new TaskSearch();
+        $tasks = $searchModel->getTasksForCalendar();
         $events = [];
 
         /** @var Task $task */

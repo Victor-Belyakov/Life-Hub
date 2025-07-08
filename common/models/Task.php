@@ -27,17 +27,17 @@ use yii\db\Expression;
 class Task extends AbstractModel
 {
     /**
-     * {@inheritdoc}
+     * @return string
      */
-    public static function tableName()
+    public static function tableName(): string
     {
         return 'task';
     }
 
     /**
-     * {@inheritdoc}
+     * @return array[]
      */
-    public function behaviors()
+    public function behaviors(): array
     {
         return [
             [
@@ -48,9 +48,9 @@ class Task extends AbstractModel
     }
 
     /**
-     * {@inheritdoc}
+     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             [['title', 'priority', 'creator_id'], 'required'],
@@ -65,9 +65,9 @@ class Task extends AbstractModel
     }
 
     /**
-     * {@inheritdoc}
+     * @return string[]
      */
-    public function attributeLabels()
+    public function attributeLabels(): array
     {
         return [
             'id' => 'ID',

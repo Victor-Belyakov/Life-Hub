@@ -106,7 +106,6 @@ $this->registerJsFile('https://code.jquery.com/ui/1.13.2/jquery-ui.min.js', ['de
 $this->registerJsFile('@web/js/task/index.js', ['depends' => JqueryAsset::class]);
 $this->registerCssFile('@web/css/task/index.css');
 
-
 ?>
 
 <script>

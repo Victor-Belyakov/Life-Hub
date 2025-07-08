@@ -9,28 +9,28 @@ use yii\db\ActiveRecord;
  * @property int $entry_id
  * @property int $tag_id
  *
- * @property Entry $entry
+ * @property Record $entry
  * @property Tag $tag
  */
-class EntryTag extends ActiveRecord
+class RecordTag extends ActiveRecord
 {
     public static function tableName()
     {
-        return 'entry_tag';
+        return 'record_tag';
     }
 
     public function rules()
     {
         return [
-            [['entry_id', 'tag_id'], 'required'],
-            [['entry_id', 'tag_id'], 'integer'],
-            [['entry_id', 'tag_id'], 'unique', 'targetAttribute' => ['entry_id', 'tag_id']],
+            [['record_id', 'tag_id'], 'required'],
+            [['record_id', 'tag_id'], 'integer'],
+            [['record_id', 'tag_id'], 'unique', 'targetAttribute' => ['record_id', 'tag_id']],
         ];
     }
 
-    public function getEntry(): ActiveQuery
+    public function getRecord(): ActiveQuery
     {
-        return $this->hasOne(Entry::class, ['id' => 'entry_id']);
+        return $this->hasOne(Record::class, ['id' => 'record_id']);
     }
 
     public function getTag(): ActiveQuery
