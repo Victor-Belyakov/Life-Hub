@@ -27,7 +27,7 @@ $this->title = 'Авторизация';
 <!--            </script>-->
 
             <div class="form-group text-center">
-                <?= Html::submitButton('Вход', ['class' => 'btn btn-info text-light', 'name' => 'login-button']) ?>
+                <?= Html::submitButton('Вход', ['class' => 'btn btn-cus-main text-light', 'name' => 'login-button']) ?>
             </div>
 
             <?php ActiveForm::end(); ?>

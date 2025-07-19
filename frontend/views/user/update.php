@@ -13,7 +13,7 @@ $this->title = 'Редактирование: ' . $model->email;
 <div class="row justify-content-center">
     <div class="col-md-10"> <!-- Ширина карточки -->
         <div class="card shadow">
-            <div class="card-header bg-info text-white">
+            <div class="card-header bg-main text-white">
                 <h3 class="mb-0"><?= Html::encode($this->title) ?></h3>
             </div>
             <style>
@@ -92,7 +92,7 @@ $this->title = 'Редактирование: ' . $model->email;
                 </div>
 
                 <div class="form-group mt-4 text-center">
-                    <?= Html::submitButton('Сохранить', ['class' => 'btn btn-cus-success text-light']) ?>
+                    <?= Html::submitButton('Сохранить', ['class' => 'btn btn-success text-light']) ?>
                     <?= Html::a('Отмена', ['view', 'id' => $model->id], ['class' => 'btn btn-secondary ms-2']) ?>
                 </div>
 

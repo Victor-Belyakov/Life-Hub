@@ -22,19 +22,19 @@ use yii\helpers\Html;
     'layout' => "{items}\n{summary}\n{pager}",
     'columns' => [
         [
-            'label' => '<span class="text-info">Id</span>',
+            'label' => '<span class="text-main">Id</span>',
             'value' => static function($model) { return $model->id; },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
-            'label' => '<span class="text-info">Название</span>',
+            'label' => '<span class="text-main">Название</span>',
             'value' => static function($model) { return $model->name; },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
-            'label' => '<span class="text-info">Дата создания</span>',
+            'label' => '<span class="text-main">Дата создания</span>',
             'value' => static function($model) {
                 return (new DateTime($model->created_at))->format('d-m-Y');
             },
@@ -43,13 +43,13 @@ use yii\helpers\Html;
         ],
         [
             'class' => ActionColumn::class,
-            'header' => '<span class="text-info">Действия</span>',
+            'header' => '<span class="text-main">Действия</span>',
             'template' => '{update} {delete}',
             'contentOptions' => ['class' => 'action-buttons'],
             'buttons' => [
                 'update' => static function ($url, $model, $key) {
                     return Html::button('', [
-                        'class' => 'bi bi-pencil text-info update-section-btn',
+                        'class' => 'bi bi-pencil text-main update-section-btn',
                         'data-bs-toggle' => 'modal',
                         'data-bs-target' => '#updateSectionModal',
                         'data-id' => $model->id
@@ -57,7 +57,7 @@ use yii\helpers\Html;
                 },
                 'delete' => static function ($url, $model, $key) {
                     return Yii::$app->user->can(UserUpdatePermission::getName())
-                        ? Html::a('<i class="bi bi-trash text-info"></i>', $url, [
+                        ? Html::a('<i class="bi bi-trash text-main"></i>', $url, [
                             'title' => 'Удалить',
                             'class' => 'btn btn-sm',
                             'data-confirm' => 'Вы уверены, что хотите удалить раздел?',

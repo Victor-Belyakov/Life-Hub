@@ -9,7 +9,7 @@ use yii\helpers\Url;
 
 <nav id="sidebar">
     <div class="logo">
-        <a href="<?= Yii::$app->homeUrl ?>" style="color: inherit; text-decoration: none;">Life Hub</a>
+        <a href="<?= Yii::$app->homeUrl ?>" style="color: inherit; text-decoration: none;">Novera</a>
     </div>
 
     <ul class="nav flex-column">

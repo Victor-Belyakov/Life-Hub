@@ -35,7 +35,7 @@ foreach ($tasks as $task) {
         <?php foreach ($statuses as $statusCode => $statusLabel): ?>
             <div class="col-md-2" style="min-width: 325px;">
                 <div class="card mb-3">
-                    <div class="card-header bg-info text-white">
+                    <div class="card-header bg-main text-white">
                         <?= Html::encode($statusLabel) ?>
                     </div>
                     <div class="card-body task-column" data-status="<?= $statusCode ?>" style="min-height: 200px;">
@@ -55,8 +55,8 @@ foreach ($tasks as $task) {
                                             <small style="color:#6c757d;"><?= Html::encode($task->executor->fullName) ?></small>
                                         </div>
                                         <div class="d-flex justify-content-between mt-2">
-                                            <?= Html::a('Подробнее', ['view', 'id' => $task->id], ['class' => 'btn btn-sm btn-info text-light']) ?>
-                                            <?= Html::a('Редактировать', ['update', 'id' => $task->id], ['class' => 'btn btn-sm btn-cus-success update-task-btn text-light']) ?>
+                                            <?= Html::a('Подробнее', ['view', 'id' => $task->id], ['class' => 'btn btn-sm btn-cus-main text-light']) ?>
+                                            <?= Html::a('Редактировать', ['update', 'id' => $task->id], ['class' => 'btn btn-sm btn-success update-task-btn text-light']) ?>
                                         </div>
                                     </div>
                                 </div>

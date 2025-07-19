@@ -10,6 +10,6 @@ $this->title = 'Нет роли';
     </div>
 
     <?= Html::beginForm(['/auth/logout'], 'post') ?>
-    <?= Html::submitButton('Выйти и вернуться к авторизации', ['class' => 'btn btn-info text-light']) ?>
+    <?= Html::submitButton('Выйти и вернуться к авторизации', ['class' => 'btn btn-cus-main text-light']) ?>
     <?= Html::endForm() ?>
 </div>

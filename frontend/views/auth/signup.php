@@ -13,7 +13,7 @@ $this->title = 'Регистрация пользователя';
 <div class="row justify-content-center">
     <div class="col-md-6"> <!-- Ширина карточки -->
         <div class="card shadow">
-            <div class="card-header bg-info text-white">
+            <div class="card-header bg-main text-white">
                 <h3 class="mb-0"><?= Html::encode($this->title) ?></h3>
             </div>
             <style>
@@ -59,7 +59,7 @@ $this->title = 'Регистрация пользователя';
                 ])->label(false) ?>
 
                 <div class="form-group mt-3 text-center">
-                    <?= Html::submitButton('Зарегистрировать', ['class' => 'btn btn-cus-success text-light', 'style' => 'width: 40%;']) ?>
+                    <?= Html::submitButton('Зарегистрировать', ['class' => 'btn btn-success text-light', 'style' => 'width: 40%;']) ?>
                 </div>
 
                 <?php ActiveForm::end(); ?>

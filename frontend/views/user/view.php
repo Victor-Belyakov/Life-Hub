@@ -12,7 +12,7 @@ $this->title = $model->email;
 <div class="row justify-content-center">
     <div class="col-md-10">
         <div class="card shadow">
-            <div class="card-header bg-info text-white">
+            <div class="card-header bg-main text-white">
                 <h3 class="mb-0"><?= Html::encode($this->title) ?></h3>
             </div>
 
@@ -76,7 +76,7 @@ $this->title = $model->email;
 
                 <div class="mt-4 d-flex gap-3">
                     <?= Html::a('Редактировать', ['update', 'id' => $model->id], [
-                        'class' => 'btn btn-cus-success text-light'
+                        'class' => 'btn btn-success text-light'
                     ]) ?>
                     <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
                         'class' => 'btn btn-danger',

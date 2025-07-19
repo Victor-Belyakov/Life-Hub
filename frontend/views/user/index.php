@@ -29,19 +29,19 @@ use yii\helpers\Url;
     },
     'columns' => [
         [
-            'label' => '<span class="text-info">Id</span>',
+            'label' => '<span class="text-main">Id</span>',
             'value' => static function($model) { return $model->id; },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
-            'label' => '<span class="text-info">Email</span>',
+            'label' => '<span class="text-main">Email</span>',
             'value' => static function($model) { return $model->email; },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
-            'label' => '<span class="text-info">ФИО</span>',
+            'label' => '<span class="text-main">ФИО</span>',
             'value' => static function($searchModel) {
                 return trim($searchModel->first_name . ' ' . $searchModel->middle_name . ' ' . $searchModel->last_name);
             },
@@ -49,13 +49,13 @@ use yii\helpers\Url;
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
-            'label' => '<span class="text-info">Роль</span>',
+            'label' => '<span class="text-main">Роль</span>',
             'value' => static function($model) { return $model->getRoleName(); },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
-            'label' => '<span class="text-info">День рождения</span>',
+            'label' => '<span class="text-main">День рождения</span>',
             'value' => static function($model) {
                 return (new DateTime($model->birth_date))->format('d-m-Y');
             },
@@ -63,7 +63,7 @@ use yii\helpers\Url;
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
-            'label' => '<span class="text-info">Статус</span>',
+            'label' => '<span class="text-main">Статус</span>',
             'value' => static function($model) {
                 $status = UserEnum::fromValue((int)$model->status);
                 return $status ? $status->label() : 'Неизвестно';
@@ -81,13 +81,13 @@ use yii\helpers\Url;
         ],
         [
             'class' => ActionColumn::class,
-            'header' => '<span class="text-info">Действия</span>',
+            'header' => '<span class="text-main">Действия</span>',
             'template' => '{update} {delete}',
             'contentOptions' => ['class' => 'action-buttons'],
             'buttons' => [
                 'update' => static function ($url, $model, $key) {
                     return Yii::$app->user->can(UserUpdatePermission::getName())
-                        ? Html::a('<i class="bi bi-pencil text-info"></i>', $url, [
+                        ? Html::a('<i class="bi bi-pencil text-main"></i>', $url, [
                             'title' => 'Редактировать',
                             'class' => 'btn btn-sm me-1',
                             'data-pjax' => '0',
@@ -95,7 +95,7 @@ use yii\helpers\Url;
                 },
                 'delete' => static function ($url, $model, $key) {
                     return Yii::$app->user->can(UserUpdatePermission::getName())
-                        ? Html::a('<i class="bi bi-trash text-info"></i>', $url, [
+                        ? Html::a('<i class="bi bi-trash text-main"></i>', $url, [
                             'title' => 'Удалить',
                             'class' => 'btn btn-sm',
                             'data-confirm' => 'Вы уверены, что хотите удалить этого пользователя?',

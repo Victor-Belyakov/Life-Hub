@@ -62,7 +62,7 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div class="form-group">
-        <?= Html::submitButton('Создать', ['class' => 'btn btn-cus-success text-light']) ?>
+        <?= Html::submitButton('Создать', ['class' => 'btn btn-success text-light']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -4,7 +4,6 @@ namespace frontend\controllers;
 
 use common\models\User;
 use frontend\models\search\UserSearch;
-use TelegramService;
 use common\services\UserService;
 use Yii;
 use yii\db\Exception;

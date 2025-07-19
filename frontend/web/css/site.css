@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@800&display=swap');
+
 main > .container, main > .container-fluid
 {
     padding: 70px 15px 20px;
@@ -74,11 +76,13 @@ html, body {
 #sidebar .logo {
     height: 60px;
     padding: 10px;
-    font-weight: 700;
-    font-size: 1.75rem;
-    color: #0dcaf0;
+    font-weight: 800;
+    font-size: 2rem;
+    color: #5567a3;
     text-align: center;
     user-select: none;
+    font-family: 'Poppins', sans-serif;
+    letter-spacing: 6px;
 }
 
 #sidebar ul {
@@ -101,22 +105,22 @@ html, body {
 }
 
 #sidebar ul li:hover {
-    color: #0dcaf0;
+    color: #5567a3;
 }
 
 #sidebar ul li:hover i,
 #sidebar ul li:hover a {
-    color: #0dcaf0;
+    color: #5567a3;
 }
 
 #sidebar ul li.active {
-    color: #0dcaf0;
-    border-left-color: #0dcaf0;
+    color: #5567a3;
+    border-left-color: #5567a3;
 }
 
 #sidebar ul li.active i,
 #sidebar ul li.active a {
-    color: #0dcaf0;
+    color: #5567a3;
 }
 
 #sidebar ul li i,
@@ -157,7 +161,7 @@ html, body {
 }
 
 .btn-link.logout {
-    color: #0dcaf0 !important;
+    color: #5567a3 !important;
     font-size: 1.3rem;
 }
 
@@ -165,15 +169,25 @@ html, body {
     color: #0a58ca !important;
 }
 
-.btn-cus-success {
-    background-color: #5bd25e; /* или любой свой цвет */
+.btn-cus-main {
+    background-color: #5567a3; /* или любой свой цвет */
     color: #fff;
-    border: 1px solid #5bd25e;
+    border: 1px solid #5567a3;
 }
 
-.btn-cus-success:hover {
-    background-color: #4dc850;
-    border-color: #4dc850;
+.btn-cus-main:hover {
+    background-color: #455896;
+    border-color: #455896;
+}
+
+.bg-main {
+    background-color:#5567a3;
+    color: #fff;
+    border: 1px solid #5567a3;
+}
+
+.text-main {
+    color: #5567a3
 }
 
 .flatpickr-calendar {
@@ -278,3 +292,6 @@ a.desc:after {
 {
     text-decoration: none;
 }
+
+
+

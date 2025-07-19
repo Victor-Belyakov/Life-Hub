@@ -11,6 +11,12 @@ use yii\bootstrap5\Html;
 
 AppAsset::register($this);
 $hasAccess = !Yii::$app->user->isGuest && !empty(Yii::$app->user->identity->role);
+
+$mainClass = match (true) {
+    Yii::$app->user->isGuest => 'guest-content',
+    empty(Yii::$app->user->identity->role) => 'no-role-content',
+    default => 'auth-content',
+};
 ?>
 
 <?php $this->beginPage() ?>
@@ -39,7 +45,7 @@ $hasAccess = !Yii::$app->user->isGuest && !empty(Yii::$app->user->identity->role
         <div id="profile" class="me-3"><?= Yii::$app->user->identity->fullName ?? '' ?></div>
 
         <?= Html::submitButton(
-            '<i class="bi bi-box-arrow-right ml-2" style="color: #0dcaf0; font-size: 24px;"></i>',
+            '<i class="bi bi-box-arrow-right ml-2" style="color: #455896; font-size: 24px;"></i>',
             [
                 'class' => 'btn btn-link logout text-decoration-none p-0',
                 'title' => 'Выйти',
@@ -49,18 +55,6 @@ $hasAccess = !Yii::$app->user->isGuest && !empty(Yii::$app->user->identity->role
         <?= Html::endForm() ?>
     </header>
 <?php endif; ?>
-
-<?php
-$mainClass = '';
-
-if (Yii::$app->user->isGuest) {
-    $mainClass = 'guest-content';
-} elseif (empty(Yii::$app->user->identity->role)) {
-    $mainClass = 'no-role-content';
-} else {
-    $mainClass = 'auth-content';
-}
-?>
 
 <main id="content" class=" <?= $mainClass ?>">
     <div class="container-fluid">

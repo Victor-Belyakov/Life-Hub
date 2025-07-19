@@ -30,56 +30,56 @@ use yii\helpers\Url;
     },
     'columns' => [
         [
-            'label' => '<span class="text-info">Id</span>',
+            'label' => '<span class="text-main">Id</span>',
             'value' => static function($model) { return $model->id; },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
-            'label' => '<span class="text-info">Название</span>',
+            'label' => '<span class="text-main">Название</span>',
             'value' => static function($model) { return $model->title; },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
-            'label' => '<span class="text-info">Описание</span>',
+            'label' => '<span class="text-main">Описание</span>',
             'value' => static function($model) { return $model->description; },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
-            'label' => '<span class="text-info">Статус</span>',
+            'label' => '<span class="text-main">Статус</span>',
             'value' => static function($model) { return TaskStatusEnum::tryFrom($model->status)?->label(); },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
-            'label' => '<span class="text-info">Приоритет</span>',
+            'label' => '<span class="text-main">Приоритет</span>',
             'value' => static function($model) { return TaskPriorityEnum::tryFrom($model->priority)?->label(); },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
-            'label' => '<span class="text-info">Исполнитель</span>',
+            'label' => '<span class="text-main">Исполнитель</span>',
             'value' => static function($model) { return $model->executor->fullName; },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
-            'label' => '<span class="text-info">Срок выполнения</span>',
+            'label' => '<span class="text-main">Срок выполнения</span>',
             'value' => static function($model) { return $model->deadline; },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
             'class' => ActionColumn::class,
-            'header' => '<span class="text-info">Действия</span>',
+            'header' => '<span class="text-main">Действия</span>',
             'template' => '{update} {delete}',
             'contentOptions' => ['class' => 'action-buttons'],
             'buttons' => [
                 'update' => static function ($url, $model, $key) {
                     return Yii::$app->user->can(UserUpdatePermission::getName())
-                        ? Html::a('<i class="bi bi-pencil text-info"></i>', $url, [
+                        ? Html::a('<i class="bi bi-pencil text-main"></i>', $url, [
                             'title' => 'Редактировать',
                             'class' => 'btn btn-sm me-1',
                             'data-pjax' => '0',
@@ -87,7 +87,7 @@ use yii\helpers\Url;
                 },
                 'delete' => static function ($url, $model, $key) {
                     return Yii::$app->user->can(UserUpdatePermission::getName())
-                        ? Html::a('<i class="bi bi-trash text-info"></i>', $url, [
+                        ? Html::a('<i class="bi bi-trash text-main"></i>', $url, [
                             'title' => 'Удалить',
                             'class' => 'btn btn-sm',
                             'data-confirm' => 'Вы уверены, что хотите удалить эту задачу?',
