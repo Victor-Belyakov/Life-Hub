@@ -2,6 +2,8 @@
 
 namespace app\widgets;
 
+use console\rbac\permissions\record\RecordIndexPermission;
+use console\rbac\permissions\setting\SettingIndexPermission;
 use console\rbac\permissions\task\TaskIndexPermission;
 use console\rbac\permissions\user\UserIndexPermission;
 use yii\base\Widget;
@@ -20,8 +22,8 @@ class SidebarWidget extends Widget
             [
                 'label' => 'Записи',
                 'url' => ['/record/index'],
-                'icon' => 'bi-people-fill',
-                'permission' => UserIndexPermission::getName(),
+                'icon' => 'bi bi-book-half',
+                'permission' => RecordIndexPermission::getName(),
             ],
             [
                 'label' => 'Пользователи',
@@ -38,12 +40,11 @@ class SidebarWidget extends Widget
             [
                 'label' => 'Настройки',
                 'icon' => 'bi-gear-fill',
-                'permission' => UserIndexPermission::getName(),
+                'permission' => SettingIndexPermission::getName(),
                 'items' => [
                     [
                         'label' => 'Разделы для записей',
-                        'url' => ['/section/index'],
-                        'permission' => UserIndexPermission::getName(),
+                        'url' => ['/section/index']
                     ]
                 ],
             ],

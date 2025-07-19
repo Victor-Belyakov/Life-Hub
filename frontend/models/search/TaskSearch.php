@@ -2,13 +2,14 @@
 
 namespace frontend\models\search;
 
+use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Task;
 
 class TaskSearch extends Task
 {
-    public function rules()
+    public function rules(): array
     {
         return [
             [['id', 'executor_id'], 'integer'],

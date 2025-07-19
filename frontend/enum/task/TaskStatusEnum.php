@@ -7,6 +7,7 @@ enum TaskStatusEnum: string
     case NEW = 'new';
     case IN_PROGRESS = 'in_progress';
     case DONE = 'done';
+    case FAIL = 'fail';
     case CANCELED = 'canceled';
 
     public function label(): string
@@ -15,6 +16,7 @@ enum TaskStatusEnum: string
             self::NEW => 'Новая',
             self::IN_PROGRESS => 'В работе',
             self::DONE => 'Выполнена',
+            self::FAIL => 'Неудача',
             self::CANCELED => 'Отменена',
         };
     }
@@ -25,6 +27,7 @@ enum TaskStatusEnum: string
             self::NEW->value => 'Новая',
             self::IN_PROGRESS->value => 'В работе',
             self::DONE->value => 'Выполнена',
+            self::FAIL->value => 'Неудача',
             self::CANCELED->value => 'Отменена',
         ];
     }

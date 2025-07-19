@@ -41,21 +41,6 @@ $(".task-column").sortable({
 
 updateEmptyPlaceholders();
 
-$(".task-index").on("click", ".update-task-btn", function() {
-    let id = $(this).data("id");
-    $("#updateTaskModalContent").html("Загрузка...");
-    $("#updateTaskModal").modal("show");
-
-    $.get(updateFormUrl, {id: id}, function(data) {
-        $("#updateTaskModalContent").html(data);
-
-        // После вставки контента — принудительная инициализация Select2
-        $('#updateTaskModalContent').find('select').select2({
-            dropdownParent: $('#updateTaskModal')
-        });
-    });
-});
-
 $("#createTaskModal").on("submit", "#task-form", function(e) {
     e.preventDefault();
     let form = $(this);

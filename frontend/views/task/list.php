@@ -1,5 +1,7 @@
 <?php
 
+use frontend\enum\task\TaskPriorityEnum;
+use frontend\enum\task\TaskStatusEnum;
 use yii\grid\ActionColumn;
 use console\rbac\permissions\user\UserUpdatePermission;
 use yii\grid\GridView;
@@ -47,13 +49,13 @@ use yii\helpers\Url;
         ],
         [
             'label' => '<span class="text-info">Статус</span>',
-            'value' => static function($model) { return $model->status; },
+            'value' => static function($model) { return TaskStatusEnum::tryFrom($model->status)?->label(); },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
             'label' => '<span class="text-info">Приоритет</span>',
-            'value' => static function($model) { return $model->priority; },
+            'value' => static function($model) { return TaskPriorityEnum::tryFrom($model->priority)?->label(); },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],

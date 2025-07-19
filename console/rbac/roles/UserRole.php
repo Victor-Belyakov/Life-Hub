@@ -2,6 +2,7 @@
 
 namespace console\rbac\roles;
 
+use console\rbac\permissions\record\RecordIndexPermission;
 use console\rbac\permissions\user\UserViewPermission;
 use console\rbac\RoleInterface;
 use Exception;
@@ -52,7 +53,8 @@ class UserRole implements RoleInterface
     public function getPermissions(): array
     {
         return [
-            UserViewPermission::class
+            UserViewPermission::class,
+            RecordIndexPermission::class,
         ];
     }
 }

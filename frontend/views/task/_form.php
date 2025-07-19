@@ -10,7 +10,6 @@ use yii\widgets\ActiveForm;
 /** @var yii\web\View $this */
 /** @var common\models\Task $model */
 
-$dropdownParent = $model->isNewRecord ? '#createTaskModal' : '#updateTaskModal';
 ?>
 
 <div class="task-form">
@@ -42,7 +41,7 @@ $dropdownParent = $model->isNewRecord ? '#createTaskModal' : '#updateTaskModal';
             'pluginOptions' => [
                 'allowClear' => true,
                 'minimumInputLength' => 2,
-                'dropdownParent' => $dropdownParent,
+                'dropdownParent' => '#createTaskModal',
                 'ajax' => [
                     'url' => Url::to(['user/executor-list']),
                     'dataType' => 'json',
@@ -63,7 +62,7 @@ $dropdownParent = $model->isNewRecord ? '#createTaskModal' : '#updateTaskModal';
     </div>
 
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Создать' : 'Сохранить', ['class' => 'btn btn-cus-success']) ?>
+        <?= Html::submitButton('Создать', ['class' => 'btn btn-cus-success text-light']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

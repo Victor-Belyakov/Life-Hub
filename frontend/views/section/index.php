@@ -5,7 +5,6 @@ use yii\bootstrap5\Modal;
 use yii\grid\ActionColumn;
 use yii\grid\GridView;
 use yii\helpers\Html;
-use yii\helpers\Url;
 
 /**
  * @var $dataProvider
@@ -30,14 +29,14 @@ use yii\helpers\Url;
         ],
         [
             'label' => '<span class="text-info">Название</span>',
-            'value' => static function($model) { return $model->email; },
+            'value' => static function($model) { return $model->name; },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
             'label' => '<span class="text-info">Дата создания</span>',
             'value' => static function($model) {
-                return (new DateTime($model->createdAt))->format('d-m-Y');
+                return (new DateTime($model->created_at))->format('d-m-Y');
             },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
@@ -49,12 +48,12 @@ use yii\helpers\Url;
             'contentOptions' => ['class' => 'action-buttons'],
             'buttons' => [
                 'update' => static function ($url, $model, $key) {
-                    return Yii::$app->user->can(UserUpdatePermission::getName())
-                        ? Html::a('<i class="bi bi-pencil text-info"></i>', $url, [
-                            'title' => 'Редактировать',
-                            'class' => 'btn btn-sm me-1',
-                            'data-pjax' => '0',
-                        ]) : '';
+                    return Html::button('', [
+                        'class' => 'bi bi-pencil text-info update-section-btn',
+                        'data-bs-toggle' => 'modal',
+                        'data-bs-target' => '#updateSectionModal',
+                        'data-id' => $model->id
+                    ]);
                 },
                 'delete' => static function ($url, $model, $key) {
                     return Yii::$app->user->can(UserUpdatePermission::getName())
@@ -81,8 +80,19 @@ Modal::begin([
 ]);
 echo $this->render('_form', ['model' => $newModel]);
 Modal::end();
-?>
 
-<script>
-    const createFormUrl = "<?= Url::to(['section/create']) ?>";
-</script>
+Modal::begin([
+    'title' => 'Редактировать секцию',
+    'id' => 'updateSectionModal',
+    'size' => Modal::SIZE_LARGE,
+    'options' => [
+        'class' => 'custom-modal',
+    ],
+]);
+echo '<div class="modal-body"></div>';
+
+Modal::end();
+
+
+$this->registerCssFile('@web/css/setting/section.css');
+?>

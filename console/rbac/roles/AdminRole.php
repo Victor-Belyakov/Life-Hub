@@ -2,6 +2,8 @@
 
 namespace console\rbac\roles;
 
+use console\rbac\permissions\record\RecordIndexPermission;
+use console\rbac\permissions\setting\SettingIndexPermission;
 use console\rbac\permissions\task\TaskIndexPermission;
 use console\rbac\permissions\user\UserCreatePermission;
 use console\rbac\permissions\user\UserIndexPermission;
@@ -61,6 +63,8 @@ class AdminRole implements RoleInterface
             UserIndexPermission::class,
             UserViewPermission::class,
             TaskIndexPermission::class,
+            RecordIndexPermission::class,
+            SettingIndexPermission::class,
         ];
     }
 }

@@ -56,6 +56,29 @@ class SectionController extends BaseController
     }
 
     /**
+     * @throws Exception|NotFoundHttpException
+     */
+    public function actionUpdate(int $id)
+    {
+        $model = Section::findModel($id);
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                return $this->asJson(['success' => true]);
+            }
+
+            return $this->asJson([
+                'success' => false,
+                'errors' => $model->getErrors(),
+            ]);
+        }
+
+        return $this->renderAjax('_form', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
      * @param int $id
      * @return Response
      * @throws Throwable

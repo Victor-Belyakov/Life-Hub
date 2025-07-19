@@ -18,6 +18,7 @@ $statuses = [
     'new' => 'Новые',
     'in_progress' => 'В работе',
     'done' => 'Выполнено',
+    'fail' => 'Неудачно',
     'canceled' => 'Отменено',
 ];
 
@@ -29,11 +30,10 @@ foreach ($tasks as $task) {
 
 
 <?= $this->render('_header') ?>
-
 <div class="task-index">
-    <div class="row">
+    <div class="row flex-nowrap overflow-auto">
         <?php foreach ($statuses as $statusCode => $statusLabel): ?>
-            <div class="col-md-3">
+            <div class="col-md-2" style="min-width: 325px;">
                 <div class="card mb-3">
                     <div class="card-header bg-info text-white">
                         <?= Html::encode($statusLabel) ?>
@@ -43,26 +43,24 @@ foreach ($tasks as $task) {
                             <?php foreach ($groupedTasks[$statusCode] as $task): ?>
                                 <?php $priorityEnum = TaskPriorityEnum::fromValue($task->priority); ?>
                                 <div class="card mb-2 task-item border-<?= $priorityEnum?->value ?>" data-id="<?= $task->id ?>">
-
-                                <div class="card-body p-2">
+                                    <div class="card-body p-2">
                                         <div class="d-flex justify-content-between align-items-center mb-1">
                                             <strong style="color:#6c757d;"><?= Html::encode($task->title) ?></strong>
                                             <span class="badge <?= $priorityEnum?->badgeClass() ?>">
                                                 <?= Html::encode($priorityEnum?->label()) ?>
                                             </span>
                                         </div>
-                                        <small style="color:#6c757d;"><?= Html::encode($task->description) ?></small>
+                                        <div>
+                                            <strong style="color:#6c757d;">Исполнитель: </strong>
+                                            <small style="color:#6c757d;"><?= Html::encode($task->executor->fullName) ?></small>
+                                        </div>
                                         <div class="d-flex justify-content-between mt-2">
                                             <?= Html::a('Подробнее', ['view', 'id' => $task->id], ['class' => 'btn btn-sm btn-info text-light']) ?>
-                                            <?= Html::button('Редактировать', [
-                                                'class' => 'btn btn-sm btn-cus-success update-task-btn',
-                                                'data-id' => $task->id
-                                            ]) ?>
+                                            <?= Html::a('Редактировать', ['update', 'id' => $task->id], ['class' => 'btn btn-sm btn-cus-success update-task-btn text-light']) ?>
                                         </div>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
-
                         <?php else: ?>
                             <p class="text-muted empty-placeholder">Нет задач</p>
                         <?php endif; ?>
@@ -72,6 +70,7 @@ foreach ($tasks as $task) {
         <?php endforeach; ?>
     </div>
 </div>
+
 
 <?php
 Modal::begin([
@@ -83,17 +82,6 @@ Modal::begin([
     ],
 ]);
 echo $this->render('_form', ['model' => $newTaskModel]);
-Modal::end();
-
-Modal::begin([
-    'title' => 'Обновить задачу',
-    'id' => 'updateTaskModal',
-    'size' => Modal::SIZE_LARGE,
-    'options' => [
-        'class' => 'custom-modal',
-    ],
-]);
-echo '<div id="updateTaskModalContent">Загрузка...</div>';
 Modal::end();
 ?>
 
@@ -110,6 +98,5 @@ $this->registerCssFile('@web/css/task/index.css');
 
 <script>
     const updateUrl = "<?= Url::to(['task/change-status']) ?>";
-    const updateFormUrl = "<?= Url::to(['task/update']) ?>";
     const createFormUrl = "<?= Url::to(['task/create']) ?>";
 </script>

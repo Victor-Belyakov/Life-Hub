@@ -12,7 +12,7 @@ class m250707_142055_create_table_entries extends Migration
         $this->createTable('section', [
             'id' => $this->primaryKey(),
             'name' => $this->string()->notNull(),
-            'created_at' => $this->integer()->notNull(),
+            'created_at' => $this->timestamp()->notNull(),
         ]);
 
         $this->createTable('record', [
@@ -22,8 +22,8 @@ class m250707_142055_create_table_entries extends Migration
             'content' => $this->text(),
             'type' => $this->string()->defaultValue('note'),
             'status' => $this->string()->defaultValue('active'),
-            'created_at' => $this->integer()->notNull(),
-            'updated_at' => $this->integer()->notNull(),
+            'created_at' => $this->timestamp()->notNull(),
+            'updated_at' => $this->timestamp()->notNull(),
         ]);
 
 

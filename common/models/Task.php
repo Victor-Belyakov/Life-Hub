@@ -47,6 +47,25 @@ class Task extends AbstractModel
         ];
     }
 
+    public function beforeSave($insert)
+    {
+        if (parent::beforeSave($insert)) {
+            if ($this->deadline) {
+                $date = new \DateTime($this->deadline);
+
+                $time = $date->format('H:i:s');
+                if ($time === '00:00:00') {
+                    $date->setTime(23, 59, 59);
+                }
+
+                $this->deadline = $date->format('Y-m-d H:i:s');
+            }
+            return true;
+        }
+        return false;
+    }
+
+
     /**
      * @return array
      */

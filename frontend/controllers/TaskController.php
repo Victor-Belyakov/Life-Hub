@@ -72,13 +72,13 @@ class TaskController extends Controller
             if ($model->save()) {
 
                 if ($model->executor_id !== $model->creator_id) {
-                    TelegramService::sendMessage(sprintf(
-                        "Пользователю %s назначена задача %s от %s. Время выполнения до %s",
-                        $model->executor->getFullName(),
-                        $model->title,
-                        $model->creator->getFullName(),
-                        $model->deadline
-                    ));
+//                    TelegramService::sendMessage(sprintf(
+//                        "Пользователю %s назначена задача %s от %s. Время выполнения до %s",
+//                        $model->executor->getFullName(),
+//                        $model->title,
+//                        $model->creator->getFullName(),
+//                        $model->deadline
+//                    ));
                 }
 
                 return $this->asJson(['success' => true]);
@@ -105,31 +105,12 @@ class TaskController extends Controller
     {
         $model = Task::findModel($id);
 
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->save()) {
-                return $this->asJson([
-                    'success' => true,
-                    'task' => [
-                        'id' => $model->id,
-                        'title' => $model->title,
-                        'description' => $model->description,
-                        'status' => $model->status,
-                        'priority' => $model->priority,
-                        'executor_id' => $model->executor_id,
-                        'deadline' => $model->deadline,
-                        'priorityLabel' => TaskPriorityEnum::fromValue($model->priority)?->label(),
-                        'priorityClass' => TaskPriorityEnum::fromValue($model->priority)?->badgeClass(),
-                    ],
-                ]);
-            }
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
-            return $this->asJson([
-                'success' => false,
-                'errors' => $model->errors,
-            ]);
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->renderAjax('_form', ['model' => $model]);
+        return $this->render('update', ['model' => $model]);
     }
 
     /**
@@ -153,6 +134,8 @@ class TaskController extends Controller
      */
     public function actionChangeStatus(): array
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
         $taskId = Yii::$app->request->post('id');
         $newStatus = Yii::$app->request->post('status');
 
