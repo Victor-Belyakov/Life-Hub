@@ -1,3 +1,4 @@
+<?= $this->title = 'Главная' ?>
 
 <div id="calendar"></div>
 

@@ -9,6 +9,7 @@ use frontend\models\search\TaskSearch;
 use Throwable;
 use Yii;
 use yii\db\StaleObjectException;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\httpclient\Exception;
 use yii\web\Controller;
@@ -23,11 +24,12 @@ class TaskController extends Controller
     public function actionIndex(): string
     {
         $tasks = Task::find()->orderBy(['created_at' => SORT_DESC])->all();
-        $newTaskModel = new Task();
+
+        $groupedTasks = ArrayHelper::index($tasks, null, 'status');
 
         return $this->render('index', [
-            'tasks' => $tasks,
-            'newTaskModel' => $newTaskModel,
+            'groupedTasks' => $groupedTasks,
+            'newTaskModel' => new Task(),
         ]);
     }
 
@@ -52,26 +54,31 @@ class TaskController extends Controller
      */
     public function actionView(int $id): string
     {
+        $model = Task::findModel($id);
+
         return $this->render('view', [
-            'model' => Task::findModel($id),
+            'model' => $model,
         ]);
     }
 
     /**
      * @return Response|string
-     * @throws Exception
      * @throws \yii\db\Exception
      */
     public function actionCreate(): Response|string
     {
         $model = new Task();
 
-        if ($model->load(Yii::$app->request->post())) {
-            $model->creator_id = Yii::$app->user->id;
+        if (!$model->load(Yii::$app->request->post())) {
+            return $this->renderAjax('_form', [
+                'model' => $model,
+            ]);
+        }
 
-            if ($model->save()) {
+        $model->creator_id = Yii::$app->user->id;
 
-                if ($model->executor_id !== $model->creator_id) {
+        if ($model->save()) {
+            if ($model->executor_id !== $model->creator_id) {
 //                    TelegramService::sendMessage(sprintf(
 //                        "Пользователю %s назначена задача %s от %s. Время выполнения до %s",
 //                        $model->executor->getFullName(),
@@ -79,19 +86,14 @@ class TaskController extends Controller
 //                        $model->creator->getFullName(),
 //                        $model->deadline
 //                    ));
-                }
-
-                return $this->asJson(['success' => true]);
             }
 
-            return $this->asJson([
-                'success' => false,
-                'errors' => $model->getErrors(),
-            ]);
+            return $this->asJson(['success' => true]);
         }
 
-        return $this->renderAjax('_form', [
-            'model' => $model,
+        return $this->asJson([
+            'success' => false,
+            'errors' => $model->getErrors(),
         ]);
     }
 
@@ -106,7 +108,6 @@ class TaskController extends Controller
         $model = Task::findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
@@ -140,7 +141,6 @@ class TaskController extends Controller
         $newStatus = Yii::$app->request->post('status');
 
         $task = Task::findModel($taskId);
-
         $task->status = $newStatus;
         if ($task->save(false)) {
             return ['success' => true];
@@ -155,6 +155,7 @@ class TaskController extends Controller
     public function actionGetEvents(): array
     {
         Yii::$app->response->format = Response::FORMAT_JSON;
+
         $searchModel = new TaskSearch();
         $tasks = $searchModel->getTasksForCalendar();
         $events = [];

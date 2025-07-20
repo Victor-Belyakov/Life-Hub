@@ -11,18 +11,13 @@ $this->title = 'Редактирование: ' . $model->email;
 ?>
 
 <div class="row justify-content-center">
-    <div class="col-md-10"> <!-- Ширина карточки -->
+    <div class="col-md-8">
         <div class="card shadow">
             <div class="card-header bg-main text-white">
                 <h3 class="mb-0"><?= Html::encode($this->title) ?></h3>
             </div>
-            <style>
-                .card-body {
-                    color: #6c757d;
-                    font-weight: 500;
-                }
-            </style>
-            <div class="card-body">
+
+            <div class="card-body" style="color: #6c757d; font-weight: 500">
                 <?php $form = ActiveForm::begin([
                     'id' => 'user-update-form',
                     'enableClientValidation' => true,

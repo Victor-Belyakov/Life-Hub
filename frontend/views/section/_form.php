@@ -16,9 +16,8 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
         'id' => 'section-form',
         'enableClientValidation' => true,
-        'method' => 'POST',
-        'action' => Yii::$app->request->url,
         'options' => ['data-pjax' => true],
+        'action' => $action ?? Url::to(['/section/create']),
     ]); ?>
 
     <div class="mb-3" style="color: #6c757d">

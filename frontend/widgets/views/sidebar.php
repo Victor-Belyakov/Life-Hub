@@ -9,10 +9,12 @@ use yii\helpers\Url;
 
 <nav id="sidebar">
     <div class="logo">
-        <a href="<?= Yii::$app->homeUrl ?>" style="color: inherit; text-decoration: none;">Novera</a>
+        <a href="<?= Yii::$app->homeUrl ?>" style="color: inherit; text-decoration: none;">
+            <img src="<?= Yii::getAlias('@web') ?>/favicon/novera.png" alt="favicon">overa
+        </a>
     </div>
 
-    <ul class="nav flex-column">
+    <ul class="nav flex-column mt-3">
         <?php foreach ($menuItems as $item): ?>
             <?php if (!isset($item['permission']) || Yii::$app->user->can($item['permission'])): ?>
                 <?php if (isset($item['items'])): ?>
@@ -40,12 +42,11 @@ use yii\helpers\Url;
                     <li class="nav-item">
                         <a class="nav-link <?= Yii::$app->controller->id === ltrim($item['url'][0], '/') ? 'active' : '' ?>"
                            href="<?= Url::to($item['url']) ?>">
-                            <i class="bi <?= $item['icon'] ?>"></i> <?= $item['label'] ?>
+                            <i class="bi <?= $item['icon'] ?> " style="margin-right: 5px"></i> <?= $item['label'] ?>
                         </a>
                     </li>
                 <?php endif; ?>
             <?php endif; ?>
         <?php endforeach; ?>
     </ul>
-
 </nav>

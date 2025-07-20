@@ -75,6 +75,7 @@ class SectionController extends BaseController
 
         return $this->renderAjax('_form', [
             'model' => $model,
+            'action' => ['/section/update', 'id' => $id],
         ]);
     }
 

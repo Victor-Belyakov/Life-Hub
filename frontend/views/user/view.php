@@ -7,23 +7,16 @@ use yii\widgets\DetailView;
 /** @var yii\web\View $this */
 /** @var common\models\User $model */
 
-$this->title = $model->email;
+$this->title = $model->fullName;
 ?>
 <div class="row justify-content-center">
-    <div class="col-md-10">
+    <div class="col-md-8">
         <div class="card shadow">
             <div class="card-header bg-main text-white">
                 <h3 class="mb-0"><?= Html::encode($this->title) ?></h3>
             </div>
 
             <div class="user-view p-4">
-                <style>
-                    .table > tbody > tr > th,
-                    .table > tbody > tr > td {
-                        color: #6c757d;
-                        font-weight: 500;
-                    }
-                </style>
 
                 <?= DetailView::widget([
                     'model' => $model,
@@ -39,11 +32,11 @@ $this->title = $model->email;
                         ],
                         [
                             'label' => 'ФИО',
-                            'value' => trim($model->first_name . ' ' . $model->middle_name . ' ' . $model->last_name),
+                            'value' => $model->fullName,
                         ],
                         [
                             'label' => 'Роль',
-                            'value' => $model->getRoleName(),
+                            'value' => $model->roleName,
                         ],
                         [
                             'label' => 'Дата рождения',
@@ -90,3 +83,6 @@ $this->title = $model->email;
         </div>
     </div>
 </div>
+
+<?php
+$this->registerCssFile('@web/css/user/view.css');

@@ -75,14 +75,19 @@ html, body {
 
 #sidebar .logo {
     height: 60px;
-    padding: 10px;
+    padding: 4px;
     font-weight: 800;
     font-size: 2rem;
     color: #5567a3;
     text-align: center;
     user-select: none;
     font-family: 'Poppins', sans-serif;
-    letter-spacing: 6px;
+    letter-spacing: 10px;
+}
+
+#sidebar .logo img {
+    vertical-align: middle;
+    margin-right: -0.5rem;
 }
 
 #sidebar ul {

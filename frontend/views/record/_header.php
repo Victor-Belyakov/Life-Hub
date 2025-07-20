@@ -5,17 +5,17 @@ use yii\helpers\Html;
 ?>
 
 <div class="mb-3" style="display: flex; justify-content: left; gap: 1rem;">
-    <?= Html::button('Создать задачу', [
+    <?= Html::button('Создать запись', [
         'class' => 'btn btn-success text-light',
         'data-bs-toggle' => 'modal',
-        'data-bs-target' => '#createTaskModal'
+        'data-bs-target' => '#createRecordModal'
     ]) ?>
 
-    <?= Html::a('Доска', ['task/index'], [
+    <?= Html::a('Стикеры', ['record/index'], [
         'class' => 'btn btn-cus-main text-light'
     ]) ?>
 
-    <?= Html::a('Список', ['task/list'], [
+    <?= Html::a('Список', ['record/list'], [
         'class' => 'btn btn-cus-main text-light'
     ]) ?>
 </div>

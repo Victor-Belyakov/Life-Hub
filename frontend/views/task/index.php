@@ -1,6 +1,7 @@
 <?php
 
 use frontend\enum\task\TaskPriorityEnum;
+use frontend\enum\task\TaskStatusEnum;
 use yii\bootstrap5\Modal;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -8,39 +9,34 @@ use yii\web\JqueryAsset;
 
 /**
  * @var $newTaskModel
- * @var $tasks
+ * @var $groupedTasks
  */
 
 
 $this->title = 'Задачи';
 
-$statuses = [
-    'new' => 'Новые',
-    'in_progress' => 'В работе',
-    'done' => 'Выполнено',
-    'fail' => 'Неудачно',
-    'canceled' => 'Отменено',
-];
 
-$groupedTasks = [];
-foreach ($tasks as $task) {
-    $groupedTasks[$task->status][] = $task;
-}
+$statuses = TaskStatusEnum::labels();
+
 ?>
 
-
 <?= $this->render('_header') ?>
+
 <div class="task-index">
     <div class="row flex-nowrap overflow-auto">
+
         <?php foreach ($statuses as $statusCode => $statusLabel): ?>
             <div class="col-md-2" style="min-width: 325px;">
                 <div class="card mb-3">
                     <div class="card-header bg-main text-white">
                         <?= Html::encode($statusLabel) ?>
                     </div>
+
                     <div class="card-body task-column" data-status="<?= $statusCode ?>" style="min-height: 200px;">
                         <?php if (!empty($groupedTasks[$statusCode])): ?>
+
                             <?php foreach ($groupedTasks[$statusCode] as $task): ?>
+
                                 <?php $priorityEnum = TaskPriorityEnum::fromValue($task->priority); ?>
                                 <div class="card mb-2 task-item border-<?= $priorityEnum?->value ?>" data-id="<?= $task->id ?>">
                                     <div class="card-body p-2">
@@ -54,13 +50,17 @@ foreach ($tasks as $task) {
                                             <strong style="color:#6c757d;">Исполнитель: </strong>
                                             <small style="color:#6c757d;"><?= Html::encode($task->executor->fullName) ?></small>
                                         </div>
+
                                         <div class="d-flex justify-content-between mt-2">
-                                            <?= Html::a('Подробнее', ['view', 'id' => $task->id], ['class' => 'btn btn-sm btn-cus-main text-light']) ?>
                                             <?= Html::a('Редактировать', ['update', 'id' => $task->id], ['class' => 'btn btn-sm btn-success update-task-btn text-light']) ?>
+                                            <?= Html::a('Подробнее', ['view', 'id' => $task->id], ['class' => 'btn btn-sm btn-cus-main text-light']) ?>
+
                                         </div>
                                     </div>
                                 </div>
+
                             <?php endforeach; ?>
+
                         <?php else: ?>
                             <p class="text-muted empty-placeholder">Нет задач</p>
                         <?php endif; ?>
@@ -68,6 +68,7 @@ foreach ($tasks as $task) {
                 </div>
             </div>
         <?php endforeach; ?>
+
     </div>
 </div>
 

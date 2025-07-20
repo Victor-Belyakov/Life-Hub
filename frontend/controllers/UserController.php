@@ -3,6 +3,7 @@
 namespace frontend\controllers;
 
 use common\models\User;
+use common\services\TelegramService;
 use frontend\models\search\UserSearch;
 use common\services\UserService;
 use Yii;

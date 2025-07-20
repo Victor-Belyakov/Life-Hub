@@ -46,7 +46,7 @@ $("#createTaskModal").on("submit", "#task-form", function(e) {
     let form = $(this);
 
     $.ajax({
-        url: createFormUrl,
+        url: form.attr('action'),
         type: form.attr("method"),
         data: form.serialize(),
         dataType: "json",
@@ -60,54 +60,6 @@ $("#createTaskModal").on("submit", "#task-form", function(e) {
         },
         error: function() {
             alert("Ошибка при создании задачи");
-        }
-    });
-});
-
-$("#updateTaskModal").on("submit", "#task-form", function(e) {
-    e.preventDefault();
-    let form = $(this);
-
-    $.ajax({
-        url: updateFormUrl,
-        type: form.attr("method"),
-        data: form.serialize(),
-        dataType: "json",
-        success: function(response) {
-            if (response.success) {
-                let task = response.task;
-                let card = $('.task-item[data-id="' + task.id + '"]');
-                let newColumn = $('.task-column[data-status="' + task.status + '"]');
-
-                // Перемещаем карточку в новую колонку, если статус изменился
-                if (card.parent().data('status') !== task.status) {
-                    card.appendTo(newColumn);
-                }
-
-                // Обновляем текст заголовка и описания
-                card.find("strong").text(task.title);
-                card.find("small").text(task.description);
-
-                // Обновляем бейдж приоритета
-                card.find(".badge")
-                    .text(task.priorityLabel)
-                    .removeClass("badge-low badge-medium badge-high")
-                    .addClass(task.priorityClass);
-
-                // Обновляем цвет обводки — удаляем все возможные классы border и добавляем нужный
-                card
-                    .removeClass("border-low border-medium border-high")
-                    .addClass("border-" + task.priorityClass.replace('badge-', ''));
-
-                $("#updateTaskModal").modal("hide");
-                updateEmptyPlaceholders();
-            } else {
-                let errors = response.errors;
-                form.yiiActiveForm("updateMessages", errors, true);
-            }
-        },
-        error: function() {
-            alert("Ошибка при сохранении задачи");
         }
     });
 });

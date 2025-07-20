@@ -19,6 +19,7 @@ class BaseController extends Controller
         if (!Yii::$app->user->isGuest) {
             $auth = Yii::$app->authManager;
             $roles = $auth->getRolesByUser(Yii::$app->user->id);
+
             if (empty($roles) && !in_array($action->id, ['no-role', 'logout']) ) {
                 return $this->redirect(['auth/no-role']);
             }

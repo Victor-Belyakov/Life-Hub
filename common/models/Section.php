@@ -2,14 +2,11 @@
 
 namespace common\models;
 
-use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
-use yii\db\Expression;
 
 /**
  * @property int $id
  * @property string $name
- * @property string $created_at
  *
  * @property Record[] $entries
  */
@@ -23,18 +20,6 @@ class Section extends AbstractModel
         return 'section';
     }
 
-    public function behaviors()
-    {
-        return [
-            [
-                'class' => TimestampBehavior::class,
-                'createdAtAttribute' => 'created_at',
-                'updatedAtAttribute' => null,
-                'value' => new Expression('NOW()'),
-            ],
-        ];
-    }
-
     /**
      * @return array
      */
@@ -42,7 +27,6 @@ class Section extends AbstractModel
     {
         return [
             [['name'], 'required'],
-            ['createdAt', 'safe'],
             [['name'], 'string', 'max' => 255],
         ];
     }

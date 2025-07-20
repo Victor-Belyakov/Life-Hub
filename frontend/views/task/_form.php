@@ -16,6 +16,7 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
         'id' => 'task-form',
         'enableClientValidation' => true,
+        'action' => Url::to(['/task/create']),
         'options' => ['data-pjax' => true],
     ]); ?>
 
@@ -62,7 +63,7 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div class="form-group">
-        <?= Html::submitButton('Создать', ['class' => 'btn btn-success text-light']) ?>
+        <?= Html::submitButton('Создать', ['class' => 'btn btn-success text-light', 'data-url' => 'task/create',]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

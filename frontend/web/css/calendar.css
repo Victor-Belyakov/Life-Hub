@@ -26,3 +26,14 @@
     text-decoration: none !important;
     color: inherit !important;
 }
+
+.fc .fc-event {
+    background-color: #6c757d !important; /* серый цвет */
+    border-color: #6c757d !important;     /* граница тоже в серый */
+    color: white !important;               /* текст белый, чтобы был виден */
+}
+
+.fc .fc-event a {
+    color: white !important;
+    text-decoration: none !important;
+}

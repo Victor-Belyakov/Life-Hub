@@ -2,7 +2,9 @@
 
 namespace common\models;
 
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 /**
  * @property int $id
@@ -24,6 +26,19 @@ class Record extends AbstractModel
         return 'record';
     }
 
+    /**
+     * @return array[]
+     */
+    public function behaviors(): array
+    {
+        return [
+            [
+                'class' => TimestampBehavior::class,
+                'value' => new Expression('NOW()'),
+            ]
+        ];
+    }
+
     public function rules()
     {
         return [
@@ -34,6 +49,20 @@ class Record extends AbstractModel
             [['title', 'type', 'status'], 'string', 'max' => 255],
             ['type', 'default', 'value' => 'note'],
             ['status', 'default', 'value' => 'active'],
+        ];
+    }
+
+    /**
+     * @return string[]
+     */
+    public function attributeLabels(): array
+    {
+        return [
+            'section_id' => 'Раздел',
+            'title' => 'Название',
+            'content' => 'Контент',
+            'type' => 'Тип',
+            'status' => 'Статус'
         ];
     }
 

@@ -11,6 +11,8 @@ use yii\helpers\Html;
  * @var $searchModel
  * @var $newModel
  */
+
+$this->title = 'Разделы для записей'
 ?>
 
 <?= $this->render('_header') ?>
@@ -34,14 +36,6 @@ use yii\helpers\Html;
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
-            'label' => '<span class="text-main">Дата создания</span>',
-            'value' => static function($model) {
-                return (new DateTime($model->created_at))->format('d-m-Y');
-            },
-            'encodeLabel' => false,
-            'contentOptions' => ['style' => 'color: #6c757d;'],
-        ],
-        [
             'class' => ActionColumn::class,
             'header' => '<span class="text-main">Действия</span>',
             'template' => '{update} {delete}',
@@ -52,6 +46,7 @@ use yii\helpers\Html;
                         'class' => 'bi bi-pencil text-main update-section-btn',
                         'data-bs-toggle' => 'modal',
                         'data-bs-target' => '#updateSectionModal',
+                        'style' => 'border: none; background: transparent;',
                         'data-id' => $model->id
                     ]);
                 },

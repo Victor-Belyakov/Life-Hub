@@ -1,8 +1,9 @@
 <?php
 
-use console\rbac\permissions\user\UserUpdatePermission;
-use frontend\enum\user\UserEnum;
+use frontend\enum\task\TaskPriorityEnum;
+use frontend\enum\task\TaskStatusEnum;
 use yii\grid\ActionColumn;
+use console\rbac\permissions\user\UserUpdatePermission;
 use yii\grid\GridView;
 use yii\helpers\Html;
 use yii\helpers\Url;
@@ -11,7 +12,6 @@ use yii\helpers\Url;
  * @var $dataProvider
  * @var $searchModel
  */
-$this->title = 'Пользователи'
 ?>
 
 <?= $this->render('_header') ?>
@@ -22,71 +22,36 @@ $this->title = 'Пользователи'
     'filterModel' => $searchModel,
     'layout' => "{items}\n{summary}\n{pager}",
     'rowOptions' => static function($model) {
-        $url = Url::to(['user/view', 'id' => $model->id]);
+        $url = Url::to(['task/view', 'id' => $model->id]);
         return [
             'style' => 'cursor: pointer;',
-            'onclick' => "if (!event.target.closest('.action-buttons')) { 
-                window.location.href='$url';
-             }",
+            'onclick' => "if(!event.target.closest('.action-buttons')) { window.location.href='$url'; }",
         ];
     },
     'columns' => [
         [
             'label' => '<span class="text-main">Id</span>',
-            'value' => static function($model) {
-                return $model->id;
-            },
+            'value' => static function($model) { return $model->id; },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
-            'label' => '<span class="text-main">Email</span>',
-            'value' => static function($model) {
-                return $model->email;
-            },
+            'label' => '<span class="text-main">Раздел</span>',
+            'value' => static function($model) { return $model->section->name; },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
-            'label' => '<span class="text-main">ФИО</span>',
-            'value' => static function($searchModel) {
-                return $searchModel->fullName;
-            },
+            'label' => '<span class="text-main">Название</span>',
+            'value' => static function($model) { return $model->title; },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],
         [
-            'label' => '<span class="text-main">Роль</span>',
-            'value' => static function($model) {
-                return $model->getRoleName();
-            },
+            'label' => '<span class="text-main">Контент</span>',
+            'value' => static function($model) { return $model->content; },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
-        ],
-        [
-            'label' => '<span class="text-main">День рождения</span>',
-            'value' => static function($model) {
-                return (new DateTime($model->birth_date))->format('d-m-Y');
-            },
-            'encodeLabel' => false,
-            'contentOptions' => ['style' => 'color: #6c757d;'],
-        ],
-        [
-            'label' => '<span class="text-main">Статус</span>',
-            'value' => static function($model) {
-                $status = UserEnum::fromValue((int)$model->status);
-                return $status ? $status->label() : 'Неизвестно';
-            },
-            'encodeLabel' => false,
-            'contentOptions' => static function($model) {
-                $status = (int)$model->status;
-                return match ($status) {
-                    UserEnum::STATUS_ACTIVE->value => ['class' => 'text-success'],
-                    UserEnum::STATUS_DELETED->value => ['class' => 'text-danger'],
-                    UserEnum::STATUS_INACTIVE->value => ['class' => 'text-warning'],
-                    default => ['class' => 'text-secondary'],
-                };
-            },
         ],
         [
             'class' => ActionColumn::class,
@@ -107,7 +72,7 @@ $this->title = 'Пользователи'
                         ? Html::a('<i class="bi bi-trash text-main"></i>', $url, [
                             'title' => 'Удалить',
                             'class' => 'btn btn-sm',
-                            'data-confirm' => 'Вы уверены, что хотите удалить этого пользователя?',
+                            'data-confirm' => 'Вы уверены, что хотите удалить эту запись?',
                             'data-method' => 'post',
                             'data-pjax' => '0',
                         ]) : '';
@@ -116,4 +81,5 @@ $this->title = 'Пользователи'
         ],
     ],
 ])
+
 ?>

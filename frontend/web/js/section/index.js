@@ -1,12 +1,12 @@
-$(document).on('click', '.update-section-btn', function() {
-    let id = $(this).data('id');
+$(document).on('click', '.update-tag-btn', function() {
+    const id = $(this).data('id');
+
     $.ajax({
-        url: '/section/update',
-        data: {id: id},
+        url: '/tag/update',
+        data: { id: id },
         success: function(html) {
-            console.log(html)
-            $('#updateSectionModal .modal-body').html(html);
-            $('#updateSectionModal').modal('show');
+            $('#updateTagModal .modal-body').html(html);
+            $('#updateTagModal').modal('show');
         },
         error: function() {
             alert('Ошибка загрузки формы редактирования');
@@ -14,20 +14,18 @@ $(document).on('click', '.update-section-btn', function() {
     });
 });
 
-
-
-$("#createSectionModal").on("submit", "#section-form", function(e) {
+$("#createTagModal").on("submit", "#tag-form", function(e) {
     e.preventDefault();
     let form = $(this);
 
     $.ajax({
         url: form.attr("action"),
-        type: form.attr("method"),
+        type: form.attr('action', '/tag/create'),
         data: form.serialize(),
         dataType: "json",
         success: function(response) {
             if (response.success) {
-                $("#createSectionModal").modal("hide");
+                $("#createTagModal").modal("hide");
                 location.reload();
             } else {
                 form.yiiActiveForm("updateMessages", response.errors, true);
@@ -39,18 +37,19 @@ $("#createSectionModal").on("submit", "#section-form", function(e) {
     });
 });
 
-$("#updateSectionModal").on("submit", "#section-form", function(e) {
+$("#updateTagModal").on("submit", "#tag-form", function(e) {
     e.preventDefault();
+    let id = button.data('id');
     let form = $(this);
 
     $.ajax({
         url: form.attr("action"),
-        type: form.attr("method"),
+        type: form.attr('action', '/tag/update?id=' + id),
         data: form.serialize(),
         dataType: "json",
         success: function(response) {
             if (response.success) {
-                $("#updateSectionModal").modal("hide");
+                $("#updateTagModal").modal("hide");
                 location.reload();
             } else {
                 form.yiiActiveForm("updateMessages", response.errors, true);

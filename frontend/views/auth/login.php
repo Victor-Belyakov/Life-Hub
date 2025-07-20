@@ -12,7 +12,7 @@ $this->title = 'Авторизация';
 ?>
     <div class="site-signup d-flex justify-content-center align-items-start" style="min-height: 100vh; padding-top: 200px;">
         <div class="form-container" style="width: 350px;">
-            <h1 class="text-center text-info" style="font-weight: 700; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Life Hub</h1>
+            <h1 class="text-center text-info" style="font-weight: 700; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Novera</h1>
 
             <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
             <?= $form->field($model, 'email')->textInput(['placeholder' => 'Введите Email'])->label(false) ?>

@@ -1,0 +1,5 @@
+.table > tbody > tr > th,
+.table > tbody > tr > td {
+    color: #6c757d;
+    font-weight: 500;
+}
