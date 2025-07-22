@@ -10,6 +10,9 @@ enum TaskStatusEnum: string
     case FAIL = 'fail';
     case CANCELED = 'canceled';
 
+    /**
+     * @return string
+     */
     public function label(): string
     {
         return match($this) {
@@ -21,6 +24,9 @@ enum TaskStatusEnum: string
         };
     }
 
+    /**
+     * @return string[]
+     */
     public static function labels(): array
     {
         return [
@@ -32,6 +38,10 @@ enum TaskStatusEnum: string
         ];
     }
 
+    /**
+     * @param string $value
+     * @return self|null
+     */
     public static function fromValue(string $value): ?self
     {
         foreach (self::cases() as $case) {

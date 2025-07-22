@@ -14,15 +14,9 @@ $this->title = 'Регистрация пользователя';
     <div class="col-md-6"> <!-- Ширина карточки -->
         <div class="card shadow">
             <div class="card-header bg-main text-white">
-                <h3 class="mb-0"><?= Html::encode($this->title) ?></h3>
+                <h4 class="mb-0"><?= Html::encode($this->title) ?></h4>
             </div>
-            <style>
-                .card-body {
-                    color: #6c757d;
-                    font-weight: 500;
-                }
-            </style>
-            <div class="card-body">
+            <div class="card-body" style="color: #6c757d; font-weight: 500">
 
                 <?php $form = ActiveForm::begin([
                     'id' => 'user-create-form',
@@ -59,21 +53,11 @@ $this->title = 'Регистрация пользователя';
                 ])->label(false) ?>
 
                 <div class="form-group mt-3 text-center">
-                    <?= Html::submitButton('Зарегистрировать', ['class' => 'btn btn-success text-light', 'style' => 'width: 40%;']) ?>
+                    <?= Html::submitButton('Зарегистрировать', ['class' => 'btn btn-success text-light', 'style' => 'width: 30%;']) ?>
                 </div>
 
                 <?php ActiveForm::end(); ?>
             </div>
-        </div>
-    </div>
-</div>
-
-
-<div class="user-create">
-
-    <div class="row justify-content-left">
-        <div class="col-md-4">
-
         </div>
     </div>
 </div>

@@ -1,10 +1,7 @@
 <?php
 
-use frontend\enum\task\TaskPriorityEnum;
-use kartik\select2\Select2;
+use frontend\enum\record\RecordTypeEnum;
 use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\web\JsExpression;
 use yii\widgets\ActiveForm;
 
 /**
@@ -19,7 +16,6 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
         'id' => 'record-form',
         'enableClientValidation' => true,
-        'action' => Url::to(['/record/create']),
         'options' => ['data-pjax' => true],
     ]); ?>
 
@@ -38,8 +34,18 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'content')->textarea(['rows' => 3]) ?>
     </div>
 
+    <div class="mb-3" style="color: #6c757d">
+        <?= $form->field($model, 'type')->dropDownList([
+            RecordTypeEnum::NOTE->value => RecordTypeEnum::NOTE->label(),
+            RecordTypeEnum::TARGET->value => RecordTypeEnum::TARGET->label(),
+        ]) ?>
+    </div>
+
     <div class="form-group">
-        <?= Html::submitButton('Создать', ['class' => 'btn btn-success text-light', 'data-url' => 'task/create',]) ?>
+        <?= Html::submitButton(
+            $model->isNewRecord ? 'Создать' : 'Сохранить',
+            ['class' => 'btn btn-success text-light']
+        ) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

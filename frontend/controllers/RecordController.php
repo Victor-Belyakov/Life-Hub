@@ -15,10 +15,14 @@ use yii\db\StaleObjectException;
 use yii\helpers\ArrayHelper;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
+use yii\widgets\ActiveForm;
 
 class RecordController extends BaseController
 {
-    public function actionIndex()
+    /**
+     * @return string
+     */
+    public function actionIndex(): string
     {
         $models = Record::find()->orderBy(['created_at' => SORT_DESC])->all();
         $sections = ArrayHelper::map(Section::find()->orderBy('name')->all(), 'id', 'name');
@@ -65,12 +69,13 @@ class RecordController extends BaseController
     public function actionCreate(): Response|string
     {
         $model = new Record();
+        $sections = ArrayHelper::map(Section::find()->orderBy('name')->all(), 'id', 'name');
 
         if ($model->load(Yii::$app->request->post())) {
             if (!$model->save()) {
                 return $this->asJson([
                     'success' => false,
-                    'errors' => $model->getErrors(),
+                    'errors' => ActiveForm::validate($model),
                 ]);
             }
 
@@ -79,24 +84,39 @@ class RecordController extends BaseController
 
         return $this->renderAjax('_form', [
             'model' => $model,
+            'sections' => $sections
         ]);
     }
 
     /**
      * @param int $id
-     * @return string|Response
      * @throws NotFoundHttpException
      * @throws Exception
      */
-    public function actionUpdate(int $id): Response|string
+    public function actionUpdate(int $id)
     {
         $model = Record::findModel($id);
+        $sections = ArrayHelper::map(Section::find()->orderBy('name')->all(), 'id', 'name');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return ['success' => true, 'id' => $model->id];
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('update', ['model' => $model]);
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_form', [
+                'model' => $model,
+                'sections' => $sections,
+            ]);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+            'sections' => $sections,
+        ]);
     }
 
     /**

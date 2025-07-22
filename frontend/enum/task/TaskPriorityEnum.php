@@ -8,6 +8,9 @@ enum TaskPriorityEnum: string
     case MEDIUM = 'medium';
     case HIGH = 'high';
 
+    /**
+     * @return string
+     */
     public function label(): string
     {
         return match($this) {
@@ -17,6 +20,9 @@ enum TaskPriorityEnum: string
         };
     }
 
+    /**
+     * @return string[]
+     */
     public static function labels(): array
     {
         return [
@@ -26,6 +32,10 @@ enum TaskPriorityEnum: string
         ];
     }
 
+    /**
+     * @param string $value
+     * @return self|null
+     */
     public static function fromValue(string $value): ?self
     {
         foreach (self::cases() as $case) {
@@ -36,12 +46,15 @@ enum TaskPriorityEnum: string
         return null;
     }
 
+    /**
+     * @return string
+     */
     public function badgeClass(): string
     {
         return match ($this) {
-            self::LOW => 'bg-success',   // Зеленый
-            self::MEDIUM => 'bg-warning', // Желтый
-            self::HIGH => 'bg-danger',   // Красный
+            self::LOW => 'bg-success',
+            self::MEDIUM => 'bg-warning',
+            self::HIGH => 'bg-danger',
         };
     }
 

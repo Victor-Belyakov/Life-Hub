@@ -14,7 +14,7 @@ $this->title = 'Редактирование: ' . $model->email;
     <div class="col-md-8">
         <div class="card shadow">
             <div class="card-header bg-main text-white">
-                <h3 class="mb-0"><?= Html::encode($this->title) ?></h3>
+                <h4 class="mb-0"><?= Html::encode($this->title) ?></h4>
             </div>
 
             <div class="card-body" style="color: #6c757d; font-weight: 500">

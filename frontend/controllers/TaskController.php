@@ -8,10 +8,10 @@ use frontend\enum\task\TaskPriorityEnum;
 use frontend\models\search\TaskSearch;
 use Throwable;
 use Yii;
+use yii\db\Exception;
 use yii\db\StaleObjectException;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
-use yii\httpclient\Exception;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
@@ -63,7 +63,7 @@ class TaskController extends Controller
 
     /**
      * @return Response|string
-     * @throws \yii\db\Exception
+     * @throws Exception
      */
     public function actionCreate(): Response|string
     {
@@ -101,7 +101,7 @@ class TaskController extends Controller
      * @param int $id
      * @return string|Response
      * @throws NotFoundHttpException
-     * @throws \yii\db\Exception
+     * @throws Exception
      */
     public function actionUpdate(int $id): Response|string
     {
@@ -130,7 +130,7 @@ class TaskController extends Controller
 
     /**
      * @return false[]|true[]
-     * @throws \yii\db\Exception
+     * @throws Exception
      * @throws NotFoundHttpException
      */
     public function actionChangeStatus(): array

@@ -3,6 +3,7 @@
 namespace common\models;
 
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
 use yii\db\Expression;
 
@@ -66,18 +67,8 @@ class Record extends AbstractModel
         ];
     }
 
-    public function getSection()
+    public function getSection(): ActiveQuery
     {
         return $this->hasOne(Section::class, ['id' => 'section_id']);
-    }
-
-    public function getRecordTags()
-    {
-        return $this->hasMany(RecordTag::class, ['record_id' => 'id']);
-    }
-
-    public function getTags()
-    {
-        return $this->hasMany(Tag::class, ['id' => 'record_id'])->via('recordTags');
     }
 }

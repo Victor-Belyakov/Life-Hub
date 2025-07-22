@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 ?>
 
@@ -8,6 +9,7 @@ use yii\helpers\Html;
     <?= Html::button('Создать запись', [
         'class' => 'btn btn-success text-light',
         'data-bs-toggle' => 'modal',
+        'data-url' => Url::to(['record/create']),
         'data-bs-target' => '#createRecordModal'
     ]) ?>
 

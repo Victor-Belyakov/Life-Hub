@@ -3,15 +3,11 @@
 namespace frontend\controllers;
 
 use common\models\Section;
-use common\services\UserService;
-use console\rbac\permissions\user\UserCreatePermission;
-use frontend\models\form\user\SignupForm;
 use frontend\models\search\SectionSearch;
 use Throwable;
 use Yii;
 use yii\db\Exception;
 use yii\db\StaleObjectException;
-use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
@@ -35,7 +31,7 @@ class SectionController extends BaseController
     /**
      * @throws Exception
      */
-    public function actionCreate()
+    public function actionCreate(): Response|string
     {
         $model = new Section();
 
@@ -58,7 +54,7 @@ class SectionController extends BaseController
     /**
      * @throws Exception|NotFoundHttpException
      */
-    public function actionUpdate(int $id)
+    public function actionUpdate(int $id): Response|string
     {
         $model = Section::findModel($id);
 

@@ -6,7 +6,6 @@ use common\models\LoginForm;
 use common\services\UserService;
 use console\rbac\permissions\user\UserCreatePermission;
 use frontend\models\form\user\SignupForm;
-use TelegramService;
 use Yii;
 use yii\db\Exception;
 use yii\web\ForbiddenHttpException;
@@ -44,7 +43,6 @@ class AuthController extends BaseController
      * Logs in a user.
      *
      * @return mixed
-     * @throws \yii\httpclient\Exception
      */
     public function actionLogin(): mixed
     {
@@ -54,7 +52,6 @@ class AuthController extends BaseController
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            TelegramService::sendMessage('Пользователь: ' . Yii::$app->user->identity->email . ' авторизовался');
             return $this->redirect(['site/index']);
         }
 
