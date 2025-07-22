@@ -21,8 +21,8 @@ $this->title = 'Записи'
     <?php foreach ($models as $record): ?>
         <div class="mb-2" style="max-width: 20%;">
             <div class="card" style="height: 100%;">
-                    <div class="card-img-top d-flex align-items-center justify-content-center"
-                         style="height: 50px; font-weight: bold; font-size: 1.5rem; color: white; background-color: <?= RecordTypeEnum::fromValue($record->type)->color() ?>">
+                    <div class="card-img-top d-flex align-items-center justify-content-center bg-main"
+                         style="height: 50px; font-weight: bold; font-size: 1.5rem; color: white;">
                         <?= Html::encode($record->section->name ?? 'Без раздела') ?>
                     </div>
                 <div class="card-body d-flex flex-column">
