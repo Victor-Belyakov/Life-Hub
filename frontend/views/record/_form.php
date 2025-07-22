@@ -1,5 +1,6 @@
 <?php
 
+use dosamigos\ckeditor\CKEditor;
 use frontend\enum\record\RecordTypeEnum;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
@@ -15,8 +16,7 @@ use yii\widgets\ActiveForm;
 <div class="record-form">
     <?php $form = ActiveForm::begin([
         'id' => 'record-form',
-        'enableClientValidation' => true,
-        'options' => ['data-pjax' => true],
+        'enableClientValidation' => true
     ]); ?>
 
     <div class="mb-3" style="color: #6c757d">
@@ -31,7 +31,10 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div class="mb-3" style="color: #6c757d">
-        <?= $form->field($model, 'content')->textarea(['rows' => 3]) ?>
+        <?= $form->field($model, 'content')->widget(CKEditor::class, [
+            'options' => ['rows' => 6],
+            'preset' => 'full'
+        ]) ?>
     </div>
 
     <div class="mb-3" style="color: #6c757d">
