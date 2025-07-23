@@ -32,8 +32,16 @@ enum RecordTypeEnum: string
     public function color(): string
     {
         return match($this) {
-            self::NOTE => '#02b1b6',
-            self::TARGET => '#b60202',
+            self::NOTE => '#d6eaff',
+            self::TARGET => '#ffe0e0',
+        };
+    }
+
+    public function icon(): string
+    {
+        return match($this) {
+            self::NOTE => '📝',
+            self::TARGET => '🎯',
         };
     }
 

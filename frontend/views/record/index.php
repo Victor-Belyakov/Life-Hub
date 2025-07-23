@@ -11,6 +11,7 @@ use yii\web\JqueryAsset;
  * @var common\models\Record $newModel
  * @var array $sections
  */
+
 $this->title = 'Записи'
 
 ?>
@@ -20,24 +21,18 @@ $this->title = 'Записи'
 <div class="row">
     <?php foreach ($models as $record): ?>
         <div class="mb-2" style="max-width: 20%;">
-            <div class="card" style="height: 100%;">
-                    <div class="card-img-top d-flex align-items-center justify-content-center bg-main"
-                         style="height: 50px; font-weight: bold; font-size: 1.5rem; color: white;">
-                        <?= Html::encode($record->section->name ?? 'Без раздела') ?>
-                    </div>
+            <div class="card" style="height: 100%; background-color: <?= RecordTypeEnum::fromValue($record->type)->color() ?? '' ?>;">
+            <div class="card-img-top d-flex align-items-center justify-content-center bg-main" style="height: 50px; font-weight: bold; font-size: 1.5rem; color: white;">
+                <?= RecordTypeEnum::fromValue($record->type)->icon() ?? '' ?>  <?= Html::encode($record->section->name ?? 'Без раздела') ?>
+            </div>
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title" style="color:#6c757d;">
                         <?= Html::encode($record->title) ?>
                     </h5>
 
-                    <?php
-                    $text = strip_tags($record->content);
-                    $short = mb_substr($text, 0, 100);
-                    $isLong = mb_strlen($text) > 100;
-                    ?>
-                    <p class="card-text text-muted" style="flex-grow: 1; color:#6c757d;">
-                        <?= Html::encode($short) ?><?= $isLong ? '...' : '' ?>
-                    </p>
+                    <div class="card-text text-muted content-preview" style="flex-grow: 1;">
+                        <?= $record->content ?>
+                    </div>
 
                     <div  class="d-flex justify-content-between mt-2">
                         <?= Html::button('Редактировать', [
@@ -50,7 +45,6 @@ $this->title = 'Записи'
 
                         <a href="<?= Url::to(['record/view', 'id' => $record->id]) ?>" class="btn btn-sm btn-cus-main mt-auto text-light">Подробнее</a>
                     </div>
-
                 </div>
             </div>
         </div>
