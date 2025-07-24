@@ -12,6 +12,10 @@ use yii\widgets\ActiveForm;
 
 ?>
 
+<?php
+$isView = Yii::$app->controller->action->id === 'view';
+?>
+
 <div class="task-form">
     <?php $form = ActiveForm::begin([
         'id' => 'task-form',
@@ -21,11 +25,11 @@ use yii\widgets\ActiveForm;
     ]); ?>
 
     <div class="mb-3" style="color: #6c757d">
-        <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'title')->textInput(['maxlength' => true, 'disabled' => $isView]) ?>
     </div>
 
     <div class="mb-3" style="color: #6c757d">
-        <?= $form->field($model, 'description')->textarea(['rows' => 3]) ?>
+        <?= $form->field($model, 'description')->textarea(['rows' => 3, 'disabled' => $isView]) ?>
     </div>
 
     <div class="mb-3" style="color: #6c757d">
@@ -33,12 +37,15 @@ use yii\widgets\ActiveForm;
             TaskPriorityEnum::LOW->value => TaskPriorityEnum::LOW->label(),
             TaskPriorityEnum::MEDIUM->value => TaskPriorityEnum::MEDIUM->label(),
             TaskPriorityEnum::HIGH->value => TaskPriorityEnum::HIGH->label(),
-        ]) ?>
+        ], ['disabled' => $isView]) ?>
     </div>
 
     <div class="mb-3" style="color: #6c757d">
         <?= $form->field($model, 'executor_id')->widget(Select2::class, [
-            'options' => ['placeholder' => 'Выберите исполнителя...'],
+            'options' => [
+                'placeholder' => 'Выберите исполнителя...',
+                'disabled' => $isView
+            ],
             'pluginOptions' => [
                 'allowClear' => true,
                 'minimumInputLength' => 2,
@@ -59,12 +66,14 @@ use yii\widgets\ActiveForm;
     </div>
 
     <div class="mb-3" style="color: #6c757d">
-        <?= $form->field($model, 'deadline')->input('date', ['class' => 'datepicker form-control']) ?>
+        <?= $form->field($model, 'deadline')->input('date', ['class' => 'datepicker form-control', 'disabled' => $isView]) ?>
     </div>
 
+    <?php if (!$isView): ?>
     <div class="form-group">
         <?= Html::submitButton('Создать', ['class' => 'btn btn-success text-light', 'data-url' => 'task/create',]) ?>
     </div>
+    <?php endif; ?>
 
     <?php ActiveForm::end(); ?>
 </div>

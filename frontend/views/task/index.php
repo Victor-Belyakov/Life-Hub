@@ -52,9 +52,21 @@ $statuses = TaskStatusEnum::labels();
                                         </div>
 
                                         <div class="d-flex justify-content-between mt-2">
-                                            <?= Html::a('Редактировать', ['update', 'id' => $task->id], ['class' => 'btn btn-sm btn-success update-task-btn text-light']) ?>
-                                            <?= Html::a('Подробнее', ['view', 'id' => $task->id], ['class' => 'btn btn-sm btn-cus-main text-light']) ?>
+                                            <?= Html::button('Редактировать', [
+                                                'class' => 'btn btn-sm btn-success mt-auto text-light',
+                                                'data-bs-toggle' => 'modal',
+                                                'data-bs-target' => '#updateTaskModal',
+                                                'data-url' => Url::to(['task/update', 'id' => $task->id]),
+                                                'data-id' => $task->id
+                                            ]) ?>
 
+                                            <?= Html::button('Подробнее', [
+                                                'class' => 'btn btn-sm btn-cus-main mt-auto text-light',
+                                                'data-bs-toggle' => 'modal',
+                                                'data-bs-target' => '#viewTaskModal',
+                                                'data-url' => Url::to(['task/view', 'id' => $task->id]),
+                                                'data-id' => $task->id
+                                            ]) ?>
                                         </div>
                                     </div>
                                 </div>
@@ -72,7 +84,6 @@ $statuses = TaskStatusEnum::labels();
     </div>
 </div>
 
-
 <?php
 Modal::begin([
     'title' => 'Создать задачу',
@@ -82,9 +93,36 @@ Modal::begin([
         'class' => 'custom-modal',
     ],
 ]);
-echo $this->render('_form', ['model' => $newTaskModel]);
-Modal::end();
 ?>
+<div id="createTaskContent"></div>
+<?php Modal::end(); ?>
+
+<?php
+Modal::begin([
+    'title' => 'Редактировать задачу',
+    'id' => 'updateTaskModal',
+    'size' => Modal::SIZE_LARGE,
+    'options' => [
+        'class' => 'custom-modal',
+    ],
+]);
+?>
+<div id="updateTaskContent"></div>
+<?php Modal::end(); ?>
+
+<?php
+Modal::begin([
+    'title' => 'Просмотр задачи',
+    'id' => 'viewTaskModal',
+    'size' => Modal::SIZE_LARGE,
+    'options' => [
+        'class' => 'custom-modal',
+    ],
+]);
+?>
+<div id="viewTaskContent"></div>
+<?php Modal::end(); ?>
+
 
 <?php
 $indexUrl = Url::to(['task/index']);
@@ -99,5 +137,4 @@ $this->registerCssFile('@web/css/task/index.css');
 
 <script>
     const updateUrl = "<?= Url::to(['task/change-status']) ?>";
-    const createFormUrl = "<?= Url::to(['task/create']) ?>";
 </script>

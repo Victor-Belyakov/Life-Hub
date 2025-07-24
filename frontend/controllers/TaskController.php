@@ -8,6 +8,7 @@ use frontend\enum\task\TaskPriorityEnum;
 use frontend\models\search\TaskSearch;
 use Throwable;
 use Yii;
+use yii\bootstrap5\ActiveForm;
 use yii\db\Exception;
 use yii\db\StaleObjectException;
 use yii\helpers\ArrayHelper;
@@ -55,8 +56,13 @@ class TaskController extends Controller
     public function actionView(int $id): string
     {
         $model = Task::findModel($id);
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_form', [
+                'model' => $model,
+            ]);
+        }
 
-        return $this->render('view', [
+        return $this->render('update', [
             'model' => $model,
         ]);
     }
@@ -68,16 +74,14 @@ class TaskController extends Controller
     public function actionCreate(): Response|string
     {
         $model = new Task();
+        if ($model->load(Yii::$app->request->post())) {
+            if (!$model->save()) {
+                return $this->asJson([
+                    'success' => false,
+                    'errors' => ActiveForm::validate($model),
+                ]);
+            }
 
-        if (!$model->load(Yii::$app->request->post())) {
-            return $this->renderAjax('_form', [
-                'model' => $model,
-            ]);
-        }
-
-        $model->creator_id = Yii::$app->user->id;
-
-        if ($model->save()) {
             if ($model->executor_id !== $model->creator_id) {
 //                    TelegramService::sendMessage(sprintf(
 //                        "Пользователю %s назначена задача %s от %s. Время выполнения до %s",
@@ -91,27 +95,38 @@ class TaskController extends Controller
             return $this->asJson(['success' => true]);
         }
 
-        return $this->asJson([
-            'success' => false,
-            'errors' => $model->getErrors(),
+        return $this->renderAjax('_form', [
+            'model' => $model
         ]);
     }
 
     /**
      * @param int $id
-     * @return string|Response
-     * @throws NotFoundHttpException
+     * @return array|string|Response
      * @throws Exception
+     * @throws NotFoundHttpException
      */
-    public function actionUpdate(int $id): Response|string
+    public function actionUpdate(int $id): Response|array|string
     {
         $model = Task::findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return ['success' => true, 'id' => $model->id];
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('update', ['model' => $model]);
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_form', [
+                'model' => $model,
+            ]);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**

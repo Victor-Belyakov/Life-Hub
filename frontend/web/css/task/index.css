@@ -21,8 +21,8 @@
 }
 
 .sortable-placeholder {
-    min-height: 120px;
-    background: #f0f0f0;
-    border: 2px dashed #007bff;
-    margin-bottom: 10px;
+    border: none;
+    background: transparent;
+    min-height: 0;
+    margin-bottom: 0;
 }

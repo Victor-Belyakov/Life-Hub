@@ -21,7 +21,7 @@ class RecordController extends BaseController
      */
     public function actionIndex(): string
     {
-        $models = Record::find()->orderBy(['created_at' => SORT_DESC])->all();
+        $models = Record::find()->orderBy(['sort_order' => SORT_ASC])->all();
         $sections = ArrayHelper::map(Section::find()->orderBy('name')->all(), 'id', 'name');
 
         return $this->render('index', [

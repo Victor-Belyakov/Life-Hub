@@ -50,6 +50,10 @@ $(function() {
     $(".sortable-records").sortable({
         items: ".sortable-item",
         placeholder: "sortable-placeholder",
+        start: function(e, ui) {
+            ui.placeholder.height(ui.item.height());
+            ui.placeholder.width(ui.item.width());
+        },
         update: function(event, ui) {
             var order = $(this).children('.sortable-item').map(function() {
                 return $(this).data('id');

@@ -41,25 +41,50 @@ $(".task-column").sortable({
 
 updateEmptyPlaceholders();
 
-$("#createTaskModal").on("submit", "#task-form", function(e) {
+$(document).on("submit", "#record-form", function(e) {
     e.preventDefault();
-    let form = $(this);
-
+    var form = $(this);
     $.ajax({
         url: form.attr('action'),
-        type: form.attr("method"),
+        type: form.attr('method'),
         data: form.serialize(),
         dataType: "json",
         success: function(response) {
             if (response.success) {
                 location.reload();
-                $("#createTaskModal").modal("hide");
-            } else {
+            } else if (response.errors) {
                 form.yiiActiveForm("updateMessages", response.errors, true);
             }
         },
         error: function() {
-            alert("Ошибка при создании задачи");
+            alert("Ошибка при сохранении");
         }
+    });
+});
+
+$('#createTaskModal').on('show.bs.modal', function (event) {
+    let button = $(event.relatedTarget);
+    let url = button.data('url');
+    $('#createTaskModal .modal-body').html('<div class="text-center p-3">Загрузка...</div>');
+    $.get(url, function(data) {
+        $('#createTaskModal .modal-body').html(data);
+    });
+});
+
+$('#updateTaskModal').on('show.bs.modal', function (event) {
+    let button = $(event.relatedTarget);
+    let url = button.data('url');
+    $('#updateTaskModal').html('<div class="text-center p-3">Загрузка...</div>');
+    $.get(url, function(data) {
+        $('#updateTaskModal').html(data);
+    });
+});
+
+$('#viewTaskModal').on('show.bs.modal', function (event) {
+    let button = $(event.relatedTarget);
+    let url = button.data('url');
+    $('#viewTaskModal .modal-body').html('<div class="text-center p-3">Загрузка...</div>');
+    $.get(url, function(data) {
+        $('#viewTaskModal .modal-body').html(data);
     });
 });
