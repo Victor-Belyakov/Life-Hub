@@ -18,3 +18,44 @@ $(document).on("submit", "#record-form", function(e) {
         }
     });
 });
+
+$('#createRecordModal').on('show.bs.modal', function (event) {
+    let button = $(event.relatedTarget);
+    let url = button.data('url');
+    $('#createRecordModal .modal-body').html('<div class="text-center p-3">Загрузка...</div>');
+    $.get(url, function(data) {
+        $('#createRecordModal .modal-body').html(data);
+    });
+});
+
+$('#updateRecordModal').on('show.bs.modal', function (event) {
+    let button = $(event.relatedTarget);
+    let url = button.data('url');
+    $('#updateRecordContent').html('<div class="text-center p-3">Загрузка...</div>');
+    $.get(url, function(data) {
+        $('#updateRecordContent').html(data);
+    });
+});
+
+$('#viewRecordModal').on('show.bs.modal', function (event) {
+    let button = $(event.relatedTarget);
+    let url = button.data('url');
+    $('#viewRecordModal .modal-body').html('<div class="text-center p-3">Загрузка...</div>');
+    $.get(url, function(data) {
+        $('#viewRecordModal .modal-body').html(data);
+    });
+});
+
+$(function() {
+    $(".sortable-records").sortable({
+        items: ".sortable-item",
+        placeholder: "sortable-placeholder",
+        update: function(event, ui) {
+            var order = $(this).children('.sortable-item').map(function() {
+                return $(this).data('id');
+            }).get();
+            $.post('/record/sort', {order: order});
+        }
+    });
+    $(".sortable-records").disableSelection();
+});

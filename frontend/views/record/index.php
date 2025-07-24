@@ -18,10 +18,10 @@ $this->title = 'Записи'
 
 <?= $this->render('_header') ?>
 
-<div class="row">
+<div class="row sortable-records">
     <?php foreach ($models as $record): ?>
-        <div class="mb-2" style="max-width: 20%;">
-            <div class="card" style="height: 100%; background-color: <?= RecordTypeEnum::fromValue($record->type)->color() ?? '' ?>;">
+        <div class="mb-2 sortable-item" style="max-width: 20%;" data-id="<?= $record->id ?>">
+            <div class="card" style="height: 100%;">
             <div class="card-img-top d-flex align-items-center justify-content-center bg-main" style="height: 50px; font-weight: bold; font-size: 1.5rem; color: white;">
                 <?= RecordTypeEnum::fromValue($record->type)->icon() ?? '' ?>  <?= Html::encode($record->section->name ?? 'Без раздела') ?>
             </div>
@@ -43,7 +43,13 @@ $this->title = 'Записи'
                             'data-id' => $record->id
                         ]) ?>
 
-                        <a href="<?= Url::to(['record/view', 'id' => $record->id]) ?>" class="btn btn-sm btn-cus-main mt-auto text-light">Подробнее</a>
+                        <?= Html::button('Подробнее', [
+                            'class' => 'btn btn-sm btn-cus-main mt-auto text-light',
+                            'data-bs-toggle' => 'modal',
+                            'data-bs-target' => '#viewRecordModal',
+                            'data-url' => Url::to(['record/view', 'id' => $record->id]),
+                            'data-id' => $record->id
+                        ]) ?>
                     </div>
                 </div>
             </div>
@@ -78,27 +84,20 @@ Modal::begin([
 <div id="updateRecordContent"></div>
 <?php Modal::end(); ?>
 
+<?php
+Modal::begin([
+    'title' => 'Просмотр записи',
+    'id' => 'viewRecordModal',
+    'size' => Modal::SIZE_LARGE,
+    'options' => [
+        'class' => 'custom-modal',
+    ],
+]);
+?>
+    <div id="viewRecordContent"></div>
+<?php Modal::end(); ?>
 
 <?php
-$this->registerJs(<<<JS
-$('#createRecordModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget);
-    var url = button.data('url');
-    $('#createRecordModal .modal-body').html('<div class="text-center p-3">Загрузка...</div>');
-    $.get(url, function(data) {
-        $('#createRecordModal .modal-body').html(data);
-    });
-});
-
-$('#updateRecordModal').on('show.bs.modal', function (event) {
-    var button = $(event.relatedTarget);
-    var url = button.data('url');
-    $('#updateRecordContent').html('<div class="text-center p-3">Загрузка...</div>');
-    $.get(url, function(data) {
-        $('#updateRecordContent').html(data);
-    });
-});
-JS);
 
 $this->registerCssFile('https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css');
 $this->registerJsFile('https://code.jquery.com/ui/1.13.2/jquery-ui.min.js', ['depends' => JqueryAsset::class]);

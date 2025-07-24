@@ -16,6 +16,7 @@ use yii\db\Expression;
  * @property string $status
  * @property string $created_at
  * @property string $updated_at
+ * @property int $sort_order
  *
  * @property Section $section
  * @property Tag[] $tags
@@ -44,7 +45,7 @@ class Record extends AbstractModel
     {
         return [
             [['section_id', 'title'], 'required'],
-            [['section_id'], 'integer'],
+            [['section_id', 'sort_order'], 'integer'],
             [['content'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['title', 'type', 'status'], 'string', 'max' => 255],
@@ -63,7 +64,8 @@ class Record extends AbstractModel
             'title' => 'Название',
             'content' => 'Контент',
             'type' => 'Тип',
-            'status' => 'Статус'
+            'status' => 'Статус',
+            'sort_order' => 'Порядок',
         ];
     }
 

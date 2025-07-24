@@ -19,3 +19,10 @@
 .card.task-item.border-high {
     border-color: #6c757d;
 }
+
+.sortable-placeholder {
+    min-height: 120px;
+    background: #f0f0f0;
+    border: 2px dashed #007bff;
+    margin-bottom: 10px;
+}

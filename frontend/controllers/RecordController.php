@@ -4,10 +4,7 @@ namespace frontend\controllers;
 
 use common\models\Record;
 use common\models\Section;
-use common\models\Tag;
-use common\models\Task;
 use frontend\models\search\RecordSearch;
-use frontend\models\search\TaskSearch;
 use Throwable;
 use Yii;
 use yii\db\Exception;
@@ -49,20 +46,6 @@ class RecordController extends BaseController
     }
 
     /**
-     * @param int $id
-     * @return string
-     * @throws NotFoundHttpException
-     */
-    public function actionView(int $id): string
-    {
-        $model = Record::findModel($id);
-
-        return $this->render('view', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
      * @return Response|string
      * @throws Exception
      */
@@ -90,10 +73,11 @@ class RecordController extends BaseController
 
     /**
      * @param int $id
-     * @throws NotFoundHttpException
+     * @return array|string|Response
      * @throws Exception
+     * @throws NotFoundHttpException
      */
-    public function actionUpdate(int $id)
+    public function actionUpdate(int $id): Response|array|string
     {
         $model = Record::findModel($id);
         $sections = ArrayHelper::map(Section::find()->orderBy('name')->all(), 'id', 'name');
@@ -120,6 +104,29 @@ class RecordController extends BaseController
     }
 
     /**
+     * @param int $id
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionView(int $id): string
+    {
+        $model = Record::findModel($id);
+        $sections = ArrayHelper::map(Section::find()->orderBy('name')->all(), 'id', 'name');
+
+        if (Yii::$app->request->isAjax) {
+            return $this->renderAjax('_form', [
+                'model' => $model,
+                'sections' => $sections,
+            ]);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+            'sections' => $sections,
+        ]);
+    }
+
+    /**
      * @param $id
      * @return Response
      * @throws NotFoundHttpException
@@ -131,5 +138,23 @@ class RecordController extends BaseController
         Record::findModel($id)?->delete();
 
         return $this->redirect(['index']);
+    }
+
+    /**
+     * @return true[]
+     * @throws Exception
+     */
+    public function actionSort(): array
+    {
+        Yii::$app->response->format = Response::FORMAT_JSON;
+        $order = Yii::$app->request->post('order', []);
+        foreach ($order as $position => $id) {
+            $model = Record::findOne($id);
+            if ($model) {
+                $model->sort_order = $position;
+                $model->save(false, ['sort_order']);
+            }
+        }
+        return ['success' => true];
     }
 }
