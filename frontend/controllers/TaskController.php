@@ -62,7 +62,7 @@ class TaskController extends Controller
             ]);
         }
 
-        return $this->render('update', [
+        return $this->render('view', [
             'model' => $model,
         ]);
     }
@@ -73,6 +73,7 @@ class TaskController extends Controller
      */
     public function actionCreate(): Response|string
     {
+        Yii::$app->response->format = Response::FORMAT_JSON;
         $model = new Task();
         if ($model->load(Yii::$app->request->post())) {
             if (!$model->save()) {
@@ -119,6 +120,7 @@ class TaskController extends Controller
         }
 
         if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
             return $this->renderAjax('_form', [
                 'model' => $model,
             ]);

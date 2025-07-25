@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 
 ?>
 
@@ -8,6 +9,7 @@ use yii\helpers\Html;
     <?= Html::button('Создать задачу', [
         'class' => 'btn btn-success text-light',
         'data-bs-toggle' => 'modal',
+        'data-url' => Url::to(['task/create']),
         'data-bs-target' => '#createTaskModal'
     ]) ?>
 

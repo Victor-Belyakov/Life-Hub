@@ -68,15 +68,17 @@ $('#createTaskModal').on('show.bs.modal', function (event) {
     $('#createTaskModal .modal-body').html('<div class="text-center p-3">Загрузка...</div>');
     $.get(url, function(data) {
         $('#createTaskModal .modal-body').html(data);
+        initDatePicker("#createTaskModal")
     });
 });
 
 $('#updateTaskModal').on('show.bs.modal', function (event) {
     let button = $(event.relatedTarget);
     let url = button.data('url');
-    $('#updateTaskModal').html('<div class="text-center p-3">Загрузка...</div>');
+    $('#updateTaskModal .modal-body').html('<div class="text-center p-3">Загрузка...</div>');
     $.get(url, function(data) {
-        $('#updateTaskModal').html(data);
+        $('#updateTaskModal .modal-body').html(data);
+        initDatePicker("#updateTaskModal")
     });
 });
 
@@ -88,3 +90,12 @@ $('#viewTaskModal').on('show.bs.modal', function (event) {
         $('#viewTaskModal .modal-body').html(data);
     });
 });
+
+function initDatePicker(id) {
+    flatpickr(`${id} .modal-body .datepicker`, {
+        altInput: true,
+        altFormat: "d-m-Y",
+        dateFormat: "Y-m-d",
+        locale: "ru"
+    });
+}

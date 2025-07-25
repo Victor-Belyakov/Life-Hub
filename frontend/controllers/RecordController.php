@@ -120,7 +120,7 @@ class RecordController extends BaseController
             ]);
         }
 
-        return $this->render('update', [
+        return $this->render('view', [
             'model' => $model,
             'sections' => $sections,
         ]);
@@ -149,12 +149,11 @@ class RecordController extends BaseController
         Yii::$app->response->format = Response::FORMAT_JSON;
         $order = Yii::$app->request->post('order', []);
         foreach ($order as $position => $id) {
-            $model = Record::findOne($id);
-            if ($model) {
-                $model->sort_order = $position;
-                $model->save(false, ['sort_order']);
-            }
+            $model = Record::findModel($id);
+            $model->sort_order = $position;
+            $model->save(false, ['sort_order']);
         }
+
         return ['success' => true];
     }
 }

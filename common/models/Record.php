@@ -19,7 +19,6 @@ use yii\db\Expression;
  * @property int $sort_order
  *
  * @property Section $section
- * @property Tag[] $tags
  */
 class Record extends AbstractModel
 {

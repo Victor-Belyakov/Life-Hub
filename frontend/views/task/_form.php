@@ -10,10 +10,8 @@ use yii\widgets\ActiveForm;
 /** @var yii\web\View $this */
 /** @var common\models\Task $model */
 
-?>
-
-<?php
 $isView = Yii::$app->controller->action->id === 'view';
+$isCreate = Yii::$app->controller->action->id === 'create';
 ?>
 
 <div class="task-form">
@@ -46,10 +44,10 @@ $isView = Yii::$app->controller->action->id === 'view';
                 'placeholder' => 'Выберите исполнителя...',
                 'disabled' => $isView
             ],
+            'initValueText' => $model->executor ? $model->executor->fullName : '',
             'pluginOptions' => [
-                'allowClear' => true,
                 'minimumInputLength' => 2,
-                'dropdownParent' => '#createTaskModal',
+                'dropdownParent' => $isCreate ? '#createTaskModal' : '#updateTaskModal',
                 'ajax' => [
                     'url' => Url::to(['user/executor-list']),
                     'dataType' => 'json',
@@ -66,7 +64,14 @@ $isView = Yii::$app->controller->action->id === 'view';
     </div>
 
     <div class="mb-3" style="color: #6c757d">
-        <?= $form->field($model, 'deadline')->input('date', ['class' => 'datepicker form-control', 'disabled' => $isView]) ?>
+        <?= $form->field($model, 'deadline')
+            ->textInput([
+                'class' => 'datepicker form-control',
+                'disabled' => $isView,
+                'autocomplete' => 'off',
+                'value' => $model->deadline ? substr($model->deadline, 0, 10) : null
+            ]) ?>
+<!--        --><?php //= $form->field($model, 'deadline')->input('date', ['class' => 'datepicker form-control', 'disabled' => $isView, 'value' => $model->deadline ? substr($model->deadline, 0, 10) : null]) ?>
     </div>
 
     <?php if (!$isView): ?>

@@ -22,7 +22,7 @@ use yii\helpers\Url;
     'filterModel' => $searchModel,
     'layout' => "{items}\n{summary}\n{pager}",
     'rowOptions' => static function($model) {
-        $url = Url::to(['task/view', 'id' => $model->id]);
+        $url = Url::to(['record/view', 'id' => $model->id]);
         return [
             'style' => 'cursor: pointer;',
             'onclick' => "if(!event.target.closest('.action-buttons')) { window.location.href='$url'; }",
@@ -49,7 +49,10 @@ use yii\helpers\Url;
         ],
         [
             'label' => '<span class="text-main">Контент</span>',
-            'value' => static function($model) { return $model->content; },
+            'value' => static function($model) {
+                $text = strip_tags($model->content);
+                return mb_strimwidth($text, 0, 100, '...');
+            },
             'encodeLabel' => false,
             'contentOptions' => ['style' => 'color: #6c757d;'],
         ],

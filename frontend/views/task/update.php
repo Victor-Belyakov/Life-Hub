@@ -65,7 +65,6 @@ $this->title = 'Редактирование: ' . $model->title;
                                 'options' => ['placeholder' => 'Выберите исполнителя...'],
                                 'initValueText' => $model->executor ? $model->executor->fullName : '',
                                 'pluginOptions' => [
-                                    'allowClear' => true,
                                     'minimumInputLength' => 2,
                                     'ajax' => [
                                         'url' => Url::to(['user/executor-list']),
