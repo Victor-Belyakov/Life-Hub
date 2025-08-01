@@ -6,10 +6,13 @@ use yii\bootstrap5\Modal;
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\web\JqueryAsset;
+use yii\widgets\ActiveForm;
+use kartik\select2\Select2;
 
 /**
  * @var $newTaskModel
  * @var $groupedTasks
+ * @var $searchModel
  */
 
 
@@ -20,7 +23,9 @@ $statuses = TaskStatusEnum::labels();
 
 ?>
 
-<?= $this->render('_header') ?>
+<?= $this->render('_header', [
+    'searchModel' => $searchModel,
+]) ?>
 
 <div class="task-index">
     <div class="row flex-nowrap overflow-auto">

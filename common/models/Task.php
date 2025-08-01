@@ -4,6 +4,7 @@ namespace common\models;
 
 use frontend\enum\task\TaskPriorityEnum;
 use frontend\enum\task\TaskStatusEnum;
+use Yii;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveQuery;
 use yii\db\ActiveRecord;
@@ -65,6 +66,18 @@ class Task extends AbstractModel
         return false;
     }
 
+    public function beforeValidate()
+    {
+        if (parent::beforeValidate()) {
+            // Устанавливаем creator_id если он не задан
+            if (empty($this->creator_id)) {
+                $this->creator_id = Yii::$app->user->getId();
+            }
+            return true;
+        }
+        return false;
+    }
+
 
     /**
      * @return array
@@ -72,12 +85,13 @@ class Task extends AbstractModel
     public function rules(): array
     {
         return [
-            [['title', 'priority', 'creator_id'], 'required'],
+            [['title', 'priority'], 'required'],
             [['description'], 'string'],
             [['executor_id', 'creator_id'], 'integer'],
             [['deadline', 'created_at', 'updated_at'], 'safe'],
             [['title'], 'string', 'max' => 255],
             [['status'], 'default', 'value' => TaskStatusEnum::NEW],
+            [['creator_id'], 'default', 'value' => Yii::$app->user->getId()],
 //            [['status'], 'in', 'range' => array_map(static fn($enum) => $enum->value, TaskStatusEnum::cases())],
             [['priority'], 'in', 'range' => array_map(static fn($enum) => $enum->value, TaskPriorityEnum::cases())],
         ];

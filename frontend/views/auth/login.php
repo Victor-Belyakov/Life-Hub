@@ -10,28 +10,24 @@ use yii\bootstrap5\Html;
 
 $this->title = 'Авторизация';
 ?>
-    <div class="site-signup d-flex justify-content-center align-items-start" style="min-height: 100vh; padding-top: 200px;">
-        <div class="form-container" style="width: 350px;">
-            <h1 class="text-center text-info" style="font-weight: 700; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);">Novera</h1>
 
-            <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
-            <?= $form->field($model, 'email')->textInput(['placeholder' => 'Введите Email'])->label(false) ?>
-            <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Введите Пароль'])->label(false) ?>
-
-<!--            <script async src="https://telegram.org/js/telegram-widget.js?15"-->
-<!--                    data-telegram-login="life_hub_official_bot"-->
-<!--                    data-size="large"-->
-<!--                    data-userpic="false"-->
-<!--                    data-auth-url="/site/telegram-auth"-->
-<!--                    data-request-access="write">-->
-<!--            </script>-->
-
-            <div class="form-group text-center">
-                <?= Html::submitButton('Вход', ['class' => 'btn btn-cus-main text-light', 'name' => 'login-button']) ?>
+<div class="site-signup d-flex justify-content-center align-items-start" style="min-height: 100vh; padding-top: 200px;">
+    <div class="form-container" style="width: 350px;">
+        <div class="text-center mb-4">
+            <div class="logo">
+                <div href="<?= Yii::$app->homeUrl ?>" style="color: inherit; text-decoration: none;">
+                    <img src="<?= Yii::getAlias('@web') ?>/favicon/novera.png" alt="favicon">overa
+                </div>
             </div>
-
-            <?php ActiveForm::end(); ?>
         </div>
-    </div>
 
-<?php
+        <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
+        <?= $form->field($model, 'email')->textInput(['placeholder' => 'Введите Email'])->label(false) ?>
+        <?= $form->field($model, 'password')->passwordInput(['placeholder' => 'Введите Пароль'])->label(false) ?>
+
+        <div class="form-group text-center">
+            <?= Html::submitButton('Вход', ['class' => 'btn btn-cus-main text-light', 'name' => 'login-button']) ?>
+        </div>
+        <?php ActiveForm::end(); ?>
+    </div>
+</div>

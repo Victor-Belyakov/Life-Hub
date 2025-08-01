@@ -20,13 +20,8 @@ $this->title = 'Редактирование: ' . $model->title;
             <div class="card-header bg-main text-white">
                 <h3 class="mb-0"><?= Html::encode($this->title) ?></h3>
             </div>
-            <style>
-                .card-body {
-                    color: #6c757d;
-                    font-weight: 500;
-                }
-            </style>
-            <div class="card-body">
+
+            <div class="card-body" style="color: #6c757d; font-weight: 500">
                 <?php $form = ActiveForm::begin([
                     'id' => 'task-update-form',
                     'enableClientValidation' => true,
@@ -55,11 +50,9 @@ $this->title = 'Редактирование: ' . $model->title;
                                 TaskPriorityEnum::HIGH->value => TaskPriorityEnum::HIGH->label(),
                             ]) ?>
                         </div>
-
                     </div>
 
                     <div class="col-md-6">
-
                         <div class="mb-3" style="color: #6c757d">
                             <?= $form->field($model, 'executor_id')->widget(Select2::class, [
                                 'options' => ['placeholder' => 'Выберите исполнителя...'],

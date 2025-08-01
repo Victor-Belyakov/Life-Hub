@@ -21,11 +21,13 @@ class RecordController extends BaseController
      */
     public function actionIndex(): string
     {
-        $models = Record::find()->orderBy(['sort_order' => SORT_ASC])->all();
+        $searchModel = new RecordSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $sections = ArrayHelper::map(Section::find()->orderBy('name')->all(), 'id', 'name');
 
         return $this->render('index', [
-            'models' => $models,
+            'models' => $dataProvider->getModels(),
+            'searchModel' => $searchModel,
             'sections' => $sections,
             'newModel' => new Record(),
         ]);

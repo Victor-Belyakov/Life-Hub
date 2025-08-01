@@ -41,23 +41,46 @@ $(".task-column").sortable({
 
 updateEmptyPlaceholders();
 
-$(document).on("submit", "#record-form", function(e) {
+$(document).on("submit", "#task-form", function(e) {
     e.preventDefault();
     var form = $(this);
     $.ajax({
         url: form.attr('action'),
-        type: form.attr('method'),
+        type: 'POST',
         data: form.serialize(),
         dataType: "json",
         success: function(response) {
             if (response.success) {
+                $("#createTaskModal").modal("hide");
                 location.reload();
             } else if (response.errors) {
                 form.yiiActiveForm("updateMessages", response.errors, true);
             }
         },
         error: function() {
-            alert("Ошибка при сохранении");
+            alert("Ошибка при создании задачи");
+        }
+    });
+});
+
+$(document).on("submit", "#task-update-form", function(e) {
+    e.preventDefault();
+    var form = $(this);
+    $.ajax({
+        url: form.attr('action'),
+        type: 'POST',
+        data: form.serialize(),
+        dataType: "json",
+        success: function(response) {
+            if (response.success) {
+                $("#updateTaskModal").modal("hide");
+                location.reload();
+            } else if (response.errors) {
+                form.yiiActiveForm("updateMessages", response.errors, true);
+            }
+        },
+        error: function() {
+            alert("Ошибка при обновлении задачи");
         }
     });
 });

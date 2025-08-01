@@ -14,7 +14,9 @@ use yii\helpers\Url;
  */
 ?>
 
-<?= $this->render('_header') ?>
+<?= $this->render('_header', [
+    'searchModel' => $searchModel,
+]) ?>
 
 <?= GridView::widget([
     'dataProvider' => $dataProvider,

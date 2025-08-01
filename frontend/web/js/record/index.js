@@ -63,3 +63,17 @@ $(function() {
     });
     $(".sortable-records").disableSelection();
 });
+
+function initCkEditors() {
+    if (typeof CKEDITOR !== 'undefined') {
+        $('.record-form textarea').each(function () {
+            let id = $(this).attr('id');
+            if (CKEDITOR.instances[id]) {
+                try {
+                    CKEDITOR.instances[id].destroy(true);
+                } catch (e) {}
+            }
+            CKEDITOR.replace(id);
+        });
+    }
+}

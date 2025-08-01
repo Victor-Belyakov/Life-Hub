@@ -73,7 +73,8 @@ html, body {
     flex-direction: column;
 }
 
-#sidebar .logo {
+
+.logo {
     height: 60px;
     padding: 4px;
     font-weight: 800;
@@ -85,7 +86,7 @@ html, body {
     letter-spacing: 10px;
 }
 
-#sidebar .logo img {
+.logo img {
     vertical-align: middle;
     margin-right: -0.5rem;
 }

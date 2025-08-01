@@ -24,11 +24,11 @@ class TaskController extends Controller
      */
     public function actionIndex(): string
     {
-        $tasks = Task::find()->orderBy(['created_at' => SORT_DESC])->all();
-
-        $groupedTasks = ArrayHelper::index($tasks, null, 'status');
-
+        $searchModel = new TaskSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $groupedTasks = ArrayHelper::index($dataProvider->getModels(), null, 'status');
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'groupedTasks' => $groupedTasks,
             'newTaskModel' => new Task(),
         ]);
@@ -111,12 +111,22 @@ class TaskController extends Controller
     {
         $model = Task::findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if (Yii::$app->request->isAjax) {
-                Yii::$app->response->format = Response::FORMAT_JSON;
-                return ['success' => true, 'id' => $model->id];
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->save()) {
+                if (Yii::$app->request->isAjax) {
+                    Yii::$app->response->format = Response::FORMAT_JSON;
+                    return ['success' => true, 'id' => $model->id];
+                }
+                return $this->redirect(['view', 'id' => $model->id]);
+            } else {
+                if (Yii::$app->request->isAjax) {
+                    Yii::$app->response->format = Response::FORMAT_JSON;
+                    return $this->asJson([
+                        'success' => false,
+                        'errors' => ActiveForm::validate($model),
+                    ]);
+                }
             }
-            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         if (Yii::$app->request->isAjax) {

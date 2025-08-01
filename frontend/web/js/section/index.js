@@ -20,7 +20,7 @@ $("#createTagModal").on("submit", "#tag-form", function(e) {
 
     $.ajax({
         url: form.attr("action"),
-        type: form.attr('action', '/tag/create'),
+        type: 'POST',
         data: form.serialize(),
         dataType: "json",
         success: function(response) {
@@ -39,12 +39,12 @@ $("#createTagModal").on("submit", "#tag-form", function(e) {
 
 $("#updateTagModal").on("submit", "#tag-form", function(e) {
     e.preventDefault();
-    let id = button.data('id');
     let form = $(this);
+    let id = form.find('input[name="id"]').val(); // Получаем ID из скрытого поля формы
 
     $.ajax({
-        url: form.attr("action"),
-        type: form.attr('action', '/tag/update?id=' + id),
+        url: '/tag/update?id=' + id,
+        type: 'POST',
         data: form.serialize(),
         dataType: "json",
         success: function(response) {

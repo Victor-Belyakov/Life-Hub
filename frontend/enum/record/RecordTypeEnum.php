@@ -2,13 +2,12 @@
 
 namespace frontend\enum\record;
 
+use Yii;
+
 enum RecordTypeEnum: string
 {
     case NOTE = 'note';
     case TARGET = 'target';
-    case WALLPAPER = 'wallpaper';
-    case WALLPAPER_PAINTABLE = 'wallpaper_paintable';
-    case WALL_PANELS = 'wall_panel';
 
     /**
      * @return string
@@ -17,10 +16,7 @@ enum RecordTypeEnum: string
     {
         return match($this) {
             self::NOTE => 'Заметка',
-            self::TARGET => 'Цель',
-            self::WALLPAPER => 'Обои',
-            self::WALLPAPER_PAINTABLE => 'Обои под покраску',
-            self::WALL_PANELS => 'Стеновые панели',
+            self::TARGET => 'Цель'
         };
     }
 
@@ -31,10 +27,7 @@ enum RecordTypeEnum: string
     {
         return [
             self::NOTE->value => 'Заметка',
-            self::TARGET->value => 'Цель',
-            self::WALLPAPER->value => 'Обои',
-            self::WALLPAPER_PAINTABLE->value => 'Обои под покраску',
-            self::WALL_PANELS->value => 'Стеновые панели',
+            self::TARGET->value => 'Цель'
         ];
     }
 
@@ -42,21 +35,16 @@ enum RecordTypeEnum: string
     {
         return match($this) {
             self::NOTE => '#d6eaff',
-            self::TARGET => '#ffe0e0',
-            self::WALLPAPER => '#fff7d6',
-            self::WALLPAPER_PAINTABLE => '#e6ffe6',
-            self::WALL_PANELS => '#e0ffe0',
+            self::TARGET => '#ffe0e0'
         };
     }
 
     public function icon(): string
     {
         return match($this) {
-            self::NOTE => '📝',
-            self::TARGET => '🎯',
-            self::WALLPAPER => '🧻',
-            self::WALLPAPER_PAINTABLE => '🎨',
-            self::WALL_PANELS => '🪟',
+            self::NOTE => file_get_contents(Yii::getAlias('@webroot') . '/icons/record/feather.svg'),
+            self::TARGET => file_get_contents(Yii::getAlias('@webroot') . '/icons/record/crosshair2.svg'),
+            default => '',
         };
     }
 

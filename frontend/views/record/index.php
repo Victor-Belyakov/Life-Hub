@@ -9,6 +9,7 @@ use yii\web\JqueryAsset;
 /**
  * @var common\models\Record[] $models
  * @var common\models\Record $newModel
+ * @var frontend\models\search\RecordSearch $searchModel
  * @var array $sections
  */
 
@@ -16,22 +17,27 @@ $this->title = 'Записи'
 
 ?>
 
-<?= $this->render('_header') ?>
+<?= $this->render('_header', [
+    'searchModel' => $searchModel,
+]) ?>
 
 <div class="row sortable-records">
     <?php foreach ($models as $record): ?>
         <div class="mb-2 sortable-item" style="max-width: 20%;" data-id="<?= $record->id ?>">
             <div class="card" style="height: 100%;">
-            <div class="card-img-top d-flex align-items-center justify-content-center bg-main" style="height: 40px; font-weight: bold; font-size: 1.2rem; color: white;">
-                <?= RecordTypeEnum::fromValue($record->type)->icon() ?? '' ?>  <?= Html::encode($record->section->name ?? 'Без раздела') ?>
-            </div>
+                <div class="card-img-top d-flex align-items-center justify-content-center bg-main" style="height: 40px; font-weight: bold; font-size: 1.2rem; color: white;">
+                    <span class="record-icon" style="display: inline-block; margin-right: 8px;">
+                        <?= RecordTypeEnum::fromValue($record->type)?->icon() ?>
+                    </span>
+                    <?= Html::encode($record->section->name ?? 'Без раздела') ?>
+                </div>
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title" style="color:#6c757d;">
                         <?= Html::encode($record->title) ?>
                     </h5>
 
                     <div class="card-text text-muted content-preview" style="flex-grow: 1;">
-                        <?= $record->content ?>
+                        <?= mb_strimwidth(strip_tags($record->content), 0, 100, '...'); ?>
                     </div>
 
                     <div  class="d-flex justify-content-between mt-2">

@@ -44,7 +44,7 @@ class Section extends AbstractModel
     /**
      * @return ActiveQuery
      */
-    public function getEntries(): ActiveQuery
+    public function getRecord(): ActiveQuery
     {
         return $this->hasMany(Record::class, ['section_id' => 'id']);
     }
