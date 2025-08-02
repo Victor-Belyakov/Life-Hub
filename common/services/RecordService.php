@@ -3,8 +3,8 @@
 namespace common\services;
 
 use frontend\enum\record\RecordTypeEnum;
-use frontend\models\search\RecordSearch;
-use frontend\models\search\SectionSearch;
+use app\models\search\RecordSearch;
+use app\models\search\SectionSearch;
 use yii\helpers\ArrayHelper;
 
 class RecordService

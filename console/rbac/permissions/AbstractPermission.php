@@ -1,6 +1,7 @@
 <?php
 
 namespace console\rbac\permissions;
+
 use console\rbac\PermissionInterface;
 use Exception;
 use yii\rbac\ManagerInterface;

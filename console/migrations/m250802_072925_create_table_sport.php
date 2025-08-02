@@ -28,7 +28,7 @@ class m250802_072925_create_table_sport extends Migration
         // Таблица подходов
         $this->createTable('sport_set', [
             'id' => $this->primaryKey(),
-            'result_id' => $this->integer()->notNull(),
+            'sport_id' => $this->integer()->notNull(),
             'set_number' => $this->integer()->notNull(),
             'reps' => $this->integer()->notNull(),
             'weight' => $this->float()->defaultValue(0),
@@ -36,7 +36,7 @@ class m250802_072925_create_table_sport extends Migration
 
         // Внешние ключи
         $this->addForeignKey('fk-sport-exercise', 'sport', 'exercise_id', 'exercise', 'id', 'CASCADE', 'CASCADE');
-        $this->addForeignKey('fk-sport_set-result', 'sport_set', 'result_id', 'sport', 'id', 'CASCADE', 'CASCADE');
+        $this->addForeignKey('fk-sport_set-result', 'sport_set', 'sport_id', 'sport', 'id', 'CASCADE', 'CASCADE');
     }
 
     public function safeDown()

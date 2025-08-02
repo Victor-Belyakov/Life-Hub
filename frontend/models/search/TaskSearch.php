@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\models\search;
+namespace app\models\search;
 
 use Yii;
 use yii\base\Model;
@@ -22,9 +22,13 @@ class TaskSearch extends Task
         return Model::scenarios();
     }
 
-    public function search($params)
+    /**
+     * @param $params
+     * @return ActiveDataProvider
+     */
+    public function search($params): ActiveDataProvider
     {
-        $query = Task::find();
+        $query = self::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

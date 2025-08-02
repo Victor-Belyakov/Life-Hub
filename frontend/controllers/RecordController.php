@@ -4,7 +4,7 @@ namespace frontend\controllers;
 
 use common\models\Record;
 use common\models\Section;
-use frontend\models\search\RecordSearch;
+use app\models\search\RecordSearch;
 use Throwable;
 use Yii;
 use yii\db\Exception;

@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\models\search;
+namespace app\models\search;
 
 use common\models\Record;
 use common\models\Section;
@@ -35,7 +35,7 @@ class RecordSearch extends Record
      */
     public function search($params): ActiveDataProvider
     {
-        $query = Record::find();
+        $query = self::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query

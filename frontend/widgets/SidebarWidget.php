@@ -45,6 +45,10 @@ class SidebarWidget extends Widget
                     [
                         'label' => 'Разделы для записей',
                         'url' => ['/section/index']
+                    ],
+                    [
+                        'label' => 'Упражнения',
+                        'url' => ['/exercise/index']
                     ]
                 ],
             ],

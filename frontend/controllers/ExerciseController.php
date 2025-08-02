@@ -1,30 +1,30 @@
 <?php
 
-namespace app\controllers;
+namespace frontend\controllers;
 
-use common\models\Section;
-use app\controllers\BaseController;
-use app\models\search\SectionSearch;
+use app\models\search\ExerciseSearch;
+use common\models\Exercise;
+use Exception;
+use frontend\controllers\BaseController;
 use Throwable;
 use Yii;
-use yii\db\Exception;
 use yii\db\StaleObjectException;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
 
-class SectionController extends BaseController
+class ExerciseController extends BaseController
 {
     /**
      * @return string
      */
     public function actionIndex(): string
     {
-        $searchModel = new SectionSearch();
+        $searchModel = new ExerciseSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
-            'newModel' => new Section(),
+            'newModel' => new Exercise(),
             'dataProvider' => $dataProvider
         ]);
     }
@@ -34,7 +34,7 @@ class SectionController extends BaseController
      */
     public function actionCreate(): Response|string
     {
-        $model = new Section();
+        $model = new Exercise();
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
@@ -57,7 +57,7 @@ class SectionController extends BaseController
      */
     public function actionUpdate(int $id): Response|string
     {
-        $model = Section::findModel($id);
+        $model = Exercise::findModel($id);
 
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
@@ -72,7 +72,7 @@ class SectionController extends BaseController
 
         return $this->renderAjax('_form', [
             'model' => $model,
-            'action' => ['/section/update', 'id' => $id],
+            'action' => ['/exercise/update', 'id' => $id],
         ]);
     }
 
@@ -85,7 +85,7 @@ class SectionController extends BaseController
      */
     public function actionDelete(int $id): Response
     {
-        Section::findModel($id)?->delete();
+        Exercise::findModel($id)?->delete();
 
         return $this->redirect(['index']);
     }

@@ -37,7 +37,7 @@ $mainClass = match (true) {
 
 <body>
 <?php $this->beginBody() ?>
-<?php if ($hasAccess): ?>
+<?php //if ($hasAccess): ?>
     <?= SidebarWidget::widget() ?>
 
     <header id="navbar">
@@ -55,7 +55,7 @@ $mainClass = match (true) {
         ) ?>
         <?= Html::endForm() ?>
     </header>
-<?php endif; ?>
+<?php //endif; ?>
 
 <main id="content" class=" <?= $mainClass ?>">
     <div class="container-fluid">

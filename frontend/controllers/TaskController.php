@@ -5,7 +5,7 @@ namespace frontend\controllers;
 use common\models\Task;
 use common\services\TelegramService;
 use frontend\enum\task\TaskPriorityEnum;
-use frontend\models\search\TaskSearch;
+use app\models\search\TaskSearch;
 use Throwable;
 use Yii;
 use yii\bootstrap5\ActiveForm;

@@ -2,21 +2,17 @@
 
 namespace app\models\search;
 
-use common\models\Section;
+use common\models\Exercise;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
-class SectionSearch extends Section
+class ExerciseSearch extends Exercise
 {
     public function scenarios()
     {
         return Model::scenarios();
     }
 
-    /**
-     * @param $params
-     * @return ActiveDataProvider
-     */
     public function search($params): ActiveDataProvider
     {
         $query = self::find();

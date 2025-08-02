@@ -1,6 +1,6 @@
 <?php
 
-namespace frontend\models\search;
+namespace app\models\search;
 
 use common\models\User;
 use yii\data\ActiveDataProvider;
@@ -9,9 +9,13 @@ class UserSearch extends User
 {
     private const int USER_SELECT2_LIMIT = 5;
 
-    public function search($params)
+    /**
+     * @param $params
+     * @return ActiveDataProvider
+     */
+    public function search($params): ActiveDataProvider
     {
-        $query = User::find();
+        $query = self::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

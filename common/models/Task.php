@@ -69,12 +69,13 @@ class Task extends AbstractModel
     public function beforeValidate()
     {
         if (parent::beforeValidate()) {
-            // Устанавливаем creator_id если он не задан
             if (empty($this->creator_id)) {
                 $this->creator_id = Yii::$app->user->getId();
             }
+
             return true;
         }
+
         return false;
     }
 

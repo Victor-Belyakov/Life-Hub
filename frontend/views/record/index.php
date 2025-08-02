@@ -9,7 +9,7 @@ use yii\web\JqueryAsset;
 /**
  * @var common\models\Record[] $models
  * @var common\models\Record $newModel
- * @var frontend\models\search\RecordSearch $searchModel
+ * @var app\models\search\RecordSearch $searchModel
  * @var array $sections
  */
 
