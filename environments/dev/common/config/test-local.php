@@ -3,7 +3,7 @@
 return [
     'components' => [
         'db' => [
-            'dsn' => 'mysql:host=localhost;dbname=life-hub',
+            'dsn' => 'mysql:host=lifehub-postgres;dbname=life-hub',
         ],
     ],
 ];

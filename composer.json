@@ -25,8 +25,7 @@
         "kartik-v/yii2-widget-select2": "^2.0",
         "kartik-v/yii2-krajee-base": "^3.0",
         "2amigos/yii2-ckeditor-widget": "^2.1",
-        "ext-mbstring": "*",
-        "yiisoft/yii2-queue": "^2.3"
+        "ext-mbstring": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",

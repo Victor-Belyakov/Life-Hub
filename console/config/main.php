@@ -1,9 +1,6 @@
 <?php
 
 use yii\db\Connection;
-use yii\mutex\FileMutex;
-use yii\queue\db\Queue;
-use yii\queue\LogBehavior;
 
 $params = array_merge(
     require __DIR__ . '/../../common/config/params.php',
@@ -15,7 +12,7 @@ $params = array_merge(
 return [
     'id' => 'app-console',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log', 'queue'],
+    'bootstrap' => ['log'],
     'controllerNamespace' => 'console\controllers',
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
@@ -38,14 +35,7 @@ return [
         ],
         'db' => [
             'class' => Connection::class,
-        ],
-        'queue' => [
-            'class' => Queue::class,
-            'db' => 'db',
-            'tableName' => '{{%queue}}', // Имя таблицы
-            'channel' => 'default',
-            'mutex' => FileMutex::class, // Мьютекс для синхронизации запросов
-        ],
+        ]
     ],
     'params' => $params,
 ];

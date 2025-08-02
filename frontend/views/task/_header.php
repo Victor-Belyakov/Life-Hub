@@ -41,7 +41,7 @@ $action = Yii::$app->controller->action->id;
     ])->widget(Select2::class, [
         'data' => TaskService::getUsersForSelect(),
         'options' => [
-            'placeholder' => 'Раздел записи',
+            'placeholder' => 'Исполнитель',
             'onchange' => 'this.form.submit()',
         ],
         'pluginOptions' => [
